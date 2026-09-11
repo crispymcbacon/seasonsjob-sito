@@ -1,0 +1,15 @@
+---
+// Minimal building block for placeholder routes only.
+// Will be deleted when real sections are designed.
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Pagina segnaposto.' } = Astro.props;
+---
+
+<section>
+  <h1>{title}</h1>
+  <p>{description}</p>
+</section>

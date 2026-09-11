@@ -1,0 +1,81 @@
+@import 'tailwindcss';
+
+/*
+  Temporary neutral theme — intentionally minimal.
+  Final colors, typography and branding will be decided in a later phase.
+  Only structural foundations live here: reset/base, typography scale,
+  accessible focus and smooth scrolling.
+*/
+
+@theme {
+  /* Temporary neutral palette: pure Tailwind defaults, nothing custom yet. */
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    font-family:
+      system-ui,
+      -apple-system,
+      'Segoe UI',
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Consistent heading rhythm until the final type scale is defined. */
+  h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  h3 {
+    font-size: 1.25rem;
+    line-height: 1.3;
+  }
+
+  p,
+  li {
+    max-width: 65ch;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Single visible focus style for keyboard users. */
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

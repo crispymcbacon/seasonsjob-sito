@@ -8,7 +8,8 @@ export const SITE = {
   /** Base site name used in titles and OpenGraph metadata. */
   name: 'SeasonsJob',
   /** Fallback description if a page does not define one. */
-  description: 'SeasonsJob — soluzioni digitali per il settore hospitality.',
+  description:
+    'SeasonsJob sviluppa software per hotel, ristoranti e strutture ricettive: persone, operazioni, acquisti e magazzino.',
   /** Default OpenGraph language-locale. */
   locale: 'it_IT',
 } as const;
@@ -18,10 +19,15 @@ export interface NavLink {
   href: string;
 }
 
-/** Primary navigation — structural placeholder, ordering to be finalized later. */
+/** Primary navigation. */
 export const NAV_LINKS: NavLink[] = [
   { label: 'Soluzioni', href: '/soluzioni/' },
   { label: 'Casi reali', href: '/casi-reali/' },
   { label: 'Chi siamo', href: '/chi-siamo/' },
-  { label: 'Contatti', href: '/contatti/' },
 ];
+
+/**
+ * Header call to action. Contact is kept out of the nav list so it reads as the
+ * primary action rather than as a fourth destination.
+ */
+export const CONTACT_LINK: NavLink = { label: 'Contatti', href: '/contatti/' };

@@ -3,18 +3,41 @@ import type { NavLink } from '@/config/site';
 
 interface Props {
   links?: NavLink[];
+  /** Inline for the desktop header row, stacked for the mobile menu panel. */
+  variant?: 'inline' | 'stacked';
+  label?: string;
 }
 
-const { links = [] } = Astro.props;
+const {
+  links = [],
+  variant = 'inline',
+  label = 'Navigazione principale',
+} = Astro.props;
+
+const layouts = {
+  inline: 'flex items-center gap-1',
+  stacked: 'flex flex-col items-stretch',
+};
+
+const linkBase =
+  'font-medium text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-ink aria-[current=page]:text-brand-700';
+
+const linkClasses = {
+  inline: `block rounded-lg px-3 py-2 text-sm ${linkBase}`,
+  stacked: `block rounded-lg px-3 py-2.5 text-base ${linkBase}`,
+};
+
+const current = Astro.url.pathname;
 ---
 
-<nav aria-label="Navigazione principale">
-  <ul class="flex items-center gap-6">
+<nav aria-label={label}>
+  <ul class={layouts[variant]}>
     {links.map((link) => (
       <li>
         <a
           href={link.href}
-          aria-current={Astro.url.pathname === link.href ? 'page' : undefined}
+          aria-current={current === link.href ? 'page' : undefined}
+          class={linkClasses[variant]}
         >
           {link.label}
         </a>

@@ -1,0 +1,21 @@
+---
+import { ICONS, type IconName } from './icon-set';
+
+interface Props {
+  /** Icon key from the local Lucide subset. */
+  name: IconName;
+  /** Sizing/spacing classes applied to the wrapper (e.g. `size-5`). */
+  class?: string;
+}
+
+const { name, class: className = 'size-5' } = Astro.props;
+
+// Icons are decorative by default: the adjacent text carries the meaning.
+const svg = ICONS[name];
+---
+
+<span
+  class:list={['icon shrink-0', className]}
+  aria-hidden="true"
+  set:html={svg}
+/>

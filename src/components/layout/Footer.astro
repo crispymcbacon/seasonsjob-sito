@@ -1,20 +1,68 @@
 ---
-import { NAV_LINKS } from '@/config/site';
+import { SOLUTIONS } from '@/config/solutions';
+import Brand from '@/components/ui/Brand.astro';
 
 const year = new Date().getFullYear();
+
+const COMPANY_LINKS = [
+  { label: 'Chi siamo', href: '/chi-siamo/' },
+  { label: 'Casi reali', href: '/casi-reali/' },
+  { label: 'Contatti', href: '/contatti/' },
+];
+
+const linkClass =
+  'inline-block py-1.5 text-neutral-600 transition-colors hover:text-ink';
 ---
 
-<footer>
-  <div class="mx-auto max-w-6xl px-4 py-6">
-    <p>© {year} SeasonsJob</p>
-    <nav aria-label="Navigazione footer">
-      <ul class="flex flex-wrap gap-4 text-sm">
-        {NAV_LINKS.map((link) => (
+<footer class="border-t border-neutral-200 bg-white">
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+      <div>
+        <Brand size="sm" />
+        <p class="mt-4 max-w-xs text-sm leading-relaxed text-neutral-600">
+          Software per il lavoro quotidiano nell'ospitalità: persone,
+          operazioni, acquisti e magazzino.
+        </p>
+      </div>
+
+      <nav aria-label="Soluzioni">
+        <p class="text-xs font-semibold tracking-[0.14em] text-neutral-500 uppercase">
+          Soluzioni
+        </p>
+        <ul class="mt-3 flex flex-col gap-1 text-sm">
+          {SOLUTIONS.map((solution) => (
+            <li>
+              <a href={solution.href} class={linkClass}>
+                {solution.name}
+              </a>
+            </li>
+          ))}
           <li>
-            <a href={link.href}>{link.label}</a>
+            <a href="/soluzioni/" class={linkClass}>
+              Tutte le soluzioni
+            </a>
           </li>
-        ))}
-      </ul>
-    </nav>
+        </ul>
+      </nav>
+
+      <nav aria-label="Azienda">
+        <p class="text-xs font-semibold tracking-[0.14em] text-neutral-500 uppercase">
+          Azienda
+        </p>
+        <ul class="mt-3 flex flex-col gap-1 text-sm">
+          {COMPANY_LINKS.map((link) => (
+            <li>
+              <a href={link.href} class={linkClass}>
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+
+    <div class="mt-12 border-t border-neutral-200 pt-6">
+      <p class="text-sm text-neutral-500">© {year} SeasonsJob</p>
+    </div>
   </div>
 </footer>

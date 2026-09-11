@@ -1,0 +1,65 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+
+/*
+  Principles behind the products — company positioning, not product features.
+  The single dark section of the page gives the homepage its second rhythm.
+*/
+const PRINCIPLES = [
+  {
+    term: "Dentro l'ospitalità",
+    detail:
+      'Lavoriamo solo su questo settore: conosciamo i turni, le stagioni e i ruoli di una struttura ricettiva.',
+  },
+  {
+    term: "Dall'operatività",
+    detail:
+      "Ogni funzione parte da un problema osservato in struttura, non da un'ipotesi di mercato.",
+  },
+  {
+    term: 'Semplice per scelta',
+    detail:
+      'Meno passaggi, meno configurazione, meno formazione: chi inizia un turno deve capire subito cosa fare.',
+  },
+  {
+    term: 'Cresce con la struttura',
+    detail:
+      'Aggiungiamo funzioni quando servono davvero, seguendo come cambia il lavoro durante la stagione.',
+  },
+];
+---
+
+<section class="bg-night">
+  <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-5" data-reveal>
+        <SectionHeader
+          tone="dark"
+          eyebrow="Perché SeasonsJob"
+          title="Costruito sul lavoro reale."
+          description="I prodotti nascono dentro le strutture: parliamo con chi lavora in sala, in cucina, alla reception e in magazzino, e progettiamo a partire da quello che ci raccontano."
+        />
+        <a
+          href="/chi-siamo/"
+          class="mt-6 inline-flex items-center gap-2 py-1.5 text-sm font-semibold text-brand-300 transition-colors hover:text-brand-200"
+        >
+          Conosci SeasonsJob
+          <Icon name="arrow-right" class="size-4" />
+        </a>
+      </div>
+
+      <dl
+        class="divide-y divide-white/10 border-t border-white/10 lg:col-span-7"
+        data-reveal
+      >
+        {PRINCIPLES.map((principle) => (
+          <div class="grid gap-2 py-6 sm:grid-cols-[10.5rem_minmax(0,1fr)] sm:gap-8 sm:py-7">
+            <dt class="font-semibold text-white">{principle.term}</dt>
+            <dd class="max-w-prose text-neutral-400">{principle.detail}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>

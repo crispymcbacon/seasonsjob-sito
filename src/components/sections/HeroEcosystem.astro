@@ -1,0 +1,177 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { SOLUTIONS } from '@/config/solutions';
+
+/*
+  Abstract representation of the SeasonsJob ecosystem: the four products
+  connected to the company in the centre.
+
+  Implemented with plain HTML (real, selectable product names) plus one static
+  SVG layer for the connectors — no canvas, no WebGL, no client JS. Positions
+  are percentages of a square container, which is also the SVG viewBox, so the
+  connectors stay aligned at every size.
+
+  The markup is prepared for richer motion later: each node already exposes a
+  `--delay` custom property.
+*/
+interface Node {
+  name: string;
+  href: string;
+  icon: (typeof SOLUTIONS)[number]['icon'];
+  /** Centre of the node, in percent of the container. */
+  x: number;
+  y: number;
+  /** Curved connector from the centre to the node. */
+  path: string;
+  delay: number;
+}
+
+const NODES: Node[] = [
+  {
+    ...SOLUTIONS[0],
+    x: 26,
+    y: 17,
+    path: 'M 50 50 Q 40 30 26 17',
+    delay: 220,
+  },
+  {
+    ...SOLUTIONS[1],
+    x: 76,
+    y: 31,
+    path: 'M 50 50 Q 63 34 76 31',
+    delay: 300,
+  },
+  {
+    ...SOLUTIONS[2],
+    x: 22,
+    y: 73,
+    path: 'M 50 50 Q 37 69 22 73',
+    delay: 380,
+  },
+  {
+    ...SOLUTIONS[3],
+    x: 70,
+    y: 82,
+    path: 'M 50 50 Q 62 73 70 82',
+    delay: 460,
+  },
+];
+---
+
+<div class="relative mx-auto aspect-square w-full max-w-88 sm:max-w-96 lg:max-w-[26rem] xl:max-w-[30rem]">
+  <!-- Decorative depth: dot texture, brand glow, one orbit line. -->
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div class="dot-grid absolute inset-0 opacity-60"></div>
+    <div class="absolute top-1/2 left-1/2 size-[74%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--color-brand-100)_0%,transparent_72%)] opacity-70"></div>
+    <div class="absolute top-1/2 left-1/2 size-[48%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-neutral-200"></div>
+  </div>
+
+  <svg
+    class="absolute inset-0 size-full"
+    viewBox="0 0 100 100"
+    aria-hidden="true"
+  >
+    {NODES.map((node) => (
+      <path
+        d={node.path}
+        class="connector"
+        vector-effect="non-scaling-stroke"
+        style={`--delay:${node.delay}ms`}
+      />
+    ))}
+  </svg>
+
+  <!-- Centre of the ecosystem. -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div
+      class="hub font-display flex size-16 items-center justify-center rounded-full border border-brand-200 bg-white text-xl font-bold text-brand-600 sm:size-20 sm:text-2xl"
+      aria-hidden="true"
+    >
+      S
+    </div>
+  </div>
+
+  <!-- Products: real text, real links. -->
+  <ul class="absolute inset-0">
+    {NODES.map((node) => (
+      <li
+        class="absolute -translate-x-1/2 -translate-y-1/2"
+        style={`left:${node.x}%;top:${node.y}%;--delay:${node.delay}ms`}
+      >
+        <a
+          href={node.href}
+          class="node flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 py-2 text-sm font-medium whitespace-nowrap text-ink shadow-[0_1px_3px_rgba(23,23,23,0.06)] transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+        >
+          <Icon name={node.icon} class="size-4 text-brand-500" />
+          {node.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .connector {
+    fill: none;
+    /* Brand-tinted neutral: reads as a connection without adding an accent colour. */
+    stroke: color-mix(
+      in oklab,
+      var(--color-brand-500) 30%,
+      var(--color-neutral-400)
+    );
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: draw-connector 900ms cubic-bezier(0.33, 1, 0.68, 1) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  /* The only real motion: the four links draw out from the centre on load. */
+  @keyframes draw-connector {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .node {
+    animation: node-in 620ms cubic-bezier(0.22, 0.7, 0.3, 1) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  @keyframes node-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .hub {
+    animation:
+      hub-in 700ms cubic-bezier(0.22, 0.7, 0.3, 1) both,
+      hub-pulse 7s ease-in-out 1.4s infinite;
+  }
+
+  @keyframes hub-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes hub-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.035);
+    }
+  }
+</style>

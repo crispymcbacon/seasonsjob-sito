@@ -1,0 +1,42 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary';
+  /** `lg` is used for the closing CTA, `md` everywhere else. */
+  size?: 'md' | 'lg';
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  class: className,
+} = Astro.props;
+
+const variants = {
+  primary: 'bg-brand-500 text-white hover:bg-brand-600',
+  secondary:
+    'border border-neutral-300 bg-white text-ink hover:border-neutral-400 hover:bg-neutral-50',
+};
+
+const sizes = {
+  md: 'min-h-11 px-4 text-sm',
+  lg: 'min-h-12 px-5 text-base',
+};
+---
+
+<a
+  href={href}
+  class:list={[
+    'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors',
+    // Keep the keyboard focus ring visible on light backgrounds, where the
+    // inherited `currentColor` ring would disappear on the primary button.
+    'focus-visible:outline-ink',
+    variants[variant],
+    sizes[size],
+    className,
+  ]}
+>
+  <slot />
+</a>

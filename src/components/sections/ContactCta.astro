@@ -1,0 +1,75 @@
+---
+import { SOLUTIONS } from '@/config/solutions';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+/*
+  Closing CTA. The current conversion is a request for information: no demo
+  booking, trial or automated onboarding is implied.
+
+  The product index on the right echoes the ecosystem without repeating the
+  product descriptions.
+*/
+---
+
+<section class="bg-neutral-50">
+  <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+    <div
+      class="relative overflow-hidden rounded-2xl border border-brand-100 bg-brand-50/70 px-6 py-12 sm:px-10 sm:py-14 lg:px-14"
+      data-reveal
+    >
+      <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div class="dot-grid absolute inset-0 opacity-50"></div>
+      </div>
+
+      <div class="relative grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-16">
+        <div class="max-w-2xl">
+          <h2 class="text-[1.75rem] sm:text-[2rem]">
+            Parliamo della tua struttura.
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-neutral-700">
+            Raccontaci come lavori oggi: ti rispondiamo per capire insieme quali
+            strumenti SeasonsJob possono esserti utili e come si parte.
+          </p>
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Button href="/contatti/" size="lg">
+              Richiedi informazioni
+              <Icon name="arrow-right" class="size-4" />
+            </Button>
+            <Button href="/soluzioni/" variant="secondary" size="lg">
+              Vedi le soluzioni
+            </Button>
+          </div>
+        </div>
+
+        <ul class="flex flex-col border-t border-brand-100 lg:self-center lg:border-t-0 lg:border-l lg:pl-10">
+          {SOLUTIONS.map((solution) => (
+            <li class="border-b border-brand-100/80 last:border-b-0">
+              <a
+                href={solution.href}
+                class="group flex items-center justify-between gap-4 py-3.5"
+              >
+                <span class="flex items-center gap-2.5 text-sm font-medium text-ink transition-colors group-hover:text-brand-700">
+                  <Icon name={solution.icon} class="size-4 text-brand-500" />
+                  {solution.name}
+                  {solution.status === 'in-sviluppo' && (
+                    <span class="rounded-full border border-brand-200 bg-white px-2 py-0.5 text-[0.625rem] font-semibold tracking-[0.06em] text-brand-700 uppercase">
+                      In sviluppo
+                    </span>
+                  )}
+                </span>
+                <span class="flex items-center gap-2 text-[0.6875rem] font-semibold tracking-[0.12em] text-neutral-500 uppercase">
+                  {solution.area}
+                  <Icon
+                    name="arrow-right"
+                    class="size-3.5 text-brand-400 transition-transform group-hover:translate-x-0.5"
+                  />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

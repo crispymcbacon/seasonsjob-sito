@@ -1,16 +1,35 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import PagePlaceholder from '@/components/ui/PagePlaceholder.astro';
+import Hero from '@/components/sections/Hero.astro';
+import Solutions from '@/components/sections/Solutions.astro';
+import WhySeasonsJob from '@/components/sections/WhySeasonsJob.astro';
+import FieldWork from '@/components/sections/FieldWork.astro';
+import ContactCta from '@/components/sections/ContactCta.astro';
+import { SITE } from '@/config/site';
 
-const pageTitle = 'SeasonsJob — soluzioni digitali per hospitality';
+const title = 'SeasonsJob — software per il lavoro quotidiano in struttura';
+const description =
+  'SeasonsJob sviluppa software per hotel, ristoranti e strutture ricettive: Lavoro, Comande, Procuro e Wine, quattro prodotti per il lavoro quotidiano.';
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.description,
+};
 ---
 
-<BaseLayout
-  title={pageTitle}
-  description="Home page segnaposto del sito SeasonsJob. I contenuti reali verranno pubblicati in una fase successiva."
->
-  <PagePlaceholder
-    title={pageTitle}
-    description="Home page segnaposto. Le sezioni reali verranno progettate in una fase successiva."
-  />
+<BaseLayout title={title} description={description} canonical="/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify(structuredData)}
+  ></script>
+  <Hero />
+  <Solutions />
+  <WhySeasonsJob />
+  <FieldWork />
+  <ContactCta />
 </BaseLayout>

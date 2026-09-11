@@ -13,10 +13,7 @@ export default defineConfig({
   output: 'static',
 
   integrations: [
-    sitemap({
-      // Temporary validation pages must not leak into production SEO.
-      filter: (page) => !page.includes('/island-demo'),
-    }),
+    sitemap(),
     // Vue is available for interactive islands only; nothing is hydrated globally.
     vue(),
   ],

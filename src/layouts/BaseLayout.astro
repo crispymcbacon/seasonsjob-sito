@@ -51,13 +51,16 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
     <meta property="og:title" content={fullTitle} />
     <meta property="og:url" content={canonicalUrl} />
     {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+
+    <!-- Per-page additions (e.g. structured data on the homepage). -->
+    <slot name="head" />
   </head>
-  <body>
+  <body class="flex min-h-dvh flex-col">
     <a class="skip-link" href="#main">
       Vai al contenuto
     </a>
     <Header />
-    <main id="main">
+    <main id="main" class="flex-1">
       <slot />
     </main>
     <Footer />

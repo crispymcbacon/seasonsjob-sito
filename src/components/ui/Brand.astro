@@ -1,0 +1,40 @@
+---
+interface Props {
+  /** Wordmark size; `md` is used in the header, `sm` in the footer. */
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const { size = 'md', class: className } = Astro.props;
+
+const marks = {
+  sm: 'size-8',
+  md: 'size-9',
+};
+
+const words = {
+  sm: 'text-base',
+  md: 'text-lg',
+};
+---
+
+<a
+  href="/"
+  class:list={['inline-flex items-center gap-2.5 rounded-lg', className]}
+  aria-label="SeasonsJob — home"
+>
+  <span
+    class:list={[
+      'font-display flex items-center justify-center rounded-lg bg-brand-500 font-bold text-white leading-none',
+      marks[size],
+    ]}
+    aria-hidden="true"
+  >
+    S
+  </span>
+  <span
+    class:list={['font-display font-bold tracking-tight text-ink', words[size]]}
+  >
+    SeasonsJob
+  </span>
+</a>

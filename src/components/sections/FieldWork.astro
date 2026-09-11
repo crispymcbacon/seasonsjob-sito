@@ -1,0 +1,113 @@
+---
+import { getCollection } from 'astro:content';
+import Icon from '@/components/ui/Icon.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { PARTNERS } from '@/config/solutions';
+
+/*
+  Credibility: demonstrates that the products are built together with real
+  hospitality businesses.
+
+  The section is already wired to the `casi-reali` content collection, so the
+  moment the first case study is published it appears here automatically. Until
+  then it shows an honest, non-invented state — no placeholder logos, quotes or
+  numbers.
+*/
+const cases = (await getCollection('casi-reali')).slice(0, 3);
+---
+
+<section class="border-b border-neutral-200/80 bg-white">
+  <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+    {PARTNERS.length > 0 && (
+      <div class="mb-16 border-b border-neutral-200 pb-10">
+        <p class="text-xs font-semibold tracking-[0.14em] text-neutral-500 uppercase">
+          Strutture e partner
+        </p>
+        <ul class="mt-6 flex flex-wrap items-center gap-x-10 gap-y-6">
+          {PARTNERS.map((partner) => (
+            <li>
+              <img
+                src={partner.src}
+                alt={partner.name}
+                height="32"
+                loading="lazy"
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-6" data-reveal>
+        <SectionHeader
+          eyebrow="Sul campo"
+          title="Costruito con le strutture."
+          description="SeasonsJob nasce e cresce a contatto con hotel, ristoranti e strutture ricettive: i prodotti vengono provati nei turni reali e corretti insieme a chi li usa ogni giorno."
+        />
+        <a
+          href="/casi-reali/"
+          class="mt-6 inline-flex items-center gap-2 py-1.5 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
+        >
+          Vai a Casi reali
+          <Icon name="arrow-right" class="size-4" />
+        </a>
+      </div>
+
+      <div class="lg:col-span-6">
+        <div class="rounded-2xl border border-neutral-200 bg-neutral-50/70 p-6 sm:p-8">
+          <span
+            class="flex size-9 items-center justify-center rounded-lg border border-neutral-200 bg-white text-brand-500"
+            aria-hidden="true"
+          >
+            <Icon name="building-2" class="size-4" />
+          </span>
+
+          {cases.length > 0 ? (
+            <>
+              <h3 class="mt-5 text-xl">Casi reali</h3>
+              <ul class="mt-4 flex flex-col divide-y divide-neutral-200">
+                {cases.map((entry) => (
+                  <li class="py-4 first:pt-0 last:pb-0">
+                    <a
+                      href={`/casi-reali/${entry.id}/`}
+                      class="font-semibold text-ink transition-colors hover:text-brand-700"
+                    >
+                      {entry.data.title}
+                    </a>
+                    <p class="mt-1 text-sm text-neutral-600">
+                      {entry.data.summary}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <>
+              <h3 class="mt-5 text-xl">
+                Stiamo documentando i primi progetti.
+              </h3>
+              <p class="mt-2 text-neutral-600">
+                Raccontiamo i casi per intero: il contesto della struttura, cosa
+                abbiamo fatto e cosa è cambiato nel lavoro quotidiano. Li
+                pubblichiamo qui appena pronti.
+              </p>
+              <div class="mt-6 flex flex-col gap-3 border-t border-neutral-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
+                <p class="text-sm text-neutral-600">
+                  Gestisci una struttura e vuoi raccontarci come lavori?
+                </p>
+                <a
+                  href="/contatti/"
+                  class="inline-flex shrink-0 items-center gap-2 py-1.5 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
+                >
+                  Scrivici
+                  <Icon name="arrow-right" class="size-4" />
+                </a>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

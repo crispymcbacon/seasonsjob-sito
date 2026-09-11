@@ -22,12 +22,12 @@ const {
 const Heading = level;
 ---
 
-<div class:list={['flex flex-col gap-4', className]}>
+<div class:list={['flex flex-col gap-5', className]}>
   {eyebrow && (
     <p
       class:list={[
-        'flex items-center gap-2 text-xs font-semibold tracking-[0.14em] uppercase',
-        tone === 'dark' ? 'text-brand-300' : 'text-brand-600',
+        'eyebrow flex items-center gap-2',
+        tone === 'dark' && 'text-brand-300',
       ]}
     >
       <span
@@ -42,7 +42,7 @@ const Heading = level;
   )}
   <Heading
     class:list={[
-      'text-[1.75rem] sm:text-[2rem] lg:text-[2.25rem]',
+      'text-[1.75rem] leading-[1.15] sm:text-[2.125rem] md:text-[2.5rem]',
       tone === 'dark' ? 'text-white' : 'text-ink',
     ]}
   >
@@ -51,7 +51,7 @@ const Heading = level;
   {description && (
     <p
       class:list={[
-        'max-w-prose text-base leading-relaxed sm:text-[1.0625rem]',
+        'max-w-prose text-lg leading-relaxed',
         tone === 'dark' ? 'text-neutral-400' : 'text-neutral-600',
       ]}
     >

@@ -8,24 +8,24 @@ import SectionHeader from '@/components/ui/SectionHeader.astro';
 */
 const PRINCIPLES = [
   {
-    term: "Dentro l'ospitalità",
-    detail:
-      'Lavoriamo solo su questo settore: conosciamo i turni, le stagioni e i ruoli di una struttura ricettiva.',
+    title: 'Nati dai flussi reali',
+    text: 'Partiamo da come si lavora davvero in reception, in sala, in cucina e in cantina, non da uno schema astratto.',
   },
   {
-    term: "Dall'operatività",
-    detail:
-      "Ogni funzione parte da un problema osservato in struttura, non da un'ipotesi di mercato.",
+    title: 'Progettati con chi li usa',
+    text: 'I prodotti prendono forma a contatto con le persone che li useranno ogni giorno, e cambiano con il loro riscontro.',
   },
   {
-    term: 'Semplice per scelta',
-    detail:
-      'Meno passaggi, meno configurazione, meno formazione: chi inizia un turno deve capire subito cosa fare.',
+    title: 'Pratici, non complicati',
+    text: 'Poche funzioni chiare al posto di tante opzioni inutili. Si capiscono in fretta e si usano senza formazione lunga.',
   },
   {
-    term: 'Cresce con la struttura',
-    detail:
-      'Aggiungiamo funzioni quando servono davvero, seguendo come cambia il lavoro durante la stagione.',
+    title: 'Solo hospitality',
+    text: 'Non facciamo software per tutti i settori. Conosciamo stagioni, turni, fornitori e ritmi di una struttura ricettiva.',
+  },
+  {
+    title: 'Crescono con le esigenze',
+    text: 'Ogni prodotto evolve seguendo bisogni operativi concreti, non un elenco di funzionalità da vendere.',
   },
 ];
 ---
@@ -37,14 +37,14 @@ const PRINCIPLES = [
         <SectionHeader
           tone="dark"
           eyebrow="Perché SeasonsJob"
-          title="Costruito sul lavoro reale."
-          description="I prodotti nascono dentro le strutture: parliamo con chi lavora in sala, in cucina, alla reception e in magazzino, e progettiamo a partire da quello che ci raccontano."
+          title="Un modo di fare software vicino a chi lo usa"
+          description="Non vendiamo una piattaforma da adattare. Costruiamo strumenti specifici, uno per volta, con le strutture che li adottano."
         />
         <a
           href="/chi-siamo/"
-          class="mt-6 inline-flex items-center gap-2 py-1.5 text-sm font-semibold text-brand-300 transition-colors hover:text-brand-200"
+          class="mt-8 inline-flex items-center gap-1.5 py-1.5 text-[0.9375rem] font-medium text-brand-300 transition-colors hover:text-brand-200"
         >
-          Conosci SeasonsJob
+          Chi siamo
           <Icon name="arrow-right" class="size-4" />
         </a>
       </div>
@@ -53,10 +53,22 @@ const PRINCIPLES = [
         class="divide-y divide-white/10 border-t border-white/10 lg:col-span-7"
         data-reveal
       >
-        {PRINCIPLES.map((principle) => (
-          <div class="grid gap-2 py-6 sm:grid-cols-[10.5rem_minmax(0,1fr)] sm:gap-8 sm:py-7">
-            <dt class="font-semibold text-white">{principle.term}</dt>
-            <dd class="max-w-prose text-neutral-400">{principle.detail}</dd>
+        {PRINCIPLES.map((principle, i) => (
+          <div class="py-7">
+            <dt class="flex items-baseline gap-3">
+              <span
+                class="font-display w-9 shrink-0 text-xl text-brand-300 tabular-nums"
+                aria-hidden="true"
+              >
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span class="text-xl font-semibold text-white">
+                {principle.title}
+              </span>
+            </dt>
+            <dd class="mt-2 max-w-prose leading-relaxed text-neutral-400 sm:pl-12">
+              {principle.text}
+            </dd>
           </div>
         ))}
       </dl>

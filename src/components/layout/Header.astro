@@ -16,7 +16,7 @@ const { links = NAV_LINKS } = Astro.props;
   <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
     <Brand />
 
-    <div class="hidden items-center gap-2 md:flex">
+    <div class="hidden items-center gap-6 md:flex">
       <SiteNav links={links} />
       <Button href={CONTACT_LINK.href}>{CONTACT_LINK.label}</Button>
     </div>
@@ -24,8 +24,8 @@ const { links = NAV_LINKS } = Astro.props;
     <details class="group md:hidden">
       <summary class="flex size-11 cursor-pointer list-none items-center justify-center rounded-lg border border-neutral-300 text-ink transition-colors hover:bg-neutral-50 [&::-webkit-details-marker]:hidden">
         <span class="sr-only">Menu di navigazione</span>
-        <Icon name="menu" class="size-5 group-open:hidden" />
-        <Icon name="x" class="hidden size-5 group-open:block" />
+        <Icon name="menu" class="size-6 group-open:hidden" />
+        <Icon name="x" class="hidden size-6 group-open:block" />
       </summary>
 
       <div class="absolute inset-x-0 top-full border-b border-neutral-200 bg-white px-4 pt-2 pb-5 shadow-[0_12px_24px_-18px_rgba(23,23,23,0.35)] sm:px-6">

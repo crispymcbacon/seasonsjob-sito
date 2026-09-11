@@ -7,42 +7,52 @@
 import type { IconName } from '@/components/ui/icon-set';
 
 export interface Solution {
+  slug: 'lavoro' | 'comande' | 'procuro' | 'wine';
   /** Product name, used as written by the company. */
   name: string;
   /** Operational area the product covers (people, operations, purchasing, inventory). */
   area: string;
-  /** One homepage-level sentence: the problem the product addresses. */
-  summary: string;
+  /** One-line purpose, homepage level. */
+  tagline: string;
+  /** Short explanation of the problem addressed. */
+  description: string;
   href: string;
   icon: IconName;
   /** Set only for products that are not generally available yet. */
   status?: 'in-sviluppo';
-  /** Optional status note shown under the summary. */
+  /** Optional status note shown under the description. */
   statusNote?: string;
 }
 
+/** Public SeasonsJob product family, in ecosystem order. */
 export const SOLUTIONS: Solution[] = [
   {
+    slug: 'lavoro',
     name: 'Lavoro',
     area: 'Persone',
-    summary:
-      'Mette in contatto le strutture ricettive con chi cerca lavoro stagionale in hotel e ristoranti.',
+    tagline: 'Personale stagionale per l’hospitality',
+    description:
+      'La piattaforma che mette in contatto strutture ricettive e lavoratori per le stagioni: ricerca, candidature e selezione in un unico flusso.',
     href: '/soluzioni/lavoro/',
     icon: 'users',
   },
   {
+    slug: 'comande',
     name: 'Comande',
-    area: 'Operazioni',
-    summary:
-      'Gestisce le comande tra reception, sala e cucina: ogni ordine arriva al reparto giusto.',
+    area: 'Operatività',
+    tagline: 'Comande digitali tra reception, sala e cucina',
+    description:
+      'Gestione digitale di pasti e ordini: le informazioni passano tra i reparti senza fogli, telefonate e trascrizioni.',
     href: '/soluzioni/comande/',
     icon: 'receipt-text',
   },
   {
+    slug: 'procuro',
     name: 'Procuro',
     area: 'Acquisti',
-    summary:
-      'Segue il flusso degli acquisti — fornitori, listini, ordini e ricevimento merci — in un unico percorso.',
+    tagline: 'Fornitori, listini e ordini sotto controllo',
+    description:
+      'Il flusso degli acquisti per la struttura: elenco fornitori, listini, ordini e ricezione della merce in un percorso ordinato.',
     href: '/soluzioni/procuro/',
     icon: 'clipboard-list',
     status: 'in-sviluppo',
@@ -50,10 +60,12 @@ export const SOLUTIONS: Solution[] = [
       'In sviluppo: lo stiamo costruendo insieme alle prime strutture.',
   },
   {
+    slug: 'wine',
     name: 'Wine',
-    area: 'Magazzino',
-    summary:
-      'Tiene traccia della cantina: giacenze, posizione delle bottiglie e movimenti di carico e scarico.',
+    area: 'Inventario',
+    tagline: 'La cantina, sempre aggiornata',
+    description:
+      'Gestione digitale dell’inventario vini: giacenze, posizioni e movimenti registrati man mano che avvengono.',
     href: '/soluzioni/wine/',
     icon: 'wine',
   },

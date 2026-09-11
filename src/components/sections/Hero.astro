@@ -5,21 +5,21 @@ import HeroEcosystem from './HeroEcosystem.astro';
 
 /*
   Opening sequence: positioning + the ecosystem visual, followed by a compact
-  three-column introduction. Kept in one section so the hero and the company
-  introduction read as a single movement.
+  introduction. Kept in one section so the hero and the company introduction
+  read as a single movement.
 */
-const INTRO_ITEMS = [
+const INTRO_POINTS = [
   {
-    label: 'Solo ospitalità',
-    text: 'Progettiamo esclusivamente per hotel, ristoranti e strutture ricettive: nessuna funzione generica pensata per altri settori.',
+    title: 'Costruiti per l’hospitality',
+    text: 'Non software generico adattato: ogni prodotto nasce da come lavorano davvero hotel e ristoranti.',
   },
   {
-    label: 'Problemi concreti',
-    text: "Ogni prodotto parte da un'attività reale: coprire un turno, far arrivare una comanda in cucina, gestire un ordine, sapere cosa resta in cantina.",
+    title: 'Problemi concreti',
+    text: 'Turni da coprire, comande da passare, ordini da fare, bottiglie da contare. Da qui partiamo.',
   },
   {
-    label: 'Aree diverse',
-    text: 'Lavoro, Comande, Procuro e Wine intervengono su parti diverse del lavoro quotidiano e si scelgono in base alle esigenze della struttura.',
+    title: 'Uno strumento per ogni parte del lavoro',
+    text: 'Persone, operatività, acquisti e inventario: aree diverse, stessa famiglia di prodotti.',
   },
 ];
 ---
@@ -27,26 +27,21 @@ const INTRO_ITEMS = [
 <section class="border-b border-neutral-200/80 bg-white">
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
     <div class="grid items-center gap-14 pt-14 pb-16 lg:grid-cols-12 lg:gap-10 lg:pt-20 lg:pb-20">
-      <div class="hero-copy flex flex-col items-start gap-6 lg:col-span-6">
-        <p class="flex items-center gap-2 text-sm font-semibold text-brand-600">
-          <span
-            class="size-1.5 rounded-full bg-brand-500"
-            aria-hidden="true"
-          ></span>
-          Software per l'ospitalità
-        </p>
+      <div class="hero-copy flex flex-col items-start lg:col-span-6">
+        <p class="eyebrow">Tecnologia per l’hospitality</p>
 
-        <h1 class="text-[2rem] leading-[1.12] sm:text-[2.5rem] lg:text-[2.75rem] xl:text-[3rem]">
-          Strumenti digitali per il lavoro quotidiano in struttura.
+        <h1 class="mt-4 text-[2.25rem] leading-[1.1] sm:text-[2.75rem] lg:text-[3.25rem]">
+          Strumenti digitali pensati per chi lavora nell’ospitalità
         </h1>
 
-        <p class="max-w-xl text-lg leading-relaxed text-neutral-600">
-          SeasonsJob sviluppa software per hotel, ristoranti e strutture
-          ricettive: quattro prodotti, ognuno specializzato in una parte diversa
-          delle operazioni quotidiane.
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-neutral-600 sm:text-xl">
+          SeasonsJob sviluppa una famiglia di prodotti specializzati per hotel,
+          ristoranti e strutture ricettive: personale stagionale, comande,
+          acquisti e cantina. Ogni strumento fa bene una cosa, e la fa dentro il
+          vostro modo di lavorare.
         </p>
 
-        <div class="mt-2 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+        <div class="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
           <Button href="#soluzioni" size="lg">
             Scopri le soluzioni
             <Icon name="arrow-right" class="size-4" />
@@ -63,19 +58,27 @@ const INTRO_ITEMS = [
     </div>
 
     <!-- Company introduction: same opening sequence, tighter rhythm. -->
-    <ul
+    <dl
       class="grid gap-8 border-t border-neutral-200 py-12 sm:grid-cols-3 sm:gap-10 sm:py-14"
       data-reveal
     >
-      {INTRO_ITEMS.map((item) => (
-        <li class="flex max-w-sm flex-col gap-2">
-          <p class="text-xs font-semibold tracking-[0.14em] text-brand-600 uppercase">
-            {item.label}
-          </p>
-          <p class="text-sm leading-relaxed text-neutral-600">{item.text}</p>
-        </li>
+      {INTRO_POINTS.map((point, i) => (
+        <div class="flex max-w-sm flex-col gap-2">
+          <dt class="flex items-baseline gap-2 font-semibold text-ink">
+            <span
+              class="text-xs font-semibold text-brand-500 tabular-nums"
+              aria-hidden="true"
+            >
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            {point.title}
+          </dt>
+          <dd class="text-[0.9375rem] leading-relaxed text-neutral-600">
+            {point.text}
+          </dd>
+        </div>
       ))}
-    </ul>
+    </dl>
   </div>
 </section>
 

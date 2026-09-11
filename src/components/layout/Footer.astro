@@ -11,7 +11,7 @@ const COMPANY_LINKS = [
 ];
 
 const linkClass =
-  'inline-block py-1.5 text-neutral-600 transition-colors hover:text-ink';
+  'inline-flex min-h-8 items-center text-[0.9375rem] text-neutral-600 transition-colors hover:text-brand-600';
 ---
 
 <footer class="border-t border-neutral-200 bg-white">
@@ -19,21 +19,25 @@ const linkClass =
     <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
       <div>
         <Brand size="sm" />
-        <p class="mt-4 max-w-xs text-sm leading-relaxed text-neutral-600">
-          Software per il lavoro quotidiano nell'ospitalità: persone,
-          operazioni, acquisti e magazzino.
+        <p class="mt-5 max-w-sm text-[0.9375rem] leading-relaxed text-neutral-600">
+          Strumenti digitali per il settore hospitality: personale stagionale,
+          comande, acquisti e cantina. Ogni prodotto risolve un pezzo concreto
+          del lavoro quotidiano.
         </p>
       </div>
 
       <nav aria-label="Soluzioni">
-        <p class="text-xs font-semibold tracking-[0.14em] text-neutral-500 uppercase">
+        <h2 class="text-sm font-semibold tracking-wide text-ink uppercase">
           Soluzioni
-        </p>
-        <ul class="mt-3 flex flex-col gap-1 text-sm">
+        </h2>
+        <ul class="mt-4 flex flex-col gap-1">
           {SOLUTIONS.map((solution) => (
             <li>
               <a href={solution.href} class={linkClass}>
                 {solution.name}
+                {solution.status === 'in-sviluppo' && (
+                  <span class="ml-2 text-xs text-neutral-500">in sviluppo</span>
+                )}
               </a>
             </li>
           ))}
@@ -46,10 +50,10 @@ const linkClass =
       </nav>
 
       <nav aria-label="Azienda">
-        <p class="text-xs font-semibold tracking-[0.14em] text-neutral-500 uppercase">
+        <h2 class="text-sm font-semibold tracking-wide text-ink uppercase">
           Azienda
-        </p>
-        <ul class="mt-3 flex flex-col gap-1 text-sm">
+        </h2>
+        <ul class="mt-4 flex flex-col gap-1">
           {COMPANY_LINKS.map((link) => (
             <li>
               <a href={link.href} class={linkClass}>
@@ -61,8 +65,9 @@ const linkClass =
       </nav>
     </div>
 
-    <div class="mt-12 border-t border-neutral-200 pt-6">
-      <p class="text-sm text-neutral-500">© {year} SeasonsJob</p>
+    <div class="mt-12 flex flex-col gap-3 border-t border-neutral-200 pt-6 text-sm text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} SeasonsJob</p>
+      <p>Tecnologia per l’hospitality, fatta con chi ci lavora.</p>
     </div>
   </div>
 </footer>

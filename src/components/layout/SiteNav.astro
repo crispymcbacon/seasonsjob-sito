@@ -15,16 +15,16 @@ const {
 } = Astro.props;
 
 const layouts = {
-  inline: 'flex items-center gap-1',
-  stacked: 'flex flex-col items-stretch',
+  inline: 'flex items-center gap-7',
+  stacked: 'flex flex-col items-stretch gap-1',
 };
 
 const linkBase =
-  'font-medium text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-ink aria-[current=page]:text-brand-700';
+  'inline-flex items-center font-medium text-neutral-600 transition-colors hover:text-ink aria-[current=page]:text-brand-600';
 
 const linkClasses = {
-  inline: `block rounded-lg px-3 py-2 text-sm ${linkBase}`,
-  stacked: `block rounded-lg px-3 py-2.5 text-base ${linkBase}`,
+  inline: `${linkBase} min-h-10 text-[0.9375rem]`,
+  stacked: `${linkBase} min-h-12 rounded-lg px-3 text-[1.0625rem] hover:bg-neutral-50`,
 };
 
 const current = Astro.url.pathname;

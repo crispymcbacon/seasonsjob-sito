@@ -16,59 +16,72 @@ import { SOLUTIONS } from '@/config/solutions';
 <section id="soluzioni" class="border-b border-neutral-200/80 bg-neutral-50">
   <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
     <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
-      <div class="lg:col-span-4 lg:sticky lg:top-24 lg:self-start" data-reveal>
+      <div class="lg:col-span-5 lg:sticky lg:top-24 lg:self-start" data-reveal>
         <SectionHeader
           eyebrow="Le soluzioni"
-          title="Quattro strumenti, quattro aree del lavoro."
-          description="I prodotti SeasonsJob appartengono alla stessa famiglia e nascono dallo stesso modo di lavorare: ognuno interviene su una fase diversa dell'operatività quotidiana."
+          title="Quattro prodotti, un unico ecosistema per l’hospitality"
+          description="Ogni prodotto copre un’area diversa della struttura. Insieme formano una famiglia coerente, costruita con lo stesso approccio e lo stesso linguaggio."
         />
         <a
           href="/soluzioni/"
-          class="mt-6 inline-flex items-center gap-2 py-1.5 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
+          class="mt-8 inline-flex items-center gap-1.5 py-1.5 text-[0.9375rem] font-medium text-brand-700 transition-colors hover:text-brand-600"
         >
           Tutte le soluzioni
           <Icon name="arrow-right" class="size-4" />
         </a>
       </div>
 
-      <ol class="soluzioni-rail relative lg:col-span-8">
+      <ol class="soluzioni-rail relative lg:col-span-7">
         {SOLUTIONS.map((solution) => (
           <li class="group relative max-w-none py-9 pl-16 sm:pl-20">
             <span
-              class="absolute top-9 left-0 flex size-11 items-center justify-center rounded-full border border-neutral-200 bg-white text-brand-500 transition-colors group-hover:border-brand-300 group-hover:bg-brand-50"
+              class="absolute top-9 left-0 grid size-10 place-items-center rounded-full border border-neutral-200 bg-white text-brand-600 transition-colors group-hover:border-brand-300 group-hover:bg-brand-50"
               aria-hidden="true"
             >
               <Icon name={solution.icon} class="size-5" />
             </span>
 
             <div class="grid gap-x-8 gap-y-2 sm:grid-cols-[8.5rem_minmax(0,1fr)]">
-              <p class="text-xs font-semibold tracking-[0.14em] text-neutral-500 uppercase">
+              <p class="text-xs font-semibold tracking-wide text-neutral-500 uppercase">
                 {solution.area}
               </p>
 
               <div class="flex flex-col gap-2">
-                <h3 class="flex flex-wrap items-center gap-x-3 gap-y-2 text-2xl">
-                  <a
-                    href={solution.href}
-                    class="group/link inline-flex items-center gap-2 transition-colors hover:text-brand-700"
-                  >
-                    {solution.name}
-                    <Icon
-                      name="arrow-right"
-                      class="size-5 text-brand-500 transition-transform group-hover/link:translate-x-0.5"
-                    />
-                  </a>
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+                  <h3 class="text-[1.375rem] leading-tight">
+                    <a
+                      href={solution.href}
+                      class="group/link inline-flex items-center gap-1.5 transition-colors hover:text-brand-700"
+                    >
+                      {solution.name}
+                      <Icon
+                        name="arrow-right"
+                        class="size-4 text-brand-500 transition-transform group-hover/link:translate-x-0.5"
+                      />
+                    </a>
+                  </h3>
                   {solution.status === 'in-sviluppo' && (
-                    <span class="rounded-full border border-brand-200 bg-brand-50 px-2.5 py-1 text-[0.6875rem] font-semibold tracking-[0.08em] text-brand-700 uppercase">
+                    <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-200 px-2.5 py-1 text-xs font-medium text-neutral-600">
+                      <span
+                        class="size-1.5 rounded-full bg-brand-500"
+                        aria-hidden="true"
+                      />
                       In sviluppo
                     </span>
                   )}
-                </h3>
+                </div>
 
-                <p class="max-w-prose text-neutral-600">{solution.summary}</p>
+                <p class="text-lg leading-snug font-medium text-ink">
+                  {solution.tagline}
+                </p>
+                <p class="max-w-prose text-[0.9375rem] leading-relaxed text-neutral-600">
+                  {solution.description}
+                </p>
 
                 {solution.statusNote && (
-                  <p class="text-sm text-neutral-500">{solution.statusNote}</p>
+                  <p class="text-[0.9375rem] text-neutral-500">
+                    {solution.statusNote}
+                  </p>
                 )}
               </div>
             </div>
@@ -89,7 +102,7 @@ import { SOLUTIONS } from '@/config/solutions';
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 1.375rem;
+    left: 1.25rem;
     width: 1px;
     background: linear-gradient(
       to bottom,

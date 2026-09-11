@@ -44,7 +44,7 @@
   body {
     min-height: 100dvh;
     font-family: var(--font-sans);
-    font-size: 1rem;
+    font-size: 1.0625rem;
     line-height: 1.6;
     color: var(--color-ink);
     background-color: #fff;
@@ -65,6 +65,10 @@
   p,
   li {
     max-width: 65ch;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   img,
@@ -101,6 +105,15 @@
 }
 
 @layer components {
+  /* Small uppercase label used above headings. */
+  .eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-brand-600);
+  }
+
   /* Lucide SVGs are inlined at build time; the wrapper controls the size. */
   .icon {
     display: inline-flex;

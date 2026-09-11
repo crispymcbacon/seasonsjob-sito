@@ -20,9 +20,7 @@ const cases = (await getCollection('casi-reali')).slice(0, 3);
   <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
     {PARTNERS.length > 0 && (
       <div class="mb-16 border-b border-neutral-200 pb-10">
-        <p class="text-xs font-semibold tracking-[0.14em] text-neutral-500 uppercase">
-          Strutture e partner
-        </p>
+        <p class="eyebrow">Strutture e partner</p>
         <ul class="mt-6 flex flex-wrap items-center gap-x-10 gap-y-6">
           {PARTNERS.map((partner) => (
             <li>
@@ -41,15 +39,15 @@ const cases = (await getCollection('casi-reali')).slice(0, 3);
     <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
       <div class="lg:col-span-6" data-reveal>
         <SectionHeader
-          eyebrow="Sul campo"
-          title="Costruito con le strutture."
-          description="SeasonsJob nasce e cresce a contatto con hotel, ristoranti e strutture ricettive: i prodotti vengono provati nei turni reali e corretti insieme a chi li usa ogni giorno."
+          eyebrow="Casi reali"
+          title="Sviluppati insieme a strutture che lavorano davvero"
+          description="I prodotti SeasonsJob vengono progettati e messi alla prova dentro attività ricettive reali, con le persone che li usano nel turno. È così che decidiamo cosa costruire e cosa lasciare fuori."
         />
         <a
           href="/casi-reali/"
-          class="mt-6 inline-flex items-center gap-2 py-1.5 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
+          class="mt-8 inline-flex items-center gap-1.5 py-1.5 text-[0.9375rem] font-medium text-brand-700 transition-colors hover:text-brand-600"
         >
-          Vai a Casi reali
+          Vai ai casi reali
           <Icon name="arrow-right" class="size-4" />
         </a>
       </div>
@@ -57,7 +55,7 @@ const cases = (await getCollection('casi-reali')).slice(0, 3);
       <div class="lg:col-span-6">
         <div class="rounded-2xl border border-neutral-200 bg-neutral-50/70 p-6 sm:p-8">
           <span
-            class="flex size-9 items-center justify-center rounded-lg border border-neutral-200 bg-white text-brand-500"
+            class="grid size-9 place-items-center rounded-full bg-brand-50 text-brand-600"
             aria-hidden="true"
           >
             <Icon name="building-2" class="size-4" />
@@ -71,11 +69,11 @@ const cases = (await getCollection('casi-reali')).slice(0, 3);
                   <li class="py-4 first:pt-0 last:pb-0">
                     <a
                       href={`/casi-reali/${entry.id}/`}
-                      class="font-semibold text-ink transition-colors hover:text-brand-700"
+                      class="text-lg font-medium text-ink transition-colors hover:text-brand-700"
                     >
                       {entry.data.title}
                     </a>
-                    <p class="mt-1 text-sm text-neutral-600">
+                    <p class="mt-1 text-[0.9375rem] leading-relaxed text-neutral-600">
                       {entry.data.summary}
                     </p>
                   </li>
@@ -87,18 +85,18 @@ const cases = (await getCollection('casi-reali')).slice(0, 3);
               <h3 class="mt-5 text-xl">
                 Stiamo documentando i primi progetti.
               </h3>
-              <p class="mt-2 text-neutral-600">
+              <p class="mt-2 text-[0.9375rem] leading-relaxed text-neutral-600">
                 Raccontiamo i casi per intero: il contesto della struttura, cosa
                 abbiamo fatto e cosa è cambiato nel lavoro quotidiano. Li
                 pubblichiamo qui appena pronti.
               </p>
               <div class="mt-6 flex flex-col gap-3 border-t border-neutral-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-                <p class="text-sm text-neutral-600">
-                  Gestisci una struttura e vuoi raccontarci come lavori?
+                <p class="text-[0.9375rem] text-neutral-600">
+                  Gestite una struttura e volete raccontarci come lavorate?
                 </p>
                 <a
                   href="/contatti/"
-                  class="inline-flex shrink-0 items-center gap-2 py-1.5 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-600"
+                  class="inline-flex shrink-0 items-center gap-1.5 py-1.5 text-[0.9375rem] font-medium text-brand-700 transition-colors hover:text-brand-600"
                 >
                   Scrivici
                   <Icon name="arrow-right" class="size-4" />

@@ -3,25 +3,23 @@ import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 
 /*
-  Closing CTA banner.
-  Compact dark hero card with perspective grid, full SeasonsJob brand emblem,
-  and dual call-to-action buttons.
+  Closing CTA banner: a focused, contained final step rather than a second hero.
 */
 ---
 
 <section class="bg-neutral-50">
   <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
     <div
-      class="relative overflow-hidden rounded-2xl border border-white/10 bg-[#141816] px-6 py-10 text-center sm:rounded-3xl sm:px-10 sm:py-12 lg:px-12 lg:py-14 shadow-xl"
+      class="relative overflow-hidden rounded-2xl border border-white/10 bg-night px-6 py-10 text-center shadow-[0_12px_36px_rgba(15,22,19,0.12)] sm:px-10 sm:py-12 lg:px-12 lg:py-14"
       data-reveal
     >
       {/* Ambient background glow */}
       <div
-        class="pointer-events-none absolute inset-x-0 -top-20 h-56 bg-[radial-gradient(ellipse_60%_60%_at_50%_0%,rgba(7,134,96,0.35),transparent_70%)]"
+        class="pointer-events-none absolute inset-x-0 -top-20 h-56 bg-[radial-gradient(ellipse_60%_60%_at_50%_0%,rgba(7,134,96,0.24),transparent_70%)]"
         aria-hidden="true"
       ></div>
       <div
-        class="pointer-events-none absolute inset-x-0 -bottom-20 h-56 bg-[radial-gradient(ellipse_60%_60%_at_50%_100%,rgba(7,134,96,0.18),transparent_70%)]"
+        class="pointer-events-none absolute inset-x-0 -bottom-20 h-56 bg-[radial-gradient(ellipse_60%_60%_at_50%_100%,rgba(7,134,96,0.12),transparent_70%)]"
         aria-hidden="true"
       ></div>
 
@@ -32,41 +30,33 @@ import Icon from '@/components/ui/Icon.astro';
       ></div>
 
       <div class="relative z-10 mx-auto max-w-2xl">
-        {/* Full frosted SeasonsJob brand badge */}
-        <div class="relative mx-auto mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.25)] backdrop-blur-md">
+        <p class="eyebrow mx-auto inline-flex items-center gap-2.5 text-lg font-medium text-neutral-400">
           <span
-            class="font-display grid size-6 place-items-center rounded-md bg-brand-500 text-xs font-black text-white leading-none"
+            class="size-2 rounded-[2px] bg-brand-400"
             aria-hidden="true"
-          >
-            S
-          </span>
-          <span class="font-display text-sm font-black tracking-tight text-white">
-            SeasonsJob
-          </span>
-        </div>
-
-        {/* Headline */}
-        <h2 class="font-display mx-auto max-w-xl text-[1.75rem] leading-snug text-white sm:text-3xl md:text-[2.25rem]">
-          Un unico ecosistema per la tua struttura{' '}
-          <em class="font-display font-normal text-brand-300 italic">
-            parte da qui
-          </em>
-        </h2>
-
-        {/* Subtitle */}
-        <p class="mx-auto mt-3.5 max-w-lg text-[0.9375rem] leading-relaxed text-neutral-300 sm:text-base">
-          Raccontateci come lavorate e quali passaggi vi portano via più tempo.
-          Vi rispondiamo con informazioni concrete sui prodotti più adatti alla
-          vostra realtà.
+          ></span>
+          Parliamo della tua struttura
         </p>
 
-        {/* Action Buttons */}
-        <div class="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-3.5">
+        <h2 class="font-display mx-auto mt-4 max-w-2xl text-[1.9rem] leading-[1.15] text-white sm:text-[2.35rem] md:text-[2.75rem]">
+          Partiamo da come lavora la{' '}
+          <em class="font-display font-normal text-brand-300 italic">
+            tua struttura
+          </em>
+          .
+        </h2>
+
+        <p class="mx-auto mt-4 max-w-xl text-[0.9375rem] leading-relaxed text-neutral-300 sm:text-base">
+          Raccontaci dove perdi più tempo. Ti aiutiamo a capire quali strumenti
+          SeasonsJob possono esserti utili.
+        </p>
+
+        <div class="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-3.5">
           <Button href="/contatti/" variant="inverted" size="md">
             Richiedi informazioni
             <Icon name="arrow-right" class="size-4" />
           </Button>
-          <Button href="#soluzioni" variant="inverted-secondary" size="md">
+          <Button href="/soluzioni/" variant="inverted-secondary" size="md">
             Scopri le soluzioni
           </Button>
         </div>

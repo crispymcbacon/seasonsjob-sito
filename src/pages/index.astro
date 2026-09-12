@@ -1,13 +1,14 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/sections/Hero.astro';
+import ClientsMarquee from '@/components/sections/ClientsMarquee.astro';
 import Solutions from '@/components/sections/Solutions.astro';
 import WhySeasonsJob from '@/components/sections/WhySeasonsJob.astro';
 import FieldWork from '@/components/sections/FieldWork.astro';
 import ContactCta from '@/components/sections/ContactCta.astro';
 import { SITE } from '@/config/site';
 
-const title = 'SeasonsJob — Strumenti digitali per l’hospitality';
+const title = 'SeasonsJob — Strumenti digitali per il settore alberghiero';
 const description =
   'SeasonsJob progetta prodotti specializzati per hotel, ristoranti e strutture ricettive: Lavoro, Comande, Procuro e Wine. Personale stagionale, comande, acquisti e cantina.';
 
@@ -28,6 +29,7 @@ const structuredData = {
     set:html={JSON.stringify(structuredData)}
   ></script>
   <Hero />
+  <ClientsMarquee />
   <Solutions />
   <WhySeasonsJob />
   <FieldWork />

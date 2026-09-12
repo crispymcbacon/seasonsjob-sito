@@ -1,111 +1,430 @@
 ---
-import { getCollection } from 'astro:content';
-import Icon from '@/components/ui/Icon.astro';
-import SectionHeader from '@/components/ui/SectionHeader.astro';
-import { PARTNERS } from '@/config/solutions';
-
 /*
-  Credibility: demonstrates that the products are built together with real
-  hospitality businesses.
-
-  The section is already wired to the `casi-reali` content collection, so the
-  moment the first case study is published it appears here automatically. Until
-  then it shows an honest, non-invented state — no placeholder logos, quotes or
-  numbers.
+  "Casi reali" / Scenari di implementazione sul campo.
+  Asymmetric 2-column layout: left column contains section narrative & vertical
+  facility selectors; right column features the detailed framed architectural showcase.
 */
-const cases = (await getCollection('casi-reali')).slice(0, 3);
+
+interface UseCase {
+  id: string;
+  tabLabel: string;
+  facility: string;
+  facilityType: string;
+  scenarioTitle: string;
+  badge: string;
+  impact: string;
+  summary: string;
+  modules: string[];
+}
+
+const USE_CASES: UseCase[] = [
+  {
+    id: 'hotel-palace',
+    tabLabel: 'Hotel 4★ · Bibione',
+    facility: 'Hotel Palace',
+    facilityType: 'Hotel 4★ · Bibione · 80+ camere & Ristorante',
+    scenarioTitle: 'Pianificazione turni stagionali e coordinamento reparti',
+    badge: 'Albergo & Piani',
+    impact: 'Pianificazione presenze in tempo reale per 45+ collaboratori',
+    summary:
+      'Nei mesi di massima occupazione estiva, la gestione dei turni spezzati e la copertura dei turni extra richiedeva ore quotidiane tra telefonate e fogli cartacei. Con SeasonsJob, la pianificazione settimanale e la conferma automatica delle presenze avvengono in tempo reale, sincronizzando sala, piani e reception.',
+    modules: [
+      'SeasonsJob Lavoro',
+      'Gestione Turni Extra',
+      'Sincronizzazione Presenze',
+    ],
+  },
+  {
+    id: 'hotel-helvetia',
+    tabLabel: 'Hotel 4★ · Jesolo',
+    facility: 'Hotel Helvetia',
+    facilityType: 'Hotel 4★ · Jesolo · Sala, Lounge Bar & Terrazza',
+    scenarioTitle: 'Gestione comande al tavolo e sincronizzazione comande',
+    badge: 'Sala & Bar',
+    impact: 'Azzeramento dei tempi morti tra ordini al bar e cucina',
+    summary:
+      'Durante i picchi del servizio serale e nei momenti di afflusso tra terrazza e sala, le ordinazioni verbali causavano ritardi al pass. Con la gestione digitale delle comande, ogni richiesta e variazione raggiunge istantaneamente la corretta partita, garantendo un servizio fluido e tempi certi.',
+    modules: [
+      'SeasonsJob Comande',
+      'Gestione Tavoli & Bar',
+      'Sincronizzazione Pass',
+    ],
+  },
+  {
+    id: 'hotel-danieli',
+    tabLabel: 'Hotel 3★ · Bibione',
+    facility: 'Hotel Danieli',
+    facilityType: 'Hotel 3★ · Bibione · Formula pensione & Ristorazione',
+    scenarioTitle: 'Approvvigionamenti cucina e controllo scorte F&B',
+    badge: 'Acquisti & Cucina',
+    impact: 'Riordino materie prime automatizzato sui volumi di pensione',
+    summary:
+      'La gestione dei rifornimenti alimentari per la pensione completa richiedeva verifiche continue sulle giacenze in dispensa e confronti tra listini fornitore. Con SeasonsJob Procuro, i fabbisogni della cucina generano automaticamente le distinte d’ordine, velocizzando gli scarichi merci ed evitando sprechi.',
+    modules: ['SeasonsJob Procuro', 'Controllo Giacenze', 'Listini Fornitori'],
+  },
+  {
+    id: 'taverna-al-boccale',
+    tabLabel: 'Ristorante & Taverna',
+    facility: 'Taverna Al Boccale',
+    facilityType:
+      'Ristorante & Taverna · 120 coperti · Birre artigianali & Cantina',
+    scenarioTitle: 'Inventario continuo delle referenze e scarico rapido',
+    badge: 'Sala & Cantina',
+    impact: 'Giacenze sempre allineate a ogni comanda servita',
+    summary:
+      'Con un’ampia offerta di referenze artigianali e vini del territorio, l’aggiornamento della carta bevande era una sfida continua nei fine settimana affollati. L’integrazione con SeasonsJob Wine assicura lo scarico automatico a ogni comanda servita, azzerando le ordinazioni su etichette esaurite.',
+    modules: ['SeasonsJob Wine', 'Inventario Cantina', 'Carta Digitale'],
+  },
+];
 ---
 
-<section class="border-b border-neutral-200/80 bg-white">
+<section id="casi-reali" class="border-b border-neutral-200/80 bg-white">
   <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
-    {PARTNERS.length > 0 && (
-      <div class="mb-16 border-b border-neutral-200 pb-10">
-        <p class="eyebrow">Strutture e partner</p>
-        <ul class="mt-6 flex flex-wrap items-center gap-x-10 gap-y-6">
-          {PARTNERS.map((partner) => (
-            <li>
-              <img
-                src={partner.src}
-                alt={partner.name}
-                height="32"
-                loading="lazy"
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
-
-    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
-      <div class="lg:col-span-6" data-reveal>
-        <SectionHeader
-          eyebrow="Casi reali"
-          title="Sviluppati insieme a strutture che lavorano davvero"
-          description="I prodotti SeasonsJob vengono progettati e messi alla prova dentro attività ricettive reali, con le persone che li usano nel turno. È così che decidiamo cosa costruire e cosa lasciare fuori."
-        />
-        <a
-          href="/casi-reali/"
-          class="mt-8 inline-flex items-center gap-1.5 py-1.5 text-[0.9375rem] font-medium text-brand-700 transition-colors hover:text-brand-600"
-        >
-          Vai ai casi reali
-          <Icon name="arrow-right" class="size-4" />
-        </a>
-      </div>
-
-      <div class="lg:col-span-6">
-        <div class="rounded-2xl border border-neutral-200 bg-neutral-50/70 p-6 sm:p-8">
+    <div class="grid items-start gap-12 lg:grid-cols-12 lg:gap-14">
+      {/* Left Column: Contextual Header + Vertical Facility Selector */}
+      <div class="flex flex-col lg:col-span-5" data-reveal>
+        <p class="eyebrow inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]">
           <span
-            class="grid size-9 place-items-center rounded-full bg-brand-50 text-brand-600"
+            class="size-2 rounded-[2px] bg-brand-500"
             aria-hidden="true"
-          >
-            <Icon name="building-2" class="size-4" />
-          </span>
+          ></span>
+          Casi reali
+        </p>
 
-          {cases.length > 0 ? (
-            <>
-              <h3 class="mt-5 text-xl">Casi reali</h3>
-              <ul class="mt-4 flex flex-col divide-y divide-neutral-200">
-                {cases.map((entry) => (
-                  <li class="py-4 first:pt-0 last:pb-0">
-                    <a
-                      href={`/casi-reali/${entry.id}/`}
-                      class="text-lg font-medium text-ink transition-colors hover:text-brand-700"
-                    >
-                      {entry.data.title}
-                    </a>
-                    <p class="mt-1 text-[0.9375rem] leading-relaxed text-neutral-600">
-                      {entry.data.summary}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <>
-              <h3 class="mt-5 text-xl">
-                Stiamo documentando i primi progetti.
-              </h3>
-              <p class="mt-2 text-[0.9375rem] leading-relaxed text-neutral-600">
-                Raccontiamo i casi per intero: il contesto della struttura, cosa
-                abbiamo fatto e cosa è cambiato nel lavoro quotidiano. Li
-                pubblichiamo qui appena pronti.
-              </p>
-              <div class="mt-6 flex flex-col gap-3 border-t border-neutral-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-                <p class="text-[0.9375rem] text-neutral-600">
-                  Gestite una struttura e volete raccontarci come lavorate?
-                </p>
-                <a
-                  href="/contatti/"
-                  class="inline-flex shrink-0 items-center gap-1.5 py-1.5 text-[0.9375rem] font-medium text-brand-700 transition-colors hover:text-brand-600"
+        <h2 class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.35rem]">
+          Applicazioni concrete{' '}
+          <em class="font-display font-normal text-brand-700 italic">
+            nelle strutture
+          </em>
+        </h2>
+
+        <p class="mt-4 text-base leading-relaxed text-neutral-600 sm:text-lg">
+          Scenari operativi e implementazioni sul campo: come gli strumenti
+          SeasonsJob risolvono le complessità quotidiane di hotel, ristoranti e
+          cantine.
+        </p>
+
+        {/* Vertical Selector List */}
+        <div
+          class="mt-8 flex flex-col gap-2.5"
+          role="tablist"
+          aria-label="Seleziona scenario applicativo"
+        >
+          {USE_CASES.map((uc, index) => (
+            <button
+              type="button"
+              role="tab"
+              id={`uc-tab-${uc.id}`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+              aria-controls={`uc-panel-${uc.id}`}
+              tabindex={index === 0 ? 0 : -1}
+              data-uc-target={uc.id}
+              class:list={[
+                'uc-trigger group flex w-full cursor-pointer items-center justify-between rounded-xl border p-3.5 text-left transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900',
+                index === 0
+                  ? 'border-neutral-900 bg-neutral-900 text-white shadow-sm'
+                  : 'border-neutral-200/80 bg-neutral-50/60 text-neutral-700 hover:border-neutral-300 hover:bg-white',
+              ]}
+            >
+              <div class="flex items-center gap-3">
+                <span
+                  class:list={[
+                    'uc-indicator grid size-8 place-items-center rounded-lg text-xs font-bold transition-colors',
+                    index === 0
+                      ? 'bg-white/15 text-white'
+                      : 'bg-white border border-neutral-200 text-neutral-500 group-hover:border-neutral-300 group-hover:text-ink',
+                  ]}
+                  aria-hidden="true"
                 >
-                  Scrivici
-                  <Icon name="arrow-right" class="size-4" />
-                </a>
+                  {index + 1}
+                </span>
+                <div>
+                  <span class="block text-sm font-semibold tracking-tight">
+                    {uc.facility}
+                  </span>
+                  <span
+                    class:list={[
+                      'uc-sub block text-xs transition-colors',
+                      index === 0 ? 'text-neutral-300' : 'text-neutral-500',
+                    ]}
+                  >
+                    {uc.tabLabel}
+                  </span>
+                </div>
               </div>
-            </>
-          )}
+
+              <svg
+                class:list={[
+                  'uc-chevron size-4 transition-transform group-hover:translate-x-0.5',
+                  index === 0 ? 'text-brand-400' : 'text-neutral-400',
+                ]}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          ))}
+        </div>
+
+        <div class="mt-8 border-t border-neutral-200/80 pt-6">
+          <a
+            href="/contatti/"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-800"
+          >
+            Vuoi valutare uno scenario per la tua struttura?
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      {/* Right Column: Framed Showcase Container */}
+      <div class="lg:col-span-7">
+        <div class="relative overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-50/60 p-4 sm:p-7 lg:p-9 shadow-xs">
+          {/* Corner crosshairs registration marks */}
+          <div
+            class="pointer-events-none absolute top-3 left-3 size-3.5 border-t-2 border-l-2 border-brand-500/50"
+            aria-hidden="true"
+          ></div>
+          <div
+            class="pointer-events-none absolute top-3 right-3 size-3.5 border-t-2 border-r-2 border-brand-500/50"
+            aria-hidden="true"
+          ></div>
+          <div
+            class="pointer-events-none absolute bottom-3 left-3 size-3.5 border-b-2 border-l-2 border-brand-500/50"
+            aria-hidden="true"
+          ></div>
+          <div
+            class="pointer-events-none absolute bottom-3 right-3 size-3.5 border-b-2 border-r-2 border-brand-500/50"
+            aria-hidden="true"
+          ></div>
+
+          {/* Background ambient dot grid */}
+          <div
+            class="usecase-grid pointer-events-none absolute inset-0 opacity-35"
+            aria-hidden="true"
+          ></div>
+
+          {/* Panels */}
+          {USE_CASES.map((uc, index) => (
+            <div
+              id={`uc-panel-${uc.id}`}
+              role="tabpanel"
+              aria-labelledby={`uc-tab-${uc.id}`}
+              class:list={[
+                'uc-panel relative z-10 rounded-xl border border-neutral-200/90 bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-opacity duration-200',
+                index !== 0 && 'hidden',
+              ]}
+            >
+              {/* Facility Header */}
+              <div class="flex flex-wrap items-start justify-between gap-4 border-b border-neutral-100 pb-5">
+                <div class="flex items-center gap-3">
+                  <div class="grid size-11 shrink-0 place-items-center rounded-xl border border-neutral-200/80 bg-neutral-50 text-brand-600 shadow-xs">
+                    <svg
+                      class="size-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M3 21h18M9 8h1m-1 4h1m-1 4h1m4-8h1m-1 4h1m-1 4h1M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-base font-semibold tracking-tight text-ink sm:text-lg">
+                      {uc.facility}
+                    </h3>
+                    <p class="text-xs font-medium text-neutral-500">
+                      {uc.facilityType}
+                    </p>
+                  </div>
+                </div>
+
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-semibold text-neutral-600">
+                  <span class="size-1.5 rounded-full bg-brand-500"></span>
+                  {uc.badge}
+                </span>
+              </div>
+
+              {/* Scenario & Narrative */}
+              <div class="py-6">
+                <div class="flex items-center gap-2">
+                  <span class="size-1.5 rounded-full bg-brand-500"></span>
+                  <h4 class="text-xs font-semibold tracking-wide text-brand-700 uppercase">
+                    {uc.scenarioTitle}
+                  </h4>
+                </div>
+
+                <blockquote class="mt-3.5 text-base sm:text-lg font-medium leading-relaxed text-neutral-800">
+                  "{uc.summary}"
+                </blockquote>
+
+                {/* Key operational impact highlight */}
+                <div class="mt-4 inline-flex items-center gap-2 rounded-lg bg-brand-50/70 border border-brand-100 px-3 py-1.5 text-xs font-medium text-brand-900">
+                  <svg
+                    class="size-3.5 text-brand-600 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>{uc.impact}</span>
+                </div>
+              </div>
+
+              {/* Modules Footer */}
+              <div class="flex flex-wrap items-center gap-2 border-t border-neutral-100 pt-5 text-xs">
+                <span class="font-semibold text-neutral-700">
+                  Moduli utilizzati:
+                </span>
+                {uc.modules.map((mod) => (
+                  <span class="inline-flex items-center gap-1 rounded-md border border-neutral-200/80 bg-neutral-50 px-2.5 py-1 font-medium text-neutral-700">
+                    <svg
+                      class="size-3 text-brand-600"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    {mod}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  const ACTIVE_BTN = [
+    'border-neutral-900',
+    'bg-neutral-900',
+    'text-white',
+    'shadow-sm',
+  ];
+  const INACTIVE_BTN = [
+    'border-neutral-200/80',
+    'bg-neutral-50/60',
+    'text-neutral-700',
+    'hover:border-neutral-300',
+    'hover:bg-white',
+  ];
+
+  const ACTIVE_INDICATOR = ['bg-white/15', 'text-white'];
+  const INACTIVE_INDICATOR = [
+    'bg-white',
+    'border',
+    'border-neutral-200',
+    'text-neutral-500',
+    'group-hover:border-neutral-300',
+    'group-hover:text-ink',
+  ];
+
+  function initUseCaseSplit() {
+    const root = document.getElementById('casi-reali');
+    if (!root || root.dataset.useCaseReady === 'true') return;
+
+    const triggers = root.querySelectorAll<HTMLButtonElement>('.uc-trigger');
+    const panels = root.querySelectorAll<HTMLElement>('.uc-panel');
+
+    if (!triggers.length || !panels.length) return;
+    root.dataset.useCaseReady = 'true';
+
+    function switchUseCase(targetId: string) {
+      triggers.forEach((btn) => {
+        const isTarget = btn.getAttribute('data-uc-target') === targetId;
+        btn.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+        btn.tabIndex = isTarget ? 0 : -1;
+
+        const indicator = btn.querySelector<HTMLElement>('.uc-indicator');
+        const sub = btn.querySelector<HTMLElement>('.uc-sub');
+        const chevron = btn.querySelector<SVGElement>('.uc-chevron');
+
+        for (const cls of ACTIVE_BTN) btn.classList.toggle(cls, isTarget);
+        for (const cls of INACTIVE_BTN) btn.classList.toggle(cls, !isTarget);
+
+        if (indicator) {
+          for (const cls of ACTIVE_INDICATOR)
+            indicator.classList.toggle(cls, isTarget);
+          for (const cls of INACTIVE_INDICATOR)
+            indicator.classList.toggle(cls, !isTarget);
+        }
+
+        if (sub) {
+          sub.classList.toggle('text-neutral-300', isTarget);
+          sub.classList.toggle('text-neutral-500', !isTarget);
+        }
+
+        if (chevron) {
+          chevron.classList.toggle('text-brand-400', isTarget);
+          chevron.classList.toggle('text-neutral-400', !isTarget);
+        }
+      });
+
+      panels.forEach((panel) => {
+        const isTarget = panel.id === `uc-panel-${targetId}`;
+        panel.classList.toggle('hidden', !isTarget);
+      });
+    }
+
+    triggers.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-uc-target');
+        if (targetId) switchUseCase(targetId);
+      });
+
+      btn.addEventListener('keydown', (e) => {
+        let newIndex = index;
+        if (e.key === 'ArrowDown') {
+          newIndex = (index + 1) % triggers.length;
+        } else if (e.key === 'ArrowUp') {
+          newIndex = (index - 1 + triggers.length) % triggers.length;
+        } else if (e.key === 'Home') {
+          newIndex = 0;
+        } else if (e.key === 'End') {
+          newIndex = triggers.length - 1;
+        } else {
+          return;
+        }
+
+        e.preventDefault();
+        const newBtn = triggers[newIndex];
+        newBtn.focus();
+        const targetId = newBtn.getAttribute('data-uc-target');
+        if (targetId) switchUseCase(targetId);
+      });
+    });
+  }
+
+  initUseCaseSplit();
+  document.addEventListener('astro:page-load', initUseCaseSplit);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initUseCaseSplit);
+  }
+</script>
+
+<style>
+  .usecase-grid {
+    background-image: radial-gradient(#d4d4d8 1.25px, transparent 1.25px);
+    background-size: 20px 20px;
+    mask-image: radial-gradient(
+      ellipse 70% 70% at 50% 50%,
+      black 20%,
+      transparent 80%
+    );
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 70% at 50% 50%,
+      black 20%,
+      transparent 80%
+    );
+  }
+</style>

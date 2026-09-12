@@ -1,0 +1,141 @@
+---
+/*
+  Clients marquee section placed between Hero and Solutions.
+  Clean floating presentation featuring partner hotels and dining venues
+  with a unified light-gray filter and zero enclosing card boxes.
+*/
+
+interface Client {
+  name: string;
+  type: string;
+  logo: string;
+}
+
+const CLIENTS: Client[] = [
+  {
+    name: 'Apogia Hotels',
+    type: 'Holding Alberghiera',
+    logo: '/images/clients/apogia.webp',
+  },
+  {
+    name: 'Hotel Palace',
+    type: 'Hotel 4★',
+    logo: '/images/clients/hotel-palace.webp',
+  },
+  {
+    name: 'Hotel Danieli',
+    type: 'Hotel 3★',
+    logo: '/images/clients/hotel-danieli.webp',
+  },
+  {
+    name: 'Hotel Helvetia',
+    type: 'Hotel 4★',
+    logo: '/images/clients/hotel-helvetia.webp',
+  },
+  {
+    name: 'Taverna Al Boccale',
+    type: 'Ristorante & Taverna',
+    logo: '/images/clients/taverna-al-boccale.webp',
+  },
+];
+
+// Tripled to guarantee smooth seamless infinite loop across all screens
+const MARQUEE_ITEMS = [...CLIENTS, ...CLIENTS, ...CLIENTS];
+---
+
+<section class="border-b border-neutral-200/80 bg-neutral-50/40 py-10 sm:py-12">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <p class="text-center text-xs font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+      Scelto da strutture ricettive e ristorative
+    </p>
+
+    <!-- Infinite moving marquee -->
+    <div
+      class="marquee-container relative mt-7 w-full overflow-hidden"
+      aria-label="Clienti e strutture partner"
+    >
+      <div class="marquee-track flex w-max items-center gap-10 sm:gap-14">
+        {MARQUEE_ITEMS.map((client) => (
+          <div
+            class="group flex shrink-0 items-center gap-3.5 sm:gap-4"
+            title={`${client.name} — ${client.type}`}
+          >
+            {/* Real Client Logo */}
+            <img
+              src={client.logo}
+              alt={`Logo ${client.name}`}
+              width="56"
+              height="56"
+              loading="lazy"
+              decoding="async"
+              class="client-logo size-12 shrink-0 object-contain sm:size-14"
+            />
+
+            <span class="flex flex-col">
+              <span class="text-[0.9375rem] font-bold tracking-tight text-neutral-400 transition-colors group-hover:text-neutral-600 sm:text-base">
+                {client.name}
+              </span>
+              <span class="text-xs font-medium text-neutral-400 sm:text-[0.8125rem]">
+                {client.type}
+              </span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .client-logo {
+    filter: grayscale(100%) contrast(75%) brightness(110%) opacity(0.5);
+    transition:
+      filter 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  .group:hover .client-logo {
+    filter: grayscale(100%) contrast(85%) brightness(105%) opacity(0.85);
+  }
+
+  .marquee-container {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent
+    );
+  }
+
+  .marquee-track {
+    animation: marquee 38s linear infinite;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-100% / 3));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+      overflow-x: auto;
+    }
+  }
+</style>

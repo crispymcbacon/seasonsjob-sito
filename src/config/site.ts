@@ -9,7 +9,7 @@ export const SITE = {
   name: 'SeasonsJob',
   /** Fallback description if a page does not define one. */
   description:
-    'SeasonsJob progetta strumenti digitali per il settore hospitality: personale stagionale, comande, acquisti e cantina.',
+    'SeasonsJob progetta strumenti digitali per il settore alberghiero: personale stagionale, comande, acquisti e cantina.',
   /** Default OpenGraph language-locale. */
   locale: 'it_IT',
 } as const;

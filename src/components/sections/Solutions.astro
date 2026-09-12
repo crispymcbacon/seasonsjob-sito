@@ -1,115 +1,52 @@
 ---
-import Icon from '@/components/ui/Icon.astro';
-import SectionHeader from '@/components/ui/SectionHeader.astro';
-import { SOLUTIONS } from '@/config/solutions';
+import SolutionsTabs from '@/components/sections/SolutionsTabs.astro';
 
 /*
   Core section of the homepage.
 
-  The four products are presented as one connected workflow (people → operations
-  → purchasing → inventory) rather than as four isolated cards: a single rail
-  with one node per product, staggered typography, and a dedicated status line
-  for the product that is still in development.
+  The four products are presented as one connected ecosystem: a single
+  interactive preview (Astro + vanilla JS, no framework hydration) that
+  switches between Lavoro, Comande, Procuro and Wine, with the copy above
+  explaining the idea the tabs then demonstrate.
 */
 ---
 
 <section id="soluzioni" class="border-b border-neutral-200/80 bg-neutral-50">
   <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
-    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
-      <div class="lg:col-span-5 lg:sticky lg:top-24 lg:self-start" data-reveal>
-        <SectionHeader
-          eyebrow="Le soluzioni"
-          title="Quattro prodotti, un unico ecosistema per l’hospitality"
-          description="Ogni prodotto copre un’area diversa della struttura. Insieme formano una famiglia coerente, costruita con lo stesso approccio e lo stesso linguaggio."
-        />
-        <a
-          href="/soluzioni/"
-          class="mt-8 inline-flex items-center gap-1.5 py-1.5 text-[0.9375rem] font-medium text-brand-700 transition-colors hover:text-brand-600"
-        >
-          Tutte le soluzioni
-          <Icon name="arrow-right" class="size-4" />
-        </a>
-      </div>
+    <div
+      class="mx-auto flex max-w-4xl flex-col items-center text-center"
+      data-reveal
+    >
+      <p class="inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]">
+        <span class="size-2 rounded-[2px] bg-brand-500" aria-hidden="true" />
+        Unico ecosistema
+      </p>
 
-      <ol class="soluzioni-rail relative lg:col-span-7">
-        {SOLUTIONS.map((solution) => (
-          <li class="group relative py-9 pl-16 sm:pl-20">
-            <span
-              class="absolute top-9 left-0 grid size-10 place-items-center rounded-full border border-neutral-200 bg-white text-brand-600 transition-colors group-hover:border-brand-300 group-hover:bg-brand-50"
-              aria-hidden="true"
-            >
-              <Icon name={solution.icon} class="size-5" />
-            </span>
+      <h2 class="font-display mt-5 text-[2.25rem] leading-[1.1] tracking-tight text-ink sm:text-[2.75rem] md:text-[3.25rem] lg:text-[3.5rem]">
+        Costruendo ogni flusso del{' '}
+        <em class="font-display font-normal text-brand-700 italic">
+          settore alberghiero
+        </em>
+      </h2>
 
-            <div class="grid gap-x-8 gap-y-2 sm:grid-cols-[8.5rem_minmax(0,1fr)]">
-              <p class="text-xs font-semibold tracking-wide text-neutral-500 uppercase">
-                {solution.area}
-              </p>
-
-              <div class="flex flex-col gap-2">
-                <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-                  <h3 class="text-[1.375rem] leading-tight">
-                    <a
-                      href={solution.href}
-                      class="group/link inline-flex items-center gap-1.5 transition-colors hover:text-brand-700"
-                    >
-                      {solution.name}
-                      <Icon
-                        name="arrow-right"
-                        class="size-4 text-brand-500 transition-transform group-hover/link:translate-x-0.5"
-                      />
-                    </a>
-                  </h3>
-                  {solution.status === 'in-sviluppo' && (
-                    <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-200 px-2.5 py-1 text-xs font-medium text-neutral-600">
-                      <span
-                        class="size-1.5 rounded-full bg-brand-500"
-                        aria-hidden="true"
-                      />
-                      In sviluppo
-                    </span>
-                  )}
-                </div>
-
-                <p class="text-lg leading-snug font-medium text-ink">
-                  {solution.tagline}
-                </p>
-                <p class="max-w-prose text-[0.9375rem] leading-relaxed text-neutral-600">
-                  {solution.description}
-                </p>
-
-                {solution.statusNote && (
-                  <p class="text-[0.9375rem] text-neutral-500">
-                    {solution.statusNote}
-                  </p>
-                )}
-              </div>
-            </div>
-          </li>
-        ))}
-      </ol>
+      <p class="mt-5 text-lg leading-relaxed text-neutral-600">
+        Dal personale alle comande di sala, dagli acquisti ai fornitori alla
+        gestione della cantina: SeasonsJob unisce l’intera operatività della
+        struttura in un’unica esperienza coerente.
+      </p>
     </div>
+
+    <div class="mt-12 sm:mt-14">
+      <SolutionsTabs />
+    </div>
+
+    <p class="mt-8 text-center text-[0.9375rem] text-neutral-500">
+      <a
+        href="/soluzioni/"
+        class="font-medium text-brand-700 transition-colors hover:text-brand-600"
+      >
+        Scopri tutte le soluzioni
+      </a>
+    </p>
   </div>
 </section>
-
-<style>
-  /*
-    The rail visually links the four products. It fades out at both ends so the
-    line never looks cut off.
-  */
-  .soluzioni-rail::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 1.25rem;
-    width: 1px;
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      var(--color-neutral-200) 10%,
-      var(--color-neutral-200) 90%,
-      transparent
-    );
-  }
-</style>

@@ -1,77 +1,359 @@
 ---
-import Icon from '@/components/ui/Icon.astro';
-import SectionHeader from '@/components/ui/SectionHeader.astro';
-
 /*
-  Principles behind the products — company positioning, not product features.
-  The single dark section of the page gives the homepage its second rhythm.
+  "Perché SeasonsJob" section.
+  Full dark mode bento grid: elevated dark cards with dark UI fragments
+  and luminous accents showcasing sector-focused product principles.
 */
-const PRINCIPLES = [
-  {
-    title: 'Nati dai flussi reali',
-    text: 'Partiamo da come si lavora davvero in reception, in sala, in cucina e in cantina, non da uno schema astratto.',
-  },
-  {
-    title: 'Progettati con chi li usa',
-    text: 'I prodotti prendono forma a contatto con le persone che li useranno ogni giorno, e cambiano con il loro riscontro.',
-  },
-  {
-    title: 'Pratici, non complicati',
-    text: 'Poche funzioni chiare al posto di tante opzioni inutili. Si capiscono in fretta e si usano senza formazione lunga.',
-  },
-  {
-    title: 'Solo hospitality',
-    text: 'Non facciamo software per tutti i settori. Conosciamo stagioni, turni, fornitori e ritmi di una struttura ricettiva.',
-  },
-  {
-    title: 'Crescono con le esigenze',
-    text: 'Ogni prodotto evolve seguendo bisogni operativi concreti, non un elenco di funzionalità da vendere.',
-  },
-];
 ---
 
-<section class="bg-night">
-  <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
-    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
-      <div class="lg:col-span-5" data-reveal>
-        <SectionHeader
-          tone="dark"
-          eyebrow="Perché SeasonsJob"
-          title="Un modo di fare software vicino a chi lo usa"
-          description="Non vendiamo una piattaforma da adattare. Costruiamo strumenti specifici, uno per volta, con le strutture che li adottano."
-        />
-        <a
-          href="/chi-siamo/"
-          class="mt-8 inline-flex items-center gap-1.5 py-1.5 text-[0.9375rem] font-medium text-brand-300 transition-colors hover:text-brand-200"
-        >
-          Chi siamo
-          <Icon name="arrow-right" class="size-4" />
-        </a>
+<section
+  id="perche-seasonsjob"
+  class="relative overflow-hidden bg-[#141816] text-white"
+>
+  {/* Ambient emerald background glows */}
+  <div
+    class="pointer-events-none absolute inset-x-0 -top-24 h-72 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(7,134,96,0.22),transparent_70%)]"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute inset-x-0 -bottom-24 h-72 bg-[radial-gradient(ellipse_60%_50%_at_50%_100%,rgba(7,134,96,0.15),transparent_70%)]"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative z-10 mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+    {/* Section Header */}
+    <div
+      class="mx-auto flex max-w-3xl flex-col items-center text-center"
+      data-reveal
+    >
+      <p class="eyebrow inline-flex items-center gap-2.5 text-lg font-medium text-neutral-400">
+        <span
+          class="size-2 rounded-[2px] bg-brand-400"
+          aria-hidden="true"
+        ></span>
+        Perché SeasonsJob
+      </p>
+
+      <h2 class="font-display mt-4 text-[2rem] leading-[1.15] text-white sm:text-[2.5rem] md:text-[2.875rem]">
+        Un modo di fare software{' '}
+        <em class="font-display font-normal text-brand-300 italic">
+          vicino a chi lo usa
+        </em>
+      </h2>
+
+      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-neutral-300">
+        Non vendiamo una piattaforma generica da adattare. Costruiamo strumenti
+        specifici per ogni reparto, insieme alle persone che li usano ogni
+        giorno nel servizio.
+      </p>
+    </div>
+
+    {/* 3-Column Asymmetric Bento Grid - Complete Dark Theme */}
+    <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 sm:mt-16">
+      {/* ================= COLUMN 1 ================= */}
+      <div class="flex flex-col gap-6">
+        {/* Card 1 (Taller): Nati dai flussi reali */}
+        <div class="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#1c2320] p-6 sm:p-7 shadow-lg transition-all hover:border-white/20 hover:bg-[#202824] hover:-translate-y-0.5">
+          {/* Visual: Floating notification & service prompt */}
+          <div class="relative mb-8 flex min-h-[210px] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#121614] p-4">
+            <div class="w-full max-w-[270px] space-y-3">
+              <div class="flex items-center justify-between text-[0.6875rem] font-semibold tracking-wider text-neutral-400 uppercase">
+                <span>Servizio di sala</span>
+                <span class="inline-flex items-center gap-1 text-brand-400">
+                  <span class="size-1.5 rounded-full bg-brand-400 animate-pulse"></span>
+                  In corso
+                </span>
+              </div>
+
+              {/* Incoming request bubble */}
+              <div class="rounded-xl border border-white/10 bg-white/[0.07] px-3.5 py-2.5 text-xs text-neutral-100 shadow-sm">
+                <p class="font-medium leading-snug">
+                  Tavolo 14: 2 risotti alla zucca senza glutine e anticipo
+                  secondi
+                </p>
+              </div>
+
+              {/* System action confirmation */}
+              <div class="rounded-xl border border-brand-500/30 bg-brand-950/60 p-3 text-[0.75rem] text-brand-200">
+                <p class="flex items-center gap-1.5 font-semibold text-brand-300">
+                  <svg
+                    class="size-3.5 shrink-0 text-brand-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Comanda aggiornata in cucina
+                </p>
+                <p class="mt-0.5 text-[0.6875rem] text-brand-300/80">
+                  Allergene segnalato · timer sincronizzato
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-white">
+              Nati dai flussi reali
+            </h3>
+            <p class="mt-2 text-[0.9375rem] leading-relaxed text-neutral-300">
+              Partiamo da come si lavora davvero in reception, in sala, in
+              cucina e in cantina, non da uno schema teorico astratto o da un
+              modello da ufficio.
+            </p>
+          </div>
+        </div>
+
+        {/* Card 2 (Shorter): Solo settore alberghiero */}
+        <div class="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#1c2320] p-6 sm:p-7 shadow-lg transition-all hover:border-white/20 hover:bg-[#202824] hover:-translate-y-0.5">
+          {/* Visual: Overlapping sector badges */}
+          <div class="relative mb-8 flex min-h-[170px] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#121614] p-4">
+            <div class="relative flex items-center justify-center">
+              {/* Document 1: HACCP */}
+              <div class="relative z-0 -mr-4 -rotate-6 rounded-xl border border-white/10 bg-[#222a25] p-4 shadow-sm">
+                <span class="block text-xs font-bold tracking-wider text-rose-400 uppercase">
+                  HACCP
+                </span>
+                <span class="mt-1 block text-[0.6875rem] text-neutral-400">
+                  Tracciabilità lotti
+                </span>
+              </div>
+
+              {/* Document 2: Turni */}
+              <div class="relative z-10 rotate-3 rounded-xl border border-brand-500/40 bg-[#26312a] p-4 shadow-md">
+                <span class="block text-xs font-bold tracking-wider text-brand-400 uppercase">
+                  CCNL
+                </span>
+                <span class="mt-1 block text-[0.6875rem] text-neutral-200 font-medium">
+                  Extra & Stagionali
+                </span>
+              </div>
+
+              {/* Document 3: Cantina */}
+              <div class="relative z-0 -ml-4 rotate-12 rounded-xl border border-white/10 bg-[#222a25] p-4 shadow-sm">
+                <span class="block text-xs font-bold tracking-wider text-amber-400 uppercase">
+                  WINE
+                </span>
+                <span class="mt-1 block text-[0.6875rem] text-neutral-400">
+                  428 referenze
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-white">
+              Solo settore alberghiero
+            </h3>
+            <p class="mt-2 text-[0.9375rem] leading-relaxed text-neutral-300">
+              Non facciamo software generico per tutti i settori. Conosciamo
+              stagionalità, turni spezzati, fornitori del territorio e ritmi
+              serrati del servizio.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <dl
-        class="divide-y divide-white/10 border-t border-white/10 lg:col-span-7"
-        data-reveal
-      >
-        {PRINCIPLES.map((principle, i) => (
-          <div class="py-7">
-            <dt class="flex items-baseline gap-3">
-              <span
-                class="font-display w-9 shrink-0 text-xl text-brand-300 tabular-nums"
-                aria-hidden="true"
-              >
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span class="text-xl font-semibold text-white">
-                {principle.title}
-              </span>
-            </dt>
-            <dd class="mt-2 max-w-prose leading-relaxed text-neutral-400 sm:pl-12">
-              {principle.text}
-            </dd>
+      {/* ================= COLUMN 2 ================= */}
+      <div class="flex flex-col gap-6">
+        {/* Card 3 (Shorter): Pratici, zero formazione */}
+        <div class="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#1c2320] p-6 sm:p-7 shadow-lg transition-all hover:border-white/20 hover:bg-[#202824] hover:-translate-y-0.5">
+          {/* Visual: Document sheet with folded corner and hand cursor */}
+          <div class="relative mb-8 flex min-h-[170px] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#121614] p-4">
+            <div class="relative w-full max-w-[220px] rounded-lg border border-white/10 bg-[#222a25] p-3.5 shadow-sm">
+              <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                <span class="text-xs font-semibold text-neutral-200">
+                  Briefing Turno
+                </span>
+                <span class="size-2 rounded-full bg-brand-400"></span>
+              </div>
+              <div class="mt-2 space-y-1.5">
+                <div class="h-2 w-3/4 rounded bg-white/20"></div>
+                <div class="h-2 w-1/2 rounded bg-white/10"></div>
+              </div>
+
+              {/* Hand pointer cursor */}
+              <div class="absolute -right-2 -bottom-2 z-10">
+                <svg
+                  class="size-6 text-white drop-shadow-md"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M10 2a2 2 0 0 0-2 2v6.59l-.83-.83a2 2 0 0 0-2.83 2.83l4.24 4.24A6 6 0 0 0 12.83 19H16a4 4 0 0 0 4-4V8a2 2 0 0 0-4 0V4a2 2 0 0 0-2-2h-4z" />
+                </svg>
+              </div>
+            </div>
           </div>
-        ))}
-      </dl>
+
+          <div>
+            <h3 class="text-lg font-semibold text-white">
+              Pratici, zero formazione
+            </h3>
+            <p class="mt-2 text-[0.9375rem] leading-relaxed text-neutral-300">
+              Poche funzioni chiare al posto di decine di opzioni inutili. Il
+              personale diventa autonomo fin dal primo giorno senza manuali
+              complessi.
+            </p>
+          </div>
+        </div>
+
+        {/* Card 4 (Taller): Workflow Automation / Ecosistema integrato */}
+        <div class="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#1c2320] p-6 sm:p-7 shadow-lg transition-all hover:border-white/20 hover:bg-[#202824] hover:-translate-y-0.5">
+          {/* Visual: Connected Node Flow Diagram */}
+          <div class="relative mb-8 flex min-h-[210px] flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#121614] p-4">
+            {/* Top trigger pill */}
+            <div class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-[#222a25] px-3 py-1.5 text-xs font-semibold text-neutral-200 shadow-xs">
+              <span class="text-amber-400">⚡</span>
+              <span>Trigger: Comanda chiusa</span>
+            </div>
+
+            {/* Connecting dashed line */}
+            <div class="h-5 w-px border-l-2 border-dashed border-white/20"></div>
+
+            {/* Central node cluster */}
+            <div class="flex items-center gap-3">
+              <span class="grid size-9 place-items-center rounded-xl bg-brand-500 text-xs font-bold text-white shadow-sm">
+                S
+              </span>
+              <span class="h-px w-4 border-t-2 border-dashed border-white/20"></span>
+              <span class="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#222a25] px-2.5 py-1 text-[0.6875rem] font-medium text-neutral-300 shadow-xs">
+                <span>Scarico bottiglie</span>
+              </span>
+            </div>
+
+            {/* Connecting dashed line */}
+            <div class="h-5 w-px border-l-2 border-dashed border-white/20"></div>
+
+            {/* Bottom action pill */}
+            <div class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-[#222a25] px-3 py-1.5 text-xs font-semibold text-neutral-200 shadow-xs">
+              <span class="text-brand-400">✓</span>
+              <span>Azione: Riconciliazione inventario</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-white">
+              Ecosistema integrato
+            </h3>
+            <p class="mt-2 text-[0.9375rem] leading-relaxed text-neutral-300">
+              Dalle persone ai tavoli, dagli acquisti all’inventario: le
+              informazioni passano da sole senza fogli sparsi o telefonate tra
+              sala e cucina.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ================= COLUMN 3 ================= */}
+      <div class="flex flex-col gap-6 md:col-span-2 lg:col-span-1">
+        {/* Card 5 (Taller): Controllo immediato / Ricerca istantanea */}
+        <div class="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#1c2320] p-6 sm:p-7 shadow-lg transition-all hover:border-white/20 hover:bg-[#202824] hover:-translate-y-0.5">
+          {/* Visual: Search bar with floating contextual tags */}
+          <div class="relative mb-8 flex min-h-[210px] flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#121614] p-4">
+            {/* Search Input Bar */}
+            <div class="flex w-full items-center gap-2 rounded-xl border border-white/10 bg-[#222a25] px-3 py-2 text-xs text-neutral-300 shadow-xs">
+              <svg
+                class="size-3.5 shrink-0 text-neutral-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span>Cerca comanda, turno o fornitore...</span>
+            </div>
+
+            {/* Floating Tags */}
+            <div class="mt-4 flex flex-wrap justify-center gap-2">
+              <span class="rounded-full border border-white/10 bg-[#222a25] px-2.5 py-1 text-[0.6875rem] font-medium text-neutral-300 shadow-xs">
+                Turno Sous Chef (Venerdì)
+              </span>
+              <span class="rounded-full border border-brand-500/40 bg-brand-950/70 px-2.5 py-1 text-[0.6875rem] font-medium text-brand-300 shadow-xs">
+                Tavolo 14 · Sala Veranda
+              </span>
+              <span class="rounded-full border border-white/10 bg-[#222a25] px-2.5 py-1 text-[0.6875rem] font-medium text-neutral-300 shadow-xs">
+                Barolo Riserva 2016
+              </span>
+              <span class="rounded-full border border-white/10 bg-[#222a25] px-2.5 py-1 text-[0.6875rem] font-medium text-neutral-300 shadow-xs">
+                Ordine Ortofrutta Bio
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-white">
+              Controllo immediato
+            </h3>
+            <p class="mt-2 text-[0.9375rem] leading-relaxed text-neutral-300">
+              Tutte le risposte a portata di mano in tempo reale. Per
+              intervenire subito anche durante i momenti di massima pressione
+              senza perdere nulla.
+            </p>
+          </div>
+        </div>
+
+        {/* Card 6 (Shorter): Crescono con le strutture */}
+        <div class="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#1c2320] p-6 sm:p-7 shadow-lg transition-all hover:border-white/20 hover:bg-[#202824] hover:-translate-y-0.5">
+          {/* Visual: Performance Analytics Curve */}
+          <div class="relative mb-8 flex min-h-[170px] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#121614] p-4">
+            <div class="relative w-full max-w-[220px]">
+              {/* Upward trending SVG curve */}
+              <svg
+                class="h-16 w-full overflow-visible"
+                viewBox="0 0 200 60"
+                fill="none"
+              >
+                <defs>
+                  <linearGradient
+                    id="curveGradientDark"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="0%" stop-color="#34d399" stop-opacity="0.3" />
+                    <stop
+                      offset="100%"
+                      stop-color="#34d399"
+                      stop-opacity="0.0"
+                    />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M 0 50 Q 50 45 100 25 T 200 5 L 200 60 L 0 60 Z"
+                  fill="url(#curveGradientDark)"
+                />
+                <path
+                  d="M 0 50 Q 50 45 100 25 T 200 5"
+                  stroke="#34d399"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+
+              {/* Floating Stat Pill */}
+              <div class="mt-2 flex items-center justify-between text-[0.6875rem] text-neutral-400">
+                <span class="font-medium">Tempo risparmiato</span>
+                <span class="font-semibold text-brand-400">+35% / turno</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-white">
+              Crescono con le strutture
+            </h3>
+            <p class="mt-2 text-[0.9375rem] leading-relaxed text-neutral-300">
+              Ogni miglioramento nasce da bisogni concreti raccolti direttamente
+              nelle attività sul campo, non da supposizioni astratte.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>

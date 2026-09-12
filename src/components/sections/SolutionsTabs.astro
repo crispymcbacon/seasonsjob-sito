@@ -1,0 +1,3427 @@
+---
+/**
+ * Interactive "Soluzioni" tabbed preview for the homepage.
+ *
+ * One tab per SeasonsJob product (Lavoro, Comande, Procuro, Wine), each showing
+ * a tablet mockup of that product in use. The markup for all four panels is
+ * server-rendered; the only client-side JavaScript is a small progressive
+ * enhancement that toggles the `hidden` class, so the content stays readable
+ * and indexable without hydration.
+ *
+ * Comande features a compact, pixel-accurate recreation of the real SeasonsJob iPad app UI.
+ */
+
+/** Badge tone inside the product mockup, not a site-wide semantic scale. */
+type Tone = 'active' | 'attention' | 'neutral';
+
+/** Lucide icon names used by the mockup action bar. */
+type IconKey =
+  | 'arrow-right'
+  | 'printer'
+  | 'sliders'
+  | 'user-plus'
+  | 'list-checks'
+  | 'plus'
+  | 'arrow-left-right'
+  | 'arrow-up-down'
+  | 'archive';
+
+type TabId = 'comande' | 'lavoro' | 'procuro' | 'wine';
+
+interface Card {
+  title: string;
+  category: string;
+  status: string;
+  tone: Tone;
+  meta: string;
+  image: string;
+  imageAlt: string;
+}
+
+interface Tab {
+  id: TabId;
+  label: string;
+  product: string;
+  href: string;
+  context: string;
+  status: string;
+  alert: { time: string; text: string; initials: string };
+  cards: Card[];
+  actions: { label: string; icon: IconKey }[];
+  detailsLabel: string;
+  contextCaption: string;
+}
+
+interface ComandeDish {
+  title: string;
+  en: string;
+  de: string;
+  count: number;
+  hasActiveNote?: boolean;
+}
+
+/** Real dishes from the actual SeasonsJob Comande app */
+const COMANDE_DISHES: ComandeDish[] = [
+  {
+    title: 'Crespellina al profumo di mare',
+    en: 'Sea-scented crepe',
+    de: 'Crêpe mit Meeresduft',
+    count: 0,
+    hasActiveNote: false,
+  },
+  {
+    title: 'Fusilli ai porri, salsiccia e zafferano',
+    en: 'Fusilli with leeks, sausage and saffron',
+    de: 'Fusilli mit Lauch, Wurst und Safran',
+    count: 1,
+    hasActiveNote: true,
+  },
+  {
+    title: 'Ravioli di ricotta e spinaci al burro (V)',
+    en: 'Ricotta and spinach ravioli with butter (V)',
+    de: 'Ravioli mit Ricotta und Spinat in Butter (V)',
+    count: 0,
+    hasActiveNote: false,
+  },
+];
+
+/** Unsplash delivery parameters, shared by secondary tabs */
+const PHOTO = 'auto=format&fit=crop&w=600&q=80';
+
+const photo = (id: string): string =>
+  `https://images.unsplash.com/photo-${id}?${PHOTO}`;
+
+const TABS: Tab[] = [
+  {
+    id: 'comande',
+    label: 'Comande & Sala',
+    product: 'Comande',
+    href: '/soluzioni/comande/',
+    context: 'Tavolo 14 — Sala Veranda',
+    status: 'Stato: Servizio attivo',
+    alert: {
+      time: 'Oggi, 20:45',
+      text: 'Tavolo 14 (4 coperti): inviate 2 tagliate al rosmarino e 1 risotto alla zucca in cucina.',
+      initials: 'MB',
+    },
+    cards: [],
+    actions: [
+      { label: 'Stampa comanda', icon: 'printer' },
+      { label: 'Preferenze tavolo', icon: 'sliders' },
+    ],
+    detailsLabel: 'Vedi dettagli SeasonsJob Comande',
+    contextCaption: 'Interfaccia tablet di sala per camerieri e pass',
+  },
+  {
+    id: 'lavoro',
+    label: 'Gestione Lavoro',
+    product: 'Lavoro',
+    href: '/soluzioni/lavoro/',
+    context: 'Settimana 32 — 42 collaboratori attivi',
+    status: 'Stato: Turni confermati',
+    alert: {
+      time: 'Oggi, 17:10',
+      text: 'Richiesta cambio turno approvata: Marco R. copre il servizio cena in sala per domani.',
+      initials: 'GL',
+    },
+    cards: [
+      {
+        title: 'Turno Serale — Sala Principale',
+        category: 'Sala',
+        status: 'Confermato',
+        tone: 'active',
+        meta: '6 addetti · 19:00 – 00:30',
+        image: photo('1517248135467-4c7edcad34c4'),
+        imageAlt: 'Sala del ristorante illuminata durante il servizio',
+      },
+      {
+        title: 'Linea Calda — Servizio Cena',
+        category: 'Cucina',
+        status: 'Confermato',
+        tone: 'active',
+        meta: '4 cuochi · 18:30 – 23:30',
+        image: photo('1556910103-1c02745aae4d'),
+        imageAlt: 'Chef al lavoro davanti alla linea calda',
+      },
+      {
+        title: 'Copertura Extra — Sabato Pranzo',
+        category: 'Extra',
+        status: '1 da confermare',
+        tone: 'attention',
+        meta: '2 baristi · 11:30 – 16:00',
+        image: photo('1551218808-94e220e084d2'),
+        imageAlt: 'Barista intento a preparare un cocktail al bancone',
+      },
+      {
+        title: 'Riconciliazione Presenze Settimana 31',
+        category: 'Presenze',
+        status: 'Da chiudere',
+        tone: 'neutral',
+        meta: '38 cartellini convalidati',
+        image: photo('1454165804606-c3d57bc86b40'),
+        imageAlt: 'Documento di lavoro e penna su una scrivania',
+      },
+    ],
+    actions: [
+      { label: 'Aggiungi turno extra', icon: 'user-plus' },
+      { label: 'Esporta presenze', icon: 'list-checks' },
+    ],
+    detailsLabel: 'Vedi dettagli SeasonsJob Lavoro',
+    contextCaption: 'Ricerca e gestione del personale stagionale alberghiero',
+  },
+  {
+    id: 'procuro',
+    label: 'Ordini & Fornitori',
+    product: 'Procuro',
+    href: '/soluzioni/procuro/',
+    context: 'Consegne di oggi — 5 ordini previsti',
+    status: 'Stato: 3/5 completati',
+    alert: {
+      time: 'Oggi, 11:30',
+      text: 'Consegna ortofrutta registrata con difformità: segnalati 2 colli mancanti al fornitore.',
+      initials: 'EP',
+    },
+    cards: [
+      {
+        title: 'Pesce Fresco del Tirreno',
+        category: 'Pescheria',
+        status: 'Consegnato ore 08:45',
+        tone: 'active',
+        meta: '8 casse · temperatura controllata',
+        image: photo('1534422298391-e4f8c172dddb'),
+        imageAlt: 'Banchi del mercato del pesce con pescato fresco',
+      },
+      {
+        title: 'Ortofrutta di Stagione',
+        category: 'Ortofrutta',
+        status: 'Parziale: -2 colli',
+        tone: 'attention',
+        meta: '12 casse · bolla n. 1042',
+        image: photo('1610348725531-843dff563e2c'),
+        imageAlt: 'Verdure fresche disposte in cassette di legno',
+      },
+      {
+        title: 'Latticini e Formaggi Tipici',
+        category: 'Latticini',
+        status: 'Confermato',
+        tone: 'active',
+        meta: '4 referenze · consegna settimanale',
+        image: photo('1486297678162-eb2a19b0a32d'),
+        imageAlt: 'Formaggi freschi su un tagliere',
+      },
+      {
+        title: 'Farine Speciali per Pizza',
+        category: 'Dispensa',
+        status: 'Riordino consigliato',
+        tone: 'neutral',
+        meta: '3 referenze · scorta sotto soglia',
+        image: photo('1586528116311-ad8dd3c8310d'),
+        imageAlt: 'Sacchi di farina nella dispensa',
+      },
+    ],
+    actions: [
+      { label: 'Nuovo ordine', icon: 'plus' },
+      { label: 'Confronta listini', icon: 'arrow-left-right' },
+    ],
+    detailsLabel: 'Vedi dettagli SeasonsJob Procuro',
+    contextCaption: 'Gestione acquisti merci, riordini e fornitori',
+  },
+  {
+    id: 'wine',
+    label: 'Cantina Digitale',
+    product: 'Wine',
+    href: '/soluzioni/wine/',
+    context: 'Cantina principale — 428 etichette',
+    status: 'Stato: Inventario aggiornato',
+    alert: {
+      time: 'Oggi, 18:20',
+      text: 'Movimento registrato: 2 bottiglie di Barolo Riserva 2016 uscite per il servizio serale.',
+      initials: 'LS',
+    },
+    cards: [
+      {
+        title: 'Barolo Riserva 2016',
+        category: 'Rossi',
+        status: 'Giacenza in calo',
+        tone: 'attention',
+        meta: '12 bottiglie · Cantina A · 2026–2036',
+        image: photo('1506377247377-2a5b3b417ebb'),
+        imageAlt: 'Bottiglie di vino in una cantina',
+      },
+      {
+        title: 'Franciacorta Satèn Brut',
+        category: 'Bollicine',
+        status: 'Disponibile',
+        tone: 'active',
+        meta: '34 bottiglie · Cantina B · servire a 8 °C',
+        image: photo('1560512823-829485b8bf24'),
+        imageAlt: 'Calici di vino spumante bianco',
+      },
+      {
+        title: 'Gewürztraminer 2022',
+        category: 'Bianchi',
+        status: 'Disponibile',
+        tone: 'active',
+        meta: '21 bottiglie · Cantina A · servire a 10 °C',
+        image: photo('1516594915697-87eb3b1c14ea'),
+        imageAlt: 'Bottiglie di vino bianco in cantina',
+      },
+      {
+        title: 'Passito di Pantelleria DOC',
+        category: 'Dolci',
+        status: 'Riordino consigliato',
+        tone: 'neutral',
+        meta: '6 bottiglie · Cantina C · 2024–2030',
+        image: photo('1474722883778-792e7990302f'),
+        imageAlt: 'Vino dolce versato in un calice',
+      },
+    ],
+    actions: [
+      { label: 'Registra movimento', icon: 'arrow-up-down' },
+      { label: 'Apri inventario', icon: 'archive' },
+    ],
+    detailsLabel: 'Vedi dettagli SeasonsJob Wine',
+    contextCaption: 'Carta dei vini digitale e inventario cantina',
+  },
+];
+
+/** Tab open on first render, and the one rendered visible in the static HTML. */
+const ACTIVE_BY_DEFAULT: TabId = 'comande';
+
+const tabId = (id: TabId): string => `soluzioni-tab-${id}`;
+const panelId = (id: TabId): string => `soluzioni-panel-${id}`;
+---
+
+<div class="mt-8 sm:mt-10" data-solutions-tabs>
+  <!-- Reverted compact tab rail: centered inline capsule wrapping only the 4 tabs -->
+  <div class="flex justify-center px-4">
+    <div
+      role="tablist"
+      aria-label="Soluzioni SeasonsJob"
+      class="no-scrollbar inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-2xl border border-neutral-200/80 bg-white/80 p-1.5 shadow-2xs backdrop-blur-xs"
+    >
+      {TABS.map((tab) => (
+        <button
+          type="button"
+          role="tab"
+          id={tabId(tab.id)}
+          aria-selected={tab.id === ACTIVE_BY_DEFAULT ? 'true' : 'false'}
+          aria-controls={panelId(tab.id)}
+          tabindex={tab.id === ACTIVE_BY_DEFAULT ? 0 : -1}
+          data-tab-target={tab.id}
+          class:list={[
+            'inline-flex shrink-0 cursor-pointer items-center rounded-xl px-3.5 py-1.5 text-xs font-semibold tracking-wide whitespace-nowrap transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:px-4 sm:py-2 sm:text-sm',
+            tab.id === ACTIVE_BY_DEFAULT
+              ? 'bg-[#333333] text-white'
+              : 'text-neutral-600 hover:bg-neutral-100 hover:text-ink',
+          ]}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Tablet mockup: authentic iPad chassis with generous, perfectly identical borders on all 4 sides -->
+  <div class="relative mx-auto mt-7 max-w-4xl rounded-[2.25rem] border border-neutral-800/90 bg-[#121614] p-4.5 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.38)] ring-1 ring-white/10 sm:mt-9 sm:rounded-[2.75rem] sm:p-6">
+    <!-- Tablet camera pinhole absolutely centered in top bezel (zero flow impact) -->
+    <div
+      class="pointer-events-none absolute top-1.5 left-1/2 flex -translate-x-1/2 items-center justify-center gap-1.5 sm:top-2.5"
+      aria-hidden="true"
+    >
+      <span class="size-1.5 rounded-full bg-neutral-700/80"></span>
+      <span class="h-1 w-6 rounded-full bg-neutral-800"></span>
+    </div>
+
+    {TABS.map((tab) => (
+      <div
+        id={panelId(tab.id)}
+        role="tabpanel"
+        aria-labelledby={tabId(tab.id)}
+        data-tab-panel={tab.id}
+        class:list={[
+          tab.id !== ACTIVE_BY_DEFAULT && 'hidden',
+          'md:h-[620px] lg:h-[640px]',
+        ]}
+      >
+        {tab.id === 'comande' ? (
+          /* =======================================================
+               AUTHENTIC SEASONSJOB COMANDE IPAD APP UI (COMPACT)
+               ======================================================= */
+          <div class="flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-[#f7f9f8] shadow-xs">
+            {/* Top Green App Header */}
+            <div class="flex shrink-0 items-center justify-between bg-[#205a36] px-3.5 py-2.5 text-white sm:px-5 sm:py-3">
+              <div class="flex items-center gap-2 sm:gap-3">
+                <span class="grid size-6.5 place-items-center rounded-lg bg-white/10 transition-colors">
+                  <svg
+                    class="size-3.5 sm:size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
+                  </svg>
+                </span>
+                <span class="text-xs font-bold tracking-tight sm:text-sm">
+                  Info Comanda
+                </span>
+                <svg
+                  class="size-4 opacity-80 sm:size-4.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 4a1 1 0 0 1 1 1v1a8 8 0 0 1 8 8v1H3v-1a8 8 0 0 1 8-8V5a1 1 0 0 1 1-1z" />
+                  <path d="M2 17h20" />
+                </svg>
+              </div>
+
+              <div class="flex items-center gap-2 sm:gap-3.5">
+                <span class="flex items-center gap-1.5 text-xs font-semibold tracking-wide">
+                  <svg
+                    class="size-3.5 opacity-85"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect
+                      x="3"
+                      y="4"
+                      width="18"
+                      height="18"
+                      rx="2"
+                      ry="2"
+                      stroke-width="2"
+                    />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                  08 SET
+                </span>
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-2 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase shadow-2xs sm:text-[11px]">
+                  <svg
+                    class="size-2.5 text-amber-300"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="4" />
+                    <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                  </svg>
+                  PRANZO
+                </span>
+              </div>
+            </div>
+
+            {/* App Body Content */}
+            <div class="flex-1 space-y-3.5 p-3.5 sm:space-y-4 sm:p-5 lg:p-6">
+              {/* Comanda Modifica Title Row */}
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <span class="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-neutral-400 uppercase sm:text-[11px]">
+                    <svg
+                      class="size-3"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                    COMANDA
+                  </span>
+                  <h3 class="mt-0.5 text-xl font-extrabold tracking-tight text-neutral-900 sm:text-2xl">
+                    Modifica #1596
+                  </h3>
+                </div>
+
+                <div class="flex items-center gap-1.5 rounded-full border border-amber-300/80 bg-[#fffdf0] px-3 py-1 text-xs font-bold text-amber-900 shadow-2xs">
+                  <svg
+                    class="size-3 text-amber-600 sm:size-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="4" />
+                    <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                  </svg>
+                  <span>Pranzo</span>
+                </div>
+              </div>
+
+              {/* Course Title + Add Button */}
+              <div class="flex items-center justify-between pt-0.5">
+                <div class="flex items-center gap-2 text-xs font-extrabold tracking-wider text-neutral-900 uppercase sm:text-sm">
+                  <svg
+                    class="size-4 text-neutral-800 sm:size-4.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M4 11a8 8 0 0 0 16 0H4z" />
+                    <path d="M6 16h12" />
+                    <path d="M9 4v3m3-4v3m3-4v3" />
+                  </svg>
+                  <span>PRIMA PORTATA</span>
+                </div>
+
+                <button
+                  type="button"
+                  class="flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#205a36] px-3 py-1.5 text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#1a4a2c]"
+                >
+                  <svg
+                    class="size-3"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  <span>Aggiungi</span>
+                </button>
+              </div>
+
+              {/* Dish Cards List */}
+              <div class="space-y-2.5 sm:space-y-3">
+                {COMANDE_DISHES.map((dish) => (
+                  <div class="flex flex-col justify-between gap-3 rounded-xl border border-neutral-200/90 bg-white p-3 shadow-2xs transition-all hover:border-neutral-300 sm:flex-row sm:items-center sm:p-4">
+                    <div class="flex flex-col">
+                      <h4 class="text-sm font-bold leading-snug text-neutral-900 sm:text-[0.9375rem]">
+                        {dish.title}
+                      </h4>
+                      <p class="mt-0.5 flex items-center gap-1.5 text-xs font-medium text-neutral-500">
+                        <span class="text-xs leading-none" aria-hidden="true">
+                          🇬🇧
+                        </span>
+                        <span>{dish.en}</span>
+                      </p>
+                      <p class="mt-0.5 flex items-center gap-1.5 text-xs font-medium text-neutral-500">
+                        <span class="text-xs leading-none" aria-hidden="true">
+                          🇩🇪
+                        </span>
+                        <span>{dish.de}</span>
+                      </p>
+                      <div class="mt-1.5">
+                        {dish.hasActiveNote ? (
+                          <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2563eb]">
+                            <svg
+                              class="size-3"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                              <polyline points="14 2 14 8 20 8" />
+                              <line x1="16" y1="13" x2="8" y2="13" />
+                            </svg>
+                            Aggiungi note
+                          </span>
+                        ) : (
+                          <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-400">
+                            <svg
+                              class="size-3"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                              <polyline points="14 2 14 8 20 8" />
+                              <line x1="16" y1="13" x2="8" y2="13" />
+                            </svg>
+                            Aggiungi note
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Stepper Counter */}
+                    <div class="stepper-container flex items-center justify-end self-end sm:self-center">
+                      <div class="flex items-center gap-2.5 rounded-xl border border-neutral-200/70 bg-neutral-50/70 p-1 sm:gap-3.5">
+                        <button
+                          type="button"
+                          data-stepper-btn="minus"
+                          aria-label={`Riduci quantità per ${dish.title}`}
+                          class="size-9 cursor-pointer rounded-lg border border-amber-200/70 bg-[#fffdf0] text-xl font-bold text-amber-900 shadow-2xs transition-colors hover:bg-amber-100/70 sm:size-10"
+                        >
+                          −
+                        </button>
+                        <span
+                          data-stepper-value
+                          class="w-6 text-center text-lg font-black text-neutral-900 sm:w-8 sm:text-2xl"
+                        >
+                          {dish.count}
+                        </span>
+                        <button
+                          type="button"
+                          data-stepper-btn="plus"
+                          aria-label={`Aumenta quantità per ${dish.title}`}
+                          class="size-9 cursor-pointer rounded-lg bg-[#fbb01b] text-xl font-black text-neutral-950 shadow-xs transition-colors hover:bg-[#f5a70f] sm:size-10"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Tablet App Navigation Bar */}
+            <div class="mt-auto grid shrink-0 grid-cols-3 items-center border-t border-neutral-200/90 bg-white px-3 py-1.5 sm:px-5 sm:py-2">
+              <button
+                type="button"
+                class="flex cursor-pointer flex-col items-center justify-center gap-0.5 py-0.5 text-neutral-500 transition-colors hover:text-neutral-800"
+              >
+                <svg
+                  class="size-4 text-neutral-400 sm:size-4.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span class="text-[9px] font-bold tracking-wider uppercase sm:text-[10px]">
+                  HOME
+                </span>
+              </button>
+
+              <div class="flex justify-center">
+                <div class="flex flex-col items-center justify-center gap-0.5 rounded-lg bg-[#205a36] px-5 py-1.5 text-white shadow-2xs sm:px-7">
+                  <svg
+                    class="size-4 text-white sm:size-4.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="8" y1="6" x2="21" y2="6" />
+                    <line x1="8" y1="12" x2="21" y2="12" />
+                    <line x1="8" y1="18" x2="21" y2="18" />
+                    <line x1="3" y1="6" x2="3.01" y2="6" />
+                    <line x1="3" y1="12" x2="3.01" y2="12" />
+                    <line x1="3" y1="18" x2="3.01" y2="18" />
+                  </svg>
+                  <span class="text-[9px] font-bold tracking-wider text-white uppercase sm:text-[10px]">
+                    LISTA
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="flex cursor-pointer flex-col items-center justify-center gap-0.5 py-0.5 text-neutral-500 transition-colors hover:text-neutral-800"
+              >
+                <svg
+                  class="size-4 text-neutral-400 sm:size-4.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                <span class="text-[9px] font-bold tracking-wider uppercase sm:text-[10px]">
+                  IMPOSTAZIONI
+                </span>
+              </button>
+            </div>
+          </div>
+        ) : tab.id === 'lavoro' ? (
+          /* =======================================================
+               AUTHENTIC SEASONSJOB LAVORO TABLET APP UI (RESPONSIVE)
+               ======================================================= */
+          <div class="flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-[#f7f9f8] shadow-xs">
+            {/* Top Green App Header */}
+            <div class="flex shrink-0 items-center justify-between bg-[#158154] px-3.5 py-2.5 text-white sm:px-5 sm:py-3">
+              <div class="flex items-center gap-2 sm:gap-3">
+                <button
+                  type="button"
+                  class="flex cursor-pointer items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-bold text-white transition-colors hover:bg-white/10 sm:text-sm"
+                >
+                  <svg
+                    class="size-3.5 sm:size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                  <span>Indietro</span>
+                </button>
+                <span class="hidden text-xs font-medium text-white/50 sm:inline-block">
+                  /
+                </span>
+                <span class="hidden text-xs font-medium text-white/85 sm:inline-block">
+                  Candidati · Cucina
+                </span>
+              </div>
+
+              <div class="flex items-center gap-2 sm:gap-3">
+                <span class="hidden items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase shadow-2xs sm:inline-flex">
+                  <span class="size-1.5 rounded-full bg-emerald-300 animate-pulse" />
+                  Disponibile
+                </span>
+                <button
+                  type="button"
+                  class="flex cursor-pointer items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-bold text-neutral-800 shadow-2xs transition-colors hover:bg-neutral-100 sm:px-3.5 sm:py-1.5"
+                >
+                  <svg
+                    class="size-3.5 text-neutral-700"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  <span>Gestisci</span>
+                </button>
+              </div>
+            </div>
+
+            {/* App Body Content: Responsive 2-column layout on tablet/desktop, stacked on mobile */}
+            <div class="flex-1 p-3.5 sm:p-5 lg:p-6">
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-12 lg:gap-5">
+                {/* Left Column: Candidate Profile Overview */}
+                <div class="flex flex-col justify-between rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs md:col-span-5 lg:col-span-4 lg:p-5">
+                  <div class="flex flex-col items-center text-center md:items-start md:text-left">
+                    {/* Avatar with white ring overlapping banner on mobile, cleanly nested on desktop */}
+                    <div class="relative -mt-10 sm:-mt-12 md:-mt-9 size-20 sm:size-24 shrink-0 overflow-hidden rounded-full bg-white shadow-md ring-4 ring-white">
+                      <img
+                        src="/images/lavoro/candidate-avatar.webp"
+                        alt="Matteo Moretti - Chef de Partie"
+                        width="96"
+                        height="96"
+                        class="size-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    {/* Candidate Name & Role */}
+                    <h3 class="mt-2.5 text-xl font-extrabold tracking-tight text-neutral-900 sm:text-2xl">
+                      Matteo Moretti
+                    </h3>
+                    <p class="mt-0.5 inline-flex items-center gap-1.5 text-xs font-bold text-[#158154]">
+                      <span class="size-1.5 rounded-full bg-[#158154]" />
+                      Chef de Partie · Cucina
+                    </p>
+
+                    {/* Bio text */}
+                    <p class="mt-2.5 text-xs leading-relaxed text-neutral-600 sm:text-[13px]">
+                      Chef de partie con esperienza nella gestione della linea
+                      calda e primi piatti. Tre stagioni consecutive in hotel 4
+                      stelle superior...{' '}
+                      <span class="font-semibold text-neutral-800">
+                        (continua su Altro)
+                      </span>
+                    </p>
+
+                    {/* Action Buttons */}
+                    <div class="mt-4 grid w-full grid-cols-4 gap-2">
+                      <button
+                        type="button"
+                        class="flex cursor-pointer items-center justify-center gap-1 rounded-xl border border-neutral-200/90 bg-white px-2 py-2 text-xs font-bold text-neutral-800 shadow-2xs transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+                      >
+                        <svg
+                          class="size-3.5 text-neutral-600"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                        <span class="hidden sm:inline">Chiama</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        class="flex cursor-pointer items-center justify-center gap-1 rounded-xl border border-neutral-200/90 bg-white px-2 py-2 text-xs font-bold text-neutral-800 shadow-2xs transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+                      >
+                        <svg
+                          class="size-3.5 text-neutral-600"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <rect width="20" height="16" x="2" y="4" rx="2" />
+                          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                        </svg>
+                        <span class="hidden sm:inline">Email</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        class="flex cursor-pointer items-center justify-center gap-1 rounded-xl bg-[#158154] px-2 py-2 text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#126c46]"
+                      >
+                        <svg
+                          class="size-3.5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                        </svg>
+                        <span class="hidden sm:inline">Chat</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        aria-label="Condividi profilo"
+                        class="flex cursor-pointer items-center justify-center rounded-xl border border-neutral-200/90 bg-white p-2 text-neutral-700 shadow-2xs transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+                      >
+                        <svg
+                          class="size-3.5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="18" cy="5" r="3" />
+                          <circle cx="6" cy="12" r="3" />
+                          <circle cx="18" cy="19" r="3" />
+                          <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
+                          <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Tablet Quick HR Highlights */}
+                  <div class="mt-4 hidden border-t border-neutral-100 pt-3 md:block">
+                    <div class="grid grid-cols-2 gap-2 text-[11px]">
+                      <div class="rounded-lg bg-neutral-50 p-2">
+                        <span class="block font-medium text-neutral-400">
+                          Valutazione
+                        </span>
+                        <span class="font-bold text-neutral-800">
+                          5.0 ★ (12 feed)
+                        </span>
+                      </div>
+                      <div class="rounded-lg bg-neutral-50 p-2">
+                        <span class="block font-medium text-neutral-400">
+                          Esperienza
+                        </span>
+                        <span class="font-bold text-neutral-800">
+                          6 stagioni
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column: Interactive Sub-tabs & Structured Data */}
+                <div class="flex flex-col justify-between rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs md:col-span-7 lg:col-span-8 lg:p-5">
+                  <div>
+                    {/* Sub-tabs Navigation */}
+                    <div
+                      role="tablist"
+                      aria-label="Dettagli Candidato"
+                      class="no-scrollbar flex items-center gap-4 overflow-x-auto border-b border-neutral-200/80 pb-2.5 text-xs sm:gap-6 sm:text-sm"
+                    >
+                      <button
+                        type="button"
+                        role="tab"
+                        data-lavoro-tab="disponibilita"
+                        aria-selected="true"
+                        class="cursor-pointer -mb-2.5 whitespace-nowrap border-b-2 border-neutral-900 pb-2.5 font-extrabold tracking-tight text-neutral-900 transition-colors"
+                      >
+                        Disponibilità
+                      </button>
+                      <button
+                        type="button"
+                        role="tab"
+                        data-lavoro-tab="esperienze"
+                        aria-selected="false"
+                        class="cursor-pointer -mb-2.5 whitespace-nowrap border-b-2 border-transparent pb-2.5 font-semibold text-neutral-500 transition-colors hover:text-neutral-900"
+                      >
+                        Esperienze
+                      </button>
+                      <button
+                        type="button"
+                        role="tab"
+                        data-lavoro-tab="recensioni"
+                        aria-selected="false"
+                        class="cursor-pointer -mb-2.5 whitespace-nowrap border-b-2 border-transparent pb-2.5 font-semibold text-neutral-500 transition-colors hover:text-neutral-900"
+                      >
+                        Recensioni
+                      </button>
+                      <button
+                        type="button"
+                        role="tab"
+                        data-lavoro-tab="altro"
+                        aria-selected="false"
+                        class="cursor-pointer -mb-2.5 whitespace-nowrap border-b-2 border-transparent pb-2.5 font-semibold text-neutral-500 transition-colors hover:text-neutral-900"
+                      >
+                        Altro
+                      </button>
+                    </div>
+
+                    {/* Sub-tab 1: Disponibilità (Real app criteria, responsive cards) */}
+                    <div
+                      data-lavoro-panel="disponibilita"
+                      class="mt-4 space-y-3 sm:space-y-3.5"
+                    >
+                      {/* Row 1: Ruolo */}
+                      <div class="flex items-start justify-between gap-3 rounded-xl border border-neutral-100 bg-neutral-50/60 p-3 transition-colors hover:bg-neutral-50 sm:p-3.5">
+                        <div class="flex items-start gap-3">
+                          <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-[#158154]/10 text-[#158154]">
+                            <svg
+                              class="size-4.5"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z" />
+                              <line x1="6" y1="17" x2="18" y2="17" />
+                            </svg>
+                          </span>
+                          <div>
+                            <p class="text-xs font-bold text-neutral-900">
+                              Cerco lavoro come:
+                            </p>
+                            <p class="mt-0.5 text-sm font-semibold text-neutral-800">
+                              • Chef
+                            </p>
+                          </div>
+                        </div>
+                        <span class="mt-0.5 shrink-0 text-xs font-medium text-neutral-400">
+                          (Cucina)
+                        </span>
+                      </div>
+
+                      {/* Row 2: Luogo */}
+                      <div class="flex items-start justify-between gap-3 rounded-xl border border-neutral-100 bg-neutral-50/60 p-3 transition-colors hover:bg-neutral-50 sm:p-3.5">
+                        <div class="flex items-start gap-3">
+                          <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-[#158154]/10 text-[#158154]">
+                            <svg
+                              class="size-4.5"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                              <circle cx="12" cy="10" r="3" />
+                            </svg>
+                          </span>
+                          <div>
+                            <p class="text-xs font-bold text-neutral-900">
+                              Cerco a:
+                            </p>
+                            <p class="mt-0.5 text-sm font-semibold text-neutral-900 underline decoration-dotted decoration-neutral-400 underline-offset-4">
+                              Trentino-Alto Adige/Südtirol
+                            </p>
+                          </div>
+                        </div>
+                        <span class="hidden items-center rounded-md border border-emerald-200/60 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-[#158154] sm:inline-flex">
+                          Disponibile a trasferta
+                        </span>
+                      </div>
+
+                      {/* Row 3: Date */}
+                      <div class="flex items-start justify-between gap-3 rounded-xl border border-neutral-100 bg-neutral-50/60 p-3 transition-colors hover:bg-neutral-50 sm:p-3.5">
+                        <div class="flex items-start gap-3">
+                          <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-[#158154]/10 text-[#158154]">
+                            <svg
+                              class="size-4.5"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <rect
+                                width="18"
+                                height="18"
+                                x="3"
+                                y="4"
+                                rx="2"
+                                ry="2"
+                              />
+                              <line x1="16" y1="2" x2="16" y2="6" />
+                              <line x1="8" y1="2" x2="8" y2="6" />
+                              <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                          </span>
+                          <div>
+                            <p class="text-xs font-bold text-neutral-900">
+                              Sono disponibile:
+                            </p>
+                            <p class="mt-0.5 text-sm font-semibold text-neutral-800">
+                              Da novembre 2025 a dicembre 2026
+                            </p>
+                          </div>
+                        </div>
+                        <span class="hidden items-center rounded-md bg-neutral-100 px-2 py-0.5 text-[11px] font-semibold text-neutral-600 sm:inline-flex">
+                          Stagionale completo
+                        </span>
+                      </div>
+
+                      {/* Row 4: Alloggio */}
+                      <div class="flex items-start justify-between gap-3 rounded-xl border border-neutral-100 bg-neutral-50/60 p-3 transition-colors hover:bg-neutral-50 sm:p-3.5">
+                        <div class="flex items-start gap-3">
+                          <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-[#158154]/10 text-[#158154]">
+                            <svg
+                              class="size-4.5"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M2 4v16" />
+                              <path d="M2 8h18a2 2 0 0 1 2 2v10" />
+                              <path d="M2 17h20" />
+                              <path d="M6 8v9" />
+                            </svg>
+                          </span>
+                          <div>
+                            <p class="text-xs font-bold text-neutral-900">
+                              Alloggio:
+                            </p>
+                            <p class="mt-0.5 text-sm font-semibold text-neutral-800">
+                              Necessito alloggio
+                            </p>
+                          </div>
+                        </div>
+                        <span class="hidden items-center rounded-md border border-amber-200/60 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-800 sm:inline-flex">
+                          Vitto + Alloggio
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Sub-tab 2: Esperienze */}
+                    <div
+                      data-lavoro-panel="esperienze"
+                      class="mt-4 hidden space-y-2.5"
+                    >
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/60 p-3">
+                        <div class="flex items-center justify-between">
+                          <h4 class="text-sm font-bold text-neutral-900">
+                            Capo Partita Primi Piatti
+                          </h4>
+                          <span class="text-xs font-semibold text-neutral-500">
+                            2024–2025
+                          </span>
+                        </div>
+                        <p class="text-xs font-medium text-neutral-600">
+                          Grand Hotel Bellevue · Cortina d'Ampezzo (BL)
+                        </p>
+                        <p class="mt-1 text-[11px] text-neutral-500">
+                          Gestione brigata primi per 160 coperti serali, pasta
+                          fresca e linea calda.
+                        </p>
+                      </div>
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/60 p-3">
+                        <div class="flex items-center justify-between">
+                          <h4 class="text-sm font-bold text-neutral-900">
+                            Demi Chef de Partie
+                          </h4>
+                          <span class="text-xs font-semibold text-neutral-500">
+                            2022–2024
+                          </span>
+                        </div>
+                        <p class="text-xs font-medium text-neutral-600">
+                          Alpenresort Dolomiti · Val Gardena (BZ)
+                        </p>
+                        <p class="mt-1 text-[11px] text-neutral-500">
+                          2 stagioni invernali ed estive complete. Preparazione
+                          risotti e secondi tipici.
+                        </p>
+                      </div>
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/60 p-3">
+                        <div class="flex items-center justify-between">
+                          <h4 class="text-sm font-bold text-neutral-900">
+                            Commis di Cucina
+                          </h4>
+                          <span class="text-xs font-semibold text-neutral-500">
+                            2020–2022
+                          </span>
+                        </div>
+                        <p class="text-xs font-medium text-neutral-600">
+                          Ristorante San Martino · Val di Sole (TN)
+                        </p>
+                        <p class="mt-1 text-[11px] text-neutral-500">
+                          Supporto al pass, gestione carni e verdure di
+                          stagione.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Sub-tab 3: Recensioni */}
+                    <div
+                      data-lavoro-panel="recensioni"
+                      class="mt-4 hidden space-y-2.5"
+                    >
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/60 p-3">
+                        <div class="flex items-center justify-between">
+                          <span class="text-xs font-bold text-amber-500">
+                            ★★★★★ 5.0
+                          </span>
+                          <span class="text-[11px] text-neutral-400">
+                            Marzo 2025
+                          </span>
+                        </div>
+                        <p class="mt-1 text-xs italic text-neutral-700">
+                          "Matteo è stato fondamentale per la nostra stagione.
+                          Grande velocità nei picchi di sala e pulizia
+                          impeccabile."
+                        </p>
+                        <p class="mt-1 text-[11px] font-bold text-neutral-800">
+                          Direzione F&B · Grand Hotel Bellevue
+                        </p>
+                      </div>
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/60 p-3">
+                        <div class="flex items-center justify-between">
+                          <span class="text-xs font-bold text-amber-500">
+                            ★★★★★ 5.0
+                          </span>
+                          <span class="text-[11px] text-neutral-400">
+                            Settembre 2024
+                          </span>
+                        </div>
+                        <p class="mt-1 text-xs italic text-neutral-700">
+                          "Puntuale, rispettoso delle direttive e con ottima
+                          gestione delle scorte. Molto consigliato."
+                        </p>
+                        <p class="mt-1 text-[11px] font-bold text-neutral-800">
+                          Chef Marco T. · Alpenresort Dolomiti
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Sub-tab 4: Altro */}
+                    <div
+                      data-lavoro-panel="altro"
+                      class="mt-4 hidden space-y-2.5"
+                    >
+                      <div class="grid grid-cols-1 gap-2 text-xs sm:grid-cols-2">
+                        <div class="rounded-xl border border-neutral-100 bg-neutral-50/60 p-3">
+                          <span class="block font-medium text-neutral-400">
+                            HACCP & Sicurezza
+                          </span>
+                          <span class="font-bold text-neutral-800">
+                            Livello 3 Responsabile
+                          </span>
+                          <span class="mt-0.5 block text-[11px] text-neutral-500">
+                            Valido fino a Dicembre 2027
+                          </span>
+                        </div>
+                        <div class="rounded-xl border border-neutral-100 bg-neutral-50/60 p-3">
+                          <span class="block font-medium text-neutral-400">
+                            Patente & Mezzo
+                          </span>
+                          <span class="font-bold text-neutral-800">
+                            Patente B · Automunito
+                          </span>
+                          <span class="mt-0.5 block text-[11px] text-neutral-500">
+                            Disponibilità a inizio rapido
+                          </span>
+                        </div>
+                        <div class="rounded-xl border border-neutral-100 bg-neutral-50/60 p-3 sm:col-span-2">
+                          <span class="block font-medium text-neutral-400">
+                            Competenze linguistiche
+                          </span>
+                          <p class="mt-1 text-xs font-semibold text-neutral-800">
+                            Italiano (Madrelingua) · Tedesco (B2 alberghiero) ·
+                            Inglese (B1 ristorazione)
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Tablet App Navigation Bar */}
+            <div class="mt-auto grid shrink-0 grid-cols-4 items-center border-t border-neutral-200/90 bg-white px-3 py-1.5 sm:px-5 sm:py-2">
+              <button
+                type="button"
+                class="flex cursor-pointer flex-col items-center justify-center gap-0.5 py-0.5 text-neutral-400 transition-colors hover:text-neutral-800"
+              >
+                <svg
+                  class="size-4 sm:size-4.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                <span class="text-[9px] font-bold tracking-wider uppercase sm:text-[10px]">
+                  Home
+                </span>
+              </button>
+
+              <div class="flex justify-center">
+                <div class="flex flex-col items-center justify-center gap-0.5 py-0.5 text-[#158154]">
+                  <svg
+                    class="size-4 sm:size-4.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.3-4.3" />
+                  </svg>
+                  <span class="text-[9px] font-bold tracking-wider uppercase sm:text-[10px]">
+                    Cerca
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="flex cursor-pointer flex-col items-center justify-center gap-0.5 py-0.5 text-neutral-400 transition-colors hover:text-neutral-800"
+              >
+                <svg
+                  class="size-4 sm:size-4.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                </svg>
+                <span class="text-[9px] font-bold tracking-wider uppercase sm:text-[10px]">
+                  Chat
+                </span>
+              </button>
+
+              <button
+                type="button"
+                class="flex cursor-pointer flex-col items-center justify-center gap-0.5 py-0.5 text-neutral-400 transition-colors hover:text-neutral-800"
+              >
+                <svg
+                  class="size-4 sm:size-4.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span class="text-[9px] font-bold tracking-wider uppercase sm:text-[10px]">
+                  Profilo
+                </span>
+              </button>
+            </div>
+          </div>
+        ) : tab.id === 'procuro' ? (
+          /* =======================================================
+               AUTHENTIC SEASONSJOB PROCURO IPAD APP UI (RESPONSIVE MASTER-DETAIL)
+               ======================================================= */
+          <div
+            class="flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-[#f8faf9] text-neutral-900 shadow-xs"
+            data-procuro-app
+          >
+            {/* Top App Bar with Brand, Hotel Selector & Actions */}
+            <div class="flex shrink-0 items-center justify-between border-b border-neutral-200/90 bg-white px-3.5 py-2.5 sm:px-5 sm:py-3">
+              <div class="flex items-center gap-3">
+                {/* Mobile Menu Icon */}
+                <button
+                  type="button"
+                  aria-label="Menu di navigazione"
+                  class="grid size-7 place-items-center rounded-lg border border-neutral-200 text-neutral-600 transition-colors hover:bg-neutral-100 md:hidden"
+                >
+                  <svg
+                    class="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                  </svg>
+                </button>
+
+                {/* Brand Logo */}
+                <div class="flex flex-col">
+                  <span class="text-[10px] font-bold tracking-wider text-[#0e7a4a] uppercase">
+                    SeasonsJob
+                  </span>
+                  <span class="text-base font-extrabold tracking-tight text-neutral-900 sm:text-lg">
+                    Procuro
+                  </span>
+                </div>
+
+                {/* Desktop Hotel Selector */}
+                <div class="hidden items-center gap-2 border-l border-neutral-200/80 pl-3.5 md:flex">
+                  <span class="text-[9px] font-bold tracking-wider text-neutral-400 uppercase">
+                    Hotel
+                  </span>
+                  <div class="flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-50/80 px-2.5 py-1 text-xs font-bold text-neutral-800 shadow-2xs">
+                    <svg
+                      class="size-3.5 text-neutral-500"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect width="16" height="20" x="4" y="2" rx="2" ry="2" />
+                      <path d="M9 22v-4h6v4" />
+                      <path d="M8 6h.01" />
+                      <path d="M16 6h.01" />
+                      <path d="M12 6h.01" />
+                      <path d="M12 10h.01" />
+                      <path d="M12 14h.01" />
+                      <path d="M16 10h.01" />
+                      <path d="M16 14h.01" />
+                      <path d="M8 10h.01" />
+                      <path d="M8 14h.01" />
+                    </svg>
+                    <span>Helvetia</span>
+                    <svg
+                      class="size-3 text-neutral-400"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop Quick Actions & Status */}
+              <div class="flex items-center gap-2 sm:gap-2.5">
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-[#0e7a4a]">
+                  <span class="size-1.5 rounded-full bg-[#0e7a4a] animate-pulse" />
+                  Listini sincronizzati
+                </span>
+              </div>
+            </div>
+
+            {/* App Content Body */}
+            <div class="flex-1 space-y-2.5 p-3 sm:space-y-3 sm:p-4.5 lg:p-5">
+              {/* Breadcrumb back link */}
+              <div class="flex items-center gap-1.5 text-xs font-bold text-neutral-800 sm:text-sm">
+                <svg
+                  class="size-3.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+                <span>Cicli d'ordine</span>
+              </div>
+
+              {/* Stepper Card 1: Avanzamento ordine */}
+              <div class="rounded-2xl border border-neutral-200/90 bg-white p-3.5 shadow-2xs sm:p-4.5">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-bold text-neutral-400">1</span>
+                      <span class="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700 sm:text-[11px]">
+                        Abbinamento completato
+                      </span>
+                    </div>
+                    <h3 class="mt-1 font-serif text-lg font-bold tracking-tight text-neutral-900 sm:text-xl lg:text-2xl">
+                      Abbinamento e revisione
+                    </h3>
+                  </div>
+
+                  {/* Header actions inside card matching original screenshot */}
+                  <div class="flex shrink-0 items-center gap-1.5">
+                    <button
+                      type="button"
+                      class="flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-xs font-semibold text-neutral-700 shadow-2xs transition-colors hover:bg-neutral-50"
+                    >
+                      <svg
+                        class="size-3.5 text-neutral-500"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect width="7" height="7" x="3" y="3" rx="1" />
+                        <rect width="7" height="7" x="14" y="3" rx="1" />
+                        <rect width="7" height="7" x="14" y="14" rx="1" />
+                        <rect width="7" height="7" x="3" y="14" rx="1" />
+                      </svg>
+                      <span class="hidden sm:inline">Panoramica</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-xs font-semibold text-neutral-700 shadow-2xs transition-colors hover:bg-neutral-50"
+                    >
+                      <svg
+                        class="size-3.5 text-neutral-500"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                        <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+                        <path d="M9 14h6" />
+                        <path d="M9 18h6" />
+                        <path d="M9 10h6" />
+                      </svg>
+                      <span class="hidden sm:inline">Registro attività</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="my-2.5 border-b border-neutral-100 sm:my-3" />
+
+                {/* Stepper Steps (Full Width with flex-1 connectors, no scrollbar) */}
+                <div class="flex w-full items-center justify-between text-xs">
+                  {/* Step 1: Preordine */}
+                  <div class="flex shrink-0 items-center gap-1.5 font-semibold text-neutral-700">
+                    <span class="grid size-5.5 place-items-center rounded-full bg-neutral-100 text-neutral-600">
+                      <svg
+                        class="size-3"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </span>
+                    <span class="whitespace-nowrap">Preordine</span>
+                  </div>
+
+                  {/* Step Line 1 */}
+                  <span class="mx-2 h-px flex-1 bg-neutral-200 sm:mx-3" />
+
+                  {/* Step 2: Abbinamento (active) */}
+                  <div class="flex shrink-0 items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700 ring-1 ring-blue-200 shadow-2xs">
+                    <span class="grid size-5 place-items-center rounded-full bg-blue-600 text-[11px] font-bold text-white">
+                      2
+                    </span>
+                    <span class="whitespace-nowrap">
+                      Abbinamento e revisione
+                    </span>
+                  </div>
+
+                  {/* Step Line 2 */}
+                  <span class="mx-2 h-px flex-1 bg-neutral-200 sm:mx-3" />
+
+                  {/* Step 3: Ordini e bozze */}
+                  <div class="flex shrink-0 items-center gap-1.5 font-medium text-neutral-400">
+                    <span class="grid size-5.5 place-items-center rounded-full border border-dashed border-neutral-300 text-neutral-400">
+                      <svg
+                        class="size-3"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect
+                          width="18"
+                          height="11"
+                          x="3"
+                          y="11"
+                          rx="2"
+                          ry="2"
+                        />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                    </span>
+                    <span class="hidden whitespace-nowrap sm:inline">
+                      Ordini e bozze
+                    </span>
+                  </div>
+
+                  {/* Step Line 3 */}
+                  <span class="mx-2 h-px flex-1 bg-neutral-200 sm:mx-3" />
+
+                  {/* Step 4: Ricezione */}
+                  <div class="flex shrink-0 items-center gap-1.5 font-medium text-neutral-400">
+                    <span class="grid size-5.5 place-items-center rounded-full border border-dashed border-neutral-300 text-neutral-400">
+                      <svg
+                        class="size-3"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect
+                          width="18"
+                          height="11"
+                          x="3"
+                          y="11"
+                          rx="2"
+                          ry="2"
+                        />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                    </span>
+                    <span class="hidden whitespace-nowrap sm:inline">
+                      Ricezione
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Execution Meta & Filter Toolbar */}
+              <div class="space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h4 class="text-base font-extrabold tracking-tight text-neutral-900 sm:text-lg">
+                      Abbinamento e revisione
+                    </h4>
+                    <p class="text-[11px] text-neutral-500">
+                      Esecuzione n. 25 · 12 set 2026, 21:59
+                    </p>
+                  </div>
+
+                  {/* Revision counter and progress */}
+                  <div class="flex items-center gap-2.5">
+                    <div class="hidden h-1.5 w-24 overflow-hidden rounded-full bg-neutral-200 sm:block">
+                      <div class="h-full w-0 bg-emerald-600" />
+                    </div>
+                    <span class="text-xs font-bold text-neutral-600">
+                      0 / 4 revisionate
+                    </span>
+                  </div>
+                </div>
+
+                {/* Action Toolbar */}
+                <div class="flex flex-wrap items-center justify-between gap-2.5 pt-1">
+                  <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    <button
+                      type="button"
+                      class="flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-200/90 bg-white px-2.5 py-1.5 text-xs font-bold text-neutral-700 shadow-2xs transition-colors hover:bg-neutral-50"
+                    >
+                      <svg
+                        class="size-3.5 text-neutral-500"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                        <path d="M16 16h5v5" />
+                      </svg>
+                      <span>Riesegui abbinamento</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-200/90 bg-white px-2.5 py-1.5 text-xs font-bold text-neutral-700 shadow-2xs transition-colors hover:bg-neutral-50"
+                    >
+                      <svg
+                        class="size-3.5 text-neutral-500"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
+                      <span>Aggiungi articolo</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="hidden cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-900 bg-neutral-900 px-3 py-1.5 text-xs font-bold text-white shadow-2xs transition-colors hover:bg-neutral-800 sm:inline-flex"
+                    >
+                      <svg
+                        class="size-3.5 text-emerald-400"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      <span>Accetta tutti i suggerimenti (3)</span>
+                    </button>
+                  </div>
+
+                  {/* Filter Pills */}
+                  <div class="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      class="cursor-pointer rounded-full bg-neutral-900 px-2.5 py-1 text-xs font-bold text-white shadow-2xs"
+                    >
+                      Tutte 4
+                    </button>
+                    <button
+                      type="button"
+                      class="cursor-pointer rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50"
+                    >
+                      Avvisi 1
+                    </button>
+                    <button
+                      type="button"
+                      class="cursor-pointer rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50"
+                    >
+                      Da revisionare 4
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Master-Detail Split Grid */}
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-12 lg:gap-5">
+                {/* Left Column: Richieste (Master List) */}
+                <div class="space-y-2 md:col-span-5">
+                  {/* Card 1: Pasta */}
+                  <button
+                    type="button"
+                    data-procuro-target="pasta"
+                    class="w-full cursor-pointer rounded-xl border border-neutral-200/90 bg-white p-3.5 text-left shadow-2xs transition-all hover:border-neutral-300 hover:shadow-xs"
+                  >
+                    <div class="flex items-start justify-between gap-2">
+                      <div>
+                        <p class="text-sm font-bold text-neutral-900">
+                          10 chili di pasta
+                        </p>
+                        <p class="text-xs text-neutral-500">Richiesto: 10 kg</p>
+                      </div>
+                      <span class="inline-flex items-center rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-bold text-amber-700">
+                        verifica unità
+                      </span>
+                    </div>
+                  </button>
+
+                  {/* Card 2: Prosciutto cotto (Active by default) */}
+                  <button
+                    type="button"
+                    data-procuro-target="prosciutto"
+                    class="w-full cursor-pointer rounded-xl border-2 border-[#158154] bg-[#f0fdf4]/40 p-3.5 text-left shadow-2xs transition-all"
+                  >
+                    <div class="flex items-start justify-between gap-2">
+                      <div>
+                        <p class="text-sm font-bold text-neutral-900">
+                          un chilo di prosciutto cotto
+                        </p>
+                        <p class="text-xs text-neutral-500">Richiesto: 1 kg</p>
+                      </div>
+                      <span class="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-[11px] font-bold text-blue-700">
+                        9 candidati
+                      </span>
+                    </div>
+                  </button>
+
+                  {/* Card 3: Meloni */}
+                  <button
+                    type="button"
+                    data-procuro-target="meloni"
+                    class="w-full cursor-pointer rounded-xl border border-neutral-200/90 bg-white p-3.5 text-left shadow-2xs transition-all hover:border-neutral-300 hover:shadow-xs"
+                  >
+                    <div class="flex items-start justify-between gap-2">
+                      <div>
+                        <p class="text-sm font-bold text-neutral-900">
+                          5 chili di meloni
+                        </p>
+                        <p class="text-xs text-neutral-500">Richiesto: 5 kg</p>
+                      </div>
+                      <span class="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-[11px] font-bold text-blue-700">
+                        9 candidati
+                      </span>
+                    </div>
+                  </button>
+
+                  {/* Card 4: Anguria */}
+                  <button
+                    type="button"
+                    data-procuro-target="anguria"
+                    class="w-full cursor-pointer rounded-xl border border-neutral-200/90 bg-white p-3.5 text-left shadow-2xs transition-all hover:border-neutral-300 hover:shadow-xs"
+                  >
+                    <div class="flex items-start justify-between gap-2">
+                      <div>
+                        <p class="text-sm font-bold text-neutral-900">
+                          10 chili di anguria
+                        </p>
+                        <p class="text-xs text-neutral-500">Richiesto: 10 kg</p>
+                      </div>
+                      <span class="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-[11px] font-bold text-blue-700">
+                        5 candidati
+                      </span>
+                    </div>
+                  </button>
+                </div>
+
+                {/* Right Column: Detail Panels */}
+                <div class="md:col-span-7">
+                  {/* Detail Panel 1: Prosciutto Cotto (Active) */}
+                  <div
+                    data-procuro-panel="prosciutto"
+                    class="rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs sm:p-5"
+                  >
+                    <div class="flex items-center justify-between gap-2 border-b border-neutral-100 pb-3">
+                      <div>
+                        <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                          Richiesta · Riga 2
+                        </span>
+                        <h4 class="mt-0.5 text-base font-extrabold tracking-tight text-neutral-900 sm:text-lg">
+                          un chilo di prosciutto cotto
+                        </h4>
+                        <p class="text-xs font-medium text-neutral-500">
+                          Richiesto: 1 kg
+                        </p>
+                      </div>
+                      <span class="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 text-xs font-bold text-sky-700">
+                        suggeriti · 9 candidati
+                      </span>
+                    </div>
+
+                    {/* Candidate options */}
+                    <div class="mt-4 space-y-2.5">
+                      {/* Option 1 (Selected match) */}
+                      <div class="rounded-xl border-2 border-[#158154] bg-[#f0fdf4]/50 p-3 shadow-2xs transition-all sm:p-3.5">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="flex items-start gap-2.5">
+                            {/* Selected radio */}
+                            <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border-2 border-[#158154] bg-white">
+                              <span class="size-2.5 rounded-full bg-[#158154]" />
+                            </span>
+                            <div>
+                              <p class="text-xs font-extrabold tracking-tight text-neutral-900 sm:text-sm">
+                                PROSCIUTTO COTTO NAZIONALE ALTA QUALITÀ ·
+                                22CT101
+                              </p>
+                              <p class="text-[11px] font-semibold text-neutral-500">
+                                GELCARNI · listino
+                              </p>
+                            </div>
+                          </div>
+                          <div class="shrink-0 text-right">
+                            <p class="text-xs font-black text-neutral-900 sm:text-sm">
+                              5,40 €{' '}
+                              <span class="text-[11px] font-normal text-neutral-500">
+                                / kg
+                              </span>
+                            </p>
+                            <p class="text-[10px] font-bold text-[#158154]">
+                              consigliato · posizione 1
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Option 2 */}
+                      <div class="rounded-xl border border-neutral-200 bg-white p-3 transition-all hover:border-neutral-300 sm:p-3.5">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="flex items-start gap-2.5">
+                            {/* Unselected radio */}
+                            <span class="mt-0.5 size-5 shrink-0 rounded-full border border-neutral-300 bg-white" />
+                            <div>
+                              <p class="text-xs font-bold text-neutral-800 sm:text-sm">
+                                COTTO T/COSCIA S/POL FOGLIA D'ORO (Kg.8,0/9,0) ·
+                                41CT1004
+                              </p>
+                              <p class="text-[11px] font-medium text-neutral-500">
+                                SIMEONI · listino
+                              </p>
+                            </div>
+                          </div>
+                          <div class="shrink-0 text-right">
+                            <p class="text-xs font-bold text-neutral-900 sm:text-sm">
+                              6,03 €{' '}
+                              <span class="text-[11px] font-normal text-neutral-500">
+                                / kg
+                              </span>
+                            </p>
+                            <p class="text-[10px] font-medium text-neutral-400">
+                              posizione 2
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Option 3 */}
+                      <div class="rounded-xl border border-neutral-200 bg-white p-3 transition-all hover:border-neutral-300 sm:p-3.5">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="flex items-start gap-2.5">
+                            <span class="mt-0.5 size-5 shrink-0 rounded-full border border-neutral-300 bg-white" />
+                            <div>
+                              <p class="text-xs font-bold text-neutral-800 sm:text-sm">
+                                COTTO TRANCIATO SPECIAL (Kg. 5,0) · 18CT095
+                              </p>
+                              <p class="text-[11px] font-medium text-neutral-500">
+                                DAC · listino
+                              </p>
+                            </div>
+                          </div>
+                          <div class="shrink-0 text-right">
+                            <p class="text-xs font-bold text-neutral-900 sm:text-sm">
+                              4,85 €{' '}
+                              <span class="text-[11px] font-normal text-neutral-500">
+                                / kg
+                              </span>
+                            </p>
+                            <p class="text-[10px] font-medium text-neutral-400">
+                              posizione 3
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Confirm buttons */}
+                    <div class="mt-4 flex items-center justify-between border-t border-neutral-100 pt-3">
+                      <button
+                        type="button"
+                        class="cursor-pointer text-xs font-semibold text-neutral-500 transition-colors hover:text-neutral-800"
+                      >
+                        Cerca altro fornitore...
+                      </button>
+                      <button
+                        type="button"
+                        class="inline-flex cursor-pointer items-center gap-1.5 rounded-xl bg-[#158154] px-3.5 py-1.5 text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#126b46]"
+                      >
+                        <svg
+                          class="size-3.5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>Conferma abbinamento</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Detail Panel 2: Pasta */}
+                  <div
+                    data-procuro-panel="pasta"
+                    class="hidden rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs sm:p-5"
+                  >
+                    <div class="flex items-center justify-between gap-2 border-b border-neutral-100 pb-3">
+                      <div>
+                        <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                          Richiesta · Riga 1
+                        </span>
+                        <h4 class="mt-0.5 text-base font-extrabold tracking-tight text-neutral-900 sm:text-lg">
+                          10 chili di pasta
+                        </h4>
+                        <p class="text-xs font-medium text-neutral-500">
+                          Richiesto: 10 kg
+                        </p>
+                      </div>
+                      <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-bold text-amber-700">
+                        avviso · verifica unità
+                      </span>
+                    </div>
+
+                    <div class="mt-3 rounded-xl border border-amber-200/80 bg-amber-50/70 p-3 text-xs text-amber-900">
+                      <p class="font-bold">Formato pasta non specificato</p>
+                      <p class="mt-0.5 text-[11px] leading-relaxed text-amber-800">
+                        La richiesta dal reparto cucina non indicava il calibro.
+                        Seleziona il formato standard per confermare l'ordine
+                        automatico.
+                      </p>
+                    </div>
+
+                    <div class="mt-3 space-y-2.5">
+                      <div class="rounded-xl border-2 border-[#158154] bg-[#f0fdf4]/50 p-3 sm:p-3.5">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="flex items-start gap-2.5">
+                            <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border-2 border-[#158154] bg-white">
+                              <span class="size-2.5 rounded-full bg-[#158154]" />
+                            </span>
+                            <div>
+                              <p class="text-xs font-extrabold text-neutral-900 sm:text-sm">
+                                PENNE RIGATE N.73 (Conf. 5kg x 2) · BARILLA
+                                FOODSERVICE
+                              </p>
+                              <p class="text-[11px] font-semibold text-neutral-500">
+                                DAC RISTORAZIONE · listino
+                              </p>
+                            </div>
+                          </div>
+                          <div class="shrink-0 text-right">
+                            <p class="text-xs font-black text-neutral-900 sm:text-sm">
+                              1,65 €{' '}
+                              <span class="text-[11px] font-normal text-neutral-500">
+                                / kg
+                              </span>
+                            </p>
+                            <p class="text-[10px] font-bold text-[#158154]">
+                              consigliato · posizione 1
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-200 bg-white p-3 sm:p-3.5">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="flex items-start gap-2.5">
+                            <span class="mt-0.5 size-5 shrink-0 rounded-full border border-neutral-300 bg-white" />
+                            <div>
+                              <p class="text-xs font-bold text-neutral-800 sm:text-sm">
+                                SPAGHETTI N.12 RISTORAZIONE (5kg x 2) · DE CECCO
+                              </p>
+                              <p class="text-[11px] font-medium text-neutral-500">
+                                SIMEONI · listino
+                              </p>
+                            </div>
+                          </div>
+                          <div class="shrink-0 text-right">
+                            <p class="text-xs font-bold text-neutral-900 sm:text-sm">
+                              1,78 €{' '}
+                              <span class="text-[11px] font-normal text-neutral-500">
+                                / kg
+                              </span>
+                            </p>
+                            <p class="text-[10px] font-medium text-neutral-400">
+                              posizione 2
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between border-t border-neutral-100 pt-3">
+                      <button
+                        type="button"
+                        class="cursor-pointer text-xs font-semibold text-neutral-500 hover:text-neutral-800"
+                      >
+                        Specifica formato manuale
+                      </button>
+                      <button
+                        type="button"
+                        class="inline-flex cursor-pointer items-center gap-1.5 rounded-xl bg-[#158154] px-3.5 py-1.5 text-xs font-bold text-white shadow-2xs hover:bg-[#126b46]"
+                      >
+                        <span>Salva e abbina</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Detail Panel 3: Meloni */}
+                  <div
+                    data-procuro-panel="meloni"
+                    class="hidden rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs sm:p-5"
+                  >
+                    <div class="flex items-center justify-between gap-2 border-b border-neutral-100 pb-3">
+                      <div>
+                        <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                          Richiesta · Riga 3
+                        </span>
+                        <h4 class="mt-0.5 text-base font-extrabold tracking-tight text-neutral-900 sm:text-lg">
+                          5 chili di meloni
+                        </h4>
+                        <p class="text-xs font-medium text-neutral-500">
+                          Richiesto: 5 kg
+                        </p>
+                      </div>
+                      <span class="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 text-xs font-bold text-sky-700">
+                        suggeriti · 9 candidati
+                      </span>
+                    </div>
+
+                    <div class="mt-4 space-y-2.5">
+                      <div class="rounded-xl border-2 border-[#158154] bg-[#f0fdf4]/50 p-3 sm:p-3.5">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="flex items-start gap-2.5">
+                            <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border-2 border-[#158154] bg-white">
+                              <span class="size-2.5 rounded-full bg-[#158154]" />
+                            </span>
+                            <div>
+                              <p class="text-xs font-extrabold text-neutral-900 sm:text-sm">
+                                MELONE RETATO EXTRA (Collo circa 5-6 kg) · CAT.
+                                I
+                              </p>
+                              <p class="text-[11px] font-semibold text-neutral-500">
+                                ORTOFRUTTA VAL DI NON · listino
+                              </p>
+                            </div>
+                          </div>
+                          <div class="shrink-0 text-right">
+                            <p class="text-xs font-black text-neutral-900 sm:text-sm">
+                              1,95 €{' '}
+                              <span class="text-[11px] font-normal text-neutral-500">
+                                / kg
+                              </span>
+                            </p>
+                            <p class="text-[10px] font-bold text-[#158154]">
+                              consigliato · posizione 1
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-200 bg-white p-3 sm:p-3.5">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="flex items-start gap-2.5">
+                            <span class="mt-0.5 size-5 shrink-0 rounded-full border border-neutral-300 bg-white" />
+                            <div>
+                              <p class="text-xs font-bold text-neutral-800 sm:text-sm">
+                                MELONE GIALLO CANTALUPO EXTRA · TRENTINO
+                              </p>
+                              <p class="text-[11px] font-medium text-neutral-500">
+                                SIMEONI ORTOFRUTTA · listino
+                              </p>
+                            </div>
+                          </div>
+                          <div class="shrink-0 text-right">
+                            <p class="text-xs font-bold text-neutral-900 sm:text-sm">
+                              2,15 €{' '}
+                              <span class="text-[11px] font-normal text-neutral-500">
+                                / kg
+                              </span>
+                            </p>
+                            <p class="text-[10px] font-medium text-neutral-400">
+                              posizione 2
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between border-t border-neutral-100 pt-3">
+                      <button
+                        type="button"
+                        class="cursor-pointer text-xs font-semibold text-neutral-500 hover:text-neutral-800"
+                      >
+                        Vedi tutti i 9 fornitori
+                      </button>
+                      <button
+                        type="button"
+                        class="inline-flex cursor-pointer items-center gap-1.5 rounded-xl bg-[#158154] px-3.5 py-1.5 text-xs font-bold text-white shadow-2xs hover:bg-[#126b46]"
+                      >
+                        <span>Conferma abbinamento</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Detail Panel 4: Anguria */}
+                  <div
+                    data-procuro-panel="anguria"
+                    class="hidden rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs sm:p-5"
+                  >
+                    <div class="flex items-center justify-between gap-2 border-b border-neutral-100 pb-3">
+                      <div>
+                        <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                          Richiesta · Riga 4
+                        </span>
+                        <h4 class="mt-0.5 text-base font-extrabold tracking-tight text-neutral-900 sm:text-lg">
+                          10 chili di anguria
+                        </h4>
+                        <p class="text-xs font-medium text-neutral-500">
+                          Richiesto: 10 kg
+                        </p>
+                      </div>
+                      <span class="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 text-xs font-bold text-sky-700">
+                        suggeriti · 5 candidati
+                      </span>
+                    </div>
+
+                    <div class="mt-4 space-y-2.5">
+                      <div class="rounded-xl border-2 border-[#158154] bg-[#f0fdf4]/50 p-3 sm:p-3.5">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="flex items-start gap-2.5">
+                            <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border-2 border-[#158154] bg-white">
+                              <span class="size-2.5 rounded-full bg-[#158154]" />
+                            </span>
+                            <div>
+                              <p class="text-xs font-extrabold text-neutral-900 sm:text-sm">
+                                ANGURIA BABY SENZA SEMI (Collo 10-12 kg) · CAT.
+                                I
+                              </p>
+                              <p class="text-[11px] font-semibold text-neutral-500">
+                                ORTOFRUTTA VAL DI NON · listino
+                              </p>
+                            </div>
+                          </div>
+                          <div class="shrink-0 text-right">
+                            <p class="text-xs font-black text-neutral-900 sm:text-sm">
+                              1,20 €{' '}
+                              <span class="text-[11px] font-normal text-neutral-500">
+                                / kg
+                              </span>
+                            </p>
+                            <p class="text-[10px] font-bold text-[#158154]">
+                              consigliato · posizione 1
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-200 bg-white p-3 sm:p-3.5">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="flex items-start gap-2.5">
+                            <span class="mt-0.5 size-5 shrink-0 rounded-full border border-neutral-300 bg-white" />
+                            <div>
+                              <p class="text-xs font-bold text-neutral-800 sm:text-sm">
+                                ANGURIA TONDA TRADIZIONALE A TRANCI · CAT. I
+                              </p>
+                              <p class="text-[11px] font-medium text-neutral-500">
+                                SIMEONI ORTOFRUTTA · listino
+                              </p>
+                            </div>
+                          </div>
+                          <div class="shrink-0 text-right">
+                            <p class="text-xs font-bold text-neutral-900 sm:text-sm">
+                              0,98 €{' '}
+                              <span class="text-[11px] font-normal text-neutral-500">
+                                / kg
+                              </span>
+                            </p>
+                            <p class="text-[10px] font-medium text-neutral-400">
+                              posizione 2
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between border-t border-neutral-100 pt-3">
+                      <button
+                        type="button"
+                        class="cursor-pointer text-xs font-semibold text-neutral-500 hover:text-neutral-800"
+                      >
+                        Vedi tutti i 5 fornitori
+                      </button>
+                      <button
+                        type="button"
+                        class="inline-flex cursor-pointer items-center gap-1.5 rounded-xl bg-[#158154] px-3.5 py-1.5 text-xs font-bold text-white shadow-2xs hover:bg-[#126b46]"
+                      >
+                        <span>Conferma abbinamento</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* =======================================================
+               AUTHENTIC APP SIMULATION: WINE (CANTINA DIGITALE)
+               ======================================================= */
+          <div class="flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-[#f8fafc]">
+            {/* Top App Header */}
+            <div class="flex shrink-0 items-center justify-between border-b border-neutral-200/80 bg-white px-3.5 py-2.5 sm:px-5 sm:py-3">
+              <div class="flex items-center gap-3">
+                {/* Mobile Menu Icon */}
+                <button
+                  type="button"
+                  class="grid size-8 place-items-center rounded-lg border border-neutral-200 text-neutral-600 md:hidden"
+                  aria-label="Menu Cantina"
+                >
+                  <svg
+                    class="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                  </svg>
+                </button>
+
+                {/* Brand Logo */}
+                <div class="flex flex-col">
+                  <span class="text-[10px] font-bold tracking-wider text-[#0e7a4a] uppercase">
+                    SeasonsJob
+                  </span>
+                  <span class="text-base font-extrabold tracking-tight text-neutral-900 sm:text-lg">
+                    Wine
+                  </span>
+                </div>
+
+                {/* Location / Cellar selector */}
+                <div class="hidden items-center gap-2 border-l border-neutral-200/80 pl-3.5 md:flex">
+                  <span class="text-[9px] font-bold tracking-wider text-neutral-400 uppercase">
+                    Cantina
+                  </span>
+                  <div class="flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-50/80 px-2.5 py-1 text-xs font-bold text-neutral-800 shadow-2xs">
+                    <svg
+                      class="size-3.5 text-neutral-500"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M8 22h8" />
+                      <path d="M12 11v11" />
+                      <path d="m19 3-4 8H9L5 3z" />
+                    </svg>
+                    <span>Cantina Principale · Helvetia</span>
+                    <svg
+                      class="size-3 text-neutral-400"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status Badge */}
+              <div class="flex items-center gap-2 sm:gap-2.5">
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-[#0e7a4a]">
+                  <span class="size-1.5 rounded-full bg-[#0e7a4a] animate-pulse" />
+                  Inventario sincronizzato
+                </span>
+              </div>
+            </div>
+
+            {/* App Content Body */}
+            <div class="flex-1 space-y-3 p-3.5 sm:p-5 lg:p-6">
+              {/* Header: Scansione Rapida */}
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200/60 pb-2.5">
+                <div>
+                  <h3 class="text-xl font-black tracking-tight text-neutral-900 sm:text-2xl">
+                    Scansione Rapida
+                  </h3>
+                  <p class="text-[11px] font-medium text-neutral-500 sm:text-xs">
+                    Gestione carichi, scarichi al tavolo e tracciamento
+                    posizioni bottiglia
+                  </p>
+                </div>
+                <div class="hidden items-center gap-2 text-xs font-semibold text-neutral-500 sm:flex">
+                  <span class="inline-flex size-2 rounded-full bg-emerald-500" />
+                  Scanner ottico pronto · Barcode / QR / NFC
+                </div>
+              </div>
+
+              {/* Responsive Layout: Master-Detail Grid on md+, Stacked on mobile */}
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-12 lg:gap-5">
+                {/* Left Column: Actions & Recent Movements (md:col-span-7) */}
+                <div class="space-y-3 md:col-span-7">
+                  {/* Action Buttons Toolbar (Ispeziona, Servizio, Vendere) */}
+                  <div class="space-y-2">
+                    <div class="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        class="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#0284c7] px-3.5 py-2.5 text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#0369a1]"
+                      >
+                        <svg
+                          class="size-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="11" cy="11" r="8" />
+                          <path d="m21 21-4.3-4.3" />
+                        </svg>
+                        <span>Ispeziona</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-neutral-200/90 bg-[#f1f5f9] px-3.5 py-2.5 text-xs font-bold text-neutral-800 shadow-2xs transition-colors hover:bg-neutral-200/80"
+                      >
+                        <svg
+                          class="size-4 text-amber-500"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span>Servizio</span>
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1e5d38] px-4 py-2.5 text-sm font-bold text-white shadow-2xs transition-colors hover:bg-[#16492c]"
+                    >
+                      <svg
+                        class="size-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                        <line x1="7" y1="7" x2="7.01" y2="7" />
+                      </svg>
+                      <span>Vendere</span>
+                    </button>
+                  </div>
+
+                  {/* Section Label */}
+                  <div class="pt-1">
+                    <p class="text-[11px] font-bold tracking-wider text-neutral-400 uppercase">
+                      I miei ultimi movimenti
+                    </p>
+                  </div>
+
+                  {/* Movement Cards List */}
+                  <div class="space-y-2.5">
+                    {/* Card 1: Pinot Nero (Active default) */}
+                    <button
+                      type="button"
+                      data-wine-target="pinot-nero"
+                      class="group relative flex w-full cursor-pointer overflow-hidden rounded-xl border border-neutral-300 bg-[#f0fdf4]/30 p-3 text-left shadow-2xs ring-2 ring-[#158154] transition-all hover:shadow-xs"
+                    >
+                      {/* Red Left Accent Stripe */}
+                      <span class="absolute inset-y-0 left-0 w-1.5 rounded-l bg-rose-500" />
+
+                      <div class="ml-2 flex-1 space-y-1.5">
+                        {/* Header Row */}
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <span class="text-xs font-black tracking-tight text-neutral-900">
+                              SCARICO
+                            </span>
+                            <span class="rounded-md border border-rose-200 bg-rose-50 px-2 py-0.5 text-[10px] font-semibold text-rose-600">
+                              Vendita
+                            </span>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-medium text-neutral-400">
+                              12 set, 13:48
+                            </span>
+                            <span class="inline-flex items-center rounded-md bg-neutral-100 px-2 py-0.5 text-xs font-black text-neutral-900">
+                              1{' '}
+                              <span class="ml-1 text-[9px] font-bold text-neutral-500 uppercase">
+                                BT
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Wine Row */}
+                        <div class="flex items-center gap-2 text-xs">
+                          <span class="size-2 shrink-0 rounded-full bg-emerald-600" />
+                          <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                            Vino
+                          </span>
+                          <span class="truncate font-bold text-neutral-900">
+                            PINOT NERO Blauburgunder
+                          </span>
+                        </div>
+
+                        {/* Vintage Row */}
+                        <div class="flex items-center gap-2 text-xs">
+                          <span class="size-2 shrink-0 rounded-full border border-neutral-400" />
+                          <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                            Annata
+                          </span>
+                          <span class="font-bold text-neutral-900">2025</span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Card 2: Balzicco */}
+                    <button
+                      type="button"
+                      data-wine-target="balzicco"
+                      class="group relative flex w-full cursor-pointer overflow-hidden rounded-xl border border-neutral-200/90 bg-white p-3 text-left shadow-2xs transition-all hover:border-neutral-300 hover:shadow-xs"
+                    >
+                      {/* Red Left Accent Stripe */}
+                      <span class="absolute inset-y-0 left-0 w-1.5 rounded-l bg-rose-500" />
+
+                      <div class="ml-2 flex-1 space-y-1.5">
+                        {/* Header Row */}
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <span class="text-xs font-black tracking-tight text-neutral-900">
+                              SCARICO
+                            </span>
+                            <span class="rounded-md border border-rose-200 bg-rose-50 px-2 py-0.5 text-[10px] font-semibold text-rose-600">
+                              Vendita
+                            </span>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-medium text-neutral-400">
+                              12 set, 13:47
+                            </span>
+                            <span class="inline-flex items-center rounded-md bg-neutral-100 px-2 py-0.5 text-xs font-black text-neutral-900">
+                              1{' '}
+                              <span class="ml-1 text-[9px] font-bold text-neutral-500 uppercase">
+                                BT
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Wine Row */}
+                        <div class="flex items-center gap-2 text-xs">
+                          <span class="size-2 shrink-0 rounded-full bg-emerald-600" />
+                          <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                            Vino
+                          </span>
+                          <span class="truncate font-bold text-neutral-900">
+                            Balzicco Collio Friulano
+                          </span>
+                        </div>
+
+                        {/* Vintage Row */}
+                        <div class="flex items-center gap-2 text-xs">
+                          <span class="size-2 shrink-0 rounded-full border border-neutral-400" />
+                          <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                            Annata
+                          </span>
+                          <span class="font-bold text-neutral-900">2023</span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Card 3: D.Vino */}
+                    <button
+                      type="button"
+                      data-wine-target="dvino"
+                      class="group relative flex w-full cursor-pointer overflow-hidden rounded-xl border border-neutral-200/90 bg-white p-3 text-left shadow-2xs transition-all hover:border-neutral-300 hover:shadow-xs"
+                    >
+                      {/* Red Left Accent Stripe */}
+                      <span class="absolute inset-y-0 left-0 w-1.5 rounded-l bg-rose-500" />
+
+                      <div class="ml-2 flex-1 space-y-1.5">
+                        {/* Header Row */}
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <span class="text-xs font-black tracking-tight text-neutral-900">
+                              SCARICO
+                            </span>
+                            <span class="rounded-md border border-rose-200 bg-rose-50 px-2 py-0.5 text-[10px] font-semibold text-rose-600">
+                              Vendita
+                            </span>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-medium text-neutral-400">
+                              12 set, 13:47
+                            </span>
+                            <span class="inline-flex items-center rounded-md bg-neutral-100 px-2 py-0.5 text-xs font-black text-neutral-900">
+                              1{' '}
+                              <span class="ml-1 text-[9px] font-bold text-neutral-500 uppercase">
+                                BT
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Wine Row */}
+                        <div class="flex items-center gap-2 text-xs">
+                          <span class="size-2 shrink-0 rounded-full bg-emerald-600" />
+                          <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                            Vino
+                          </span>
+                          <span class="truncate font-bold text-neutral-900">
+                            D.Vino Monferrato
+                          </span>
+                        </div>
+
+                        {/* Vintage Row */}
+                        <div class="flex items-center gap-2 text-xs">
+                          <span class="size-2 shrink-0 rounded-full border border-neutral-400" />
+                          <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                            Annata
+                          </span>
+                          <span class="font-bold text-neutral-900">NV</span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Card 4: Trebbiano */}
+                    <button
+                      type="button"
+                      data-wine-target="trebbiano"
+                      class="group relative flex w-full cursor-pointer overflow-hidden rounded-xl border border-neutral-200/90 bg-white p-3 text-left shadow-2xs transition-all hover:border-neutral-300 hover:shadow-xs"
+                    >
+                      {/* Red Left Accent Stripe */}
+                      <span class="absolute inset-y-0 left-0 w-1.5 rounded-l bg-rose-500" />
+
+                      <div class="ml-2 flex-1 space-y-1.5">
+                        {/* Header Row */}
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <span class="text-xs font-black tracking-tight text-neutral-900">
+                              SCARICO
+                            </span>
+                            <span class="rounded-md border border-rose-200 bg-rose-50 px-2 py-0.5 text-[10px] font-semibold text-rose-600">
+                              Vendita
+                            </span>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-medium text-neutral-400">
+                              12 set, 13:45
+                            </span>
+                            <span class="inline-flex items-center rounded-md bg-neutral-100 px-2 py-0.5 text-xs font-black text-neutral-900">
+                              1{' '}
+                              <span class="ml-1 text-[9px] font-bold text-neutral-500 uppercase">
+                                BT
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Wine Row */}
+                        <div class="flex items-center gap-2 text-xs">
+                          <span class="size-2 shrink-0 rounded-full bg-emerald-600" />
+                          <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                            Vino
+                          </span>
+                          <span class="truncate font-bold text-neutral-900">
+                            TREBBIANO - JASCI
+                          </span>
+                        </div>
+
+                        {/* Vintage Row */}
+                        <div class="flex items-center gap-2 text-xs">
+                          <span class="size-2 shrink-0 rounded-full border border-neutral-400" />
+                          <span class="text-[10px] font-bold tracking-wider text-neutral-400 uppercase">
+                            Annata
+                          </span>
+                          <span class="font-bold text-neutral-900">2024</span>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right Column: Wine Inspection & Cellar Detail Panel (md:col-span-5) */}
+                <div class="md:col-span-5">
+                  {/* Panel 1: Pinot Nero */}
+                  <div
+                    data-wine-panel="pinot-nero"
+                    class="space-y-3 rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs"
+                  >
+                    <div class="flex items-center justify-between border-b border-neutral-100 pb-2.5">
+                      <span class="text-[11px] font-bold tracking-wider text-neutral-400 uppercase">
+                        Scheda Bottiglia
+                      </span>
+                      <span class="inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700">
+                        In Carta · Tavolo 14
+                      </span>
+                    </div>
+
+                    <div>
+                      <span class="text-[10px] font-semibold text-rose-600 uppercase">
+                        Alto Adige DOC · Vino Rosso
+                      </span>
+                      <h4 class="font-serif text-lg font-bold text-neutral-900">
+                        Pinot Nero Blauburgunder
+                      </h4>
+                      <p class="text-xs text-neutral-500">
+                        Cantina San Michele Appiano · Annata 2025
+                      </p>
+                    </div>
+
+                    {/* Metrics 2x2 Grid */}
+                    <div class="grid grid-cols-2 gap-2 pt-1 text-xs">
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Giacenza cantina
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          18 BT{' '}
+                          <span class="text-[10px] font-semibold text-emerald-600">
+                            (Ottimale)
+                          </span>
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Posizione
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          Scaffale B4 · R2
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Prezzo in carta
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          46,00 €{' '}
+                          <span class="text-[10px] font-normal text-neutral-500">
+                            (Cal. 8,50 €)
+                          </span>
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Temperatura
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          16° - 18° C
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Sommelier Service Notes */}
+                    <div class="rounded-xl border border-amber-200/60 bg-amber-50/50 p-2.5 text-xs">
+                      <div class="flex items-center gap-1.5 font-bold text-amber-900">
+                        <svg
+                          class="size-3.5 text-amber-600"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span>Note sommelier & servizio</span>
+                      </div>
+                      <p class="mt-1 text-[11px] leading-relaxed text-neutral-600">
+                        Profumo intenso di mora, ribes nero e lievi note
+                        speziate. Tannini vellutati, servire in calice borgogna.
+                        Perfetto con tagliata di vitello o formaggi stagionati.
+                      </p>
+                    </div>
+
+                    {/* Fast Actions */}
+                    <div class="flex items-center gap-2 pt-1">
+                      <button
+                        type="button"
+                        class="flex-1 cursor-pointer rounded-xl bg-[#158154] py-2 text-center text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#126b46]"
+                      >
+                        Scarica 1 BT (Tavolo)
+                      </button>
+                      <button
+                        type="button"
+                        class="cursor-pointer rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50"
+                      >
+                        Vedi storia
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Panel 2: Balzicco */}
+                  <div
+                    data-wine-panel="balzicco"
+                    class="hidden space-y-3 rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs"
+                  >
+                    <div class="flex items-center justify-between border-b border-neutral-100 pb-2.5">
+                      <span class="text-[11px] font-bold tracking-wider text-neutral-400 uppercase">
+                        Scheda Bottiglia
+                      </span>
+                      <span class="inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700">
+                        In Carta · Servizio
+                      </span>
+                    </div>
+
+                    <div>
+                      <span class="text-[10px] font-semibold text-emerald-600 uppercase">
+                        Friuli Colli Orientali DOC · Bianco
+                      </span>
+                      <h4 class="font-serif text-lg font-bold text-neutral-900">
+                        Balzicco Collio Friulano
+                      </h4>
+                      <p class="text-xs text-neutral-500">
+                        Tenuta Balzicco · Annata 2023
+                      </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-1 text-xs">
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Giacenza cantina
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          24 BT{' '}
+                          <span class="text-[10px] font-semibold text-emerald-600">
+                            (Disponibile)
+                          </span>
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Posizione
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          Scaffale A2 · R3
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Prezzo in carta
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          38,00 €{' '}
+                          <span class="text-[10px] font-normal text-neutral-500">
+                            (Cal. 7,00 €)
+                          </span>
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Temperatura
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          10° - 12° C
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="rounded-xl border border-amber-200/60 bg-amber-50/50 p-2.5 text-xs">
+                      <div class="flex items-center gap-1.5 font-bold text-amber-900">
+                        <svg
+                          class="size-3.5 text-amber-600"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span>Note sommelier & servizio</span>
+                      </div>
+                      <p class="mt-1 text-[11px] leading-relaxed text-neutral-600">
+                        Profilo floreale e minerale con sentori di fiori di
+                        campo e mandorla amara. Splendido con antipasti di mare,
+                        prosciutto di San Daniele e risotti alle erbe.
+                      </p>
+                    </div>
+
+                    <div class="flex items-center gap-2 pt-1">
+                      <button
+                        type="button"
+                        class="flex-1 cursor-pointer rounded-xl bg-[#158154] py-2 text-center text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#126b46]"
+                      >
+                        Scarica 1 BT (Tavolo)
+                      </button>
+                      <button
+                        type="button"
+                        class="cursor-pointer rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50"
+                      >
+                        Vedi storia
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Panel 3: D.Vino */}
+                  <div
+                    data-wine-panel="dvino"
+                    class="hidden space-y-3 rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs"
+                  >
+                    <div class="flex items-center justify-between border-b border-neutral-100 pb-2.5">
+                      <span class="text-[11px] font-bold tracking-wider text-neutral-400 uppercase">
+                        Scheda Bottiglia
+                      </span>
+                      <span class="inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700">
+                        In Carta · Sala
+                      </span>
+                    </div>
+
+                    <div>
+                      <span class="text-[10px] font-semibold text-rose-600 uppercase">
+                        Monferrato Rosso DOC · Rosso
+                      </span>
+                      <h4 class="font-serif text-lg font-bold text-neutral-900">
+                        D.Vino Monferrato
+                      </h4>
+                      <p class="text-xs text-neutral-500">
+                        Cascina D.Vino · Non Vintage (NV)
+                      </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-1 text-xs">
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Giacenza cantina
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          14 BT{' '}
+                          <span class="text-[10px] font-semibold text-amber-600">
+                            (In esaurimento)
+                          </span>
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Posizione
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          Scaffale C1 · R1
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Prezzo in carta
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          32,00 €{' '}
+                          <span class="text-[10px] font-normal text-neutral-500">
+                            (Cal. 6,50 €)
+                          </span>
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Temperatura
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          16° - 17° C
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="rounded-xl border border-amber-200/60 bg-amber-50/50 p-2.5 text-xs">
+                      <div class="flex items-center gap-1.5 font-bold text-amber-900">
+                        <svg
+                          class="size-3.5 text-amber-600"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span>Note sommelier & servizio</span>
+                      </div>
+                      <p class="mt-1 text-[11px] leading-relaxed text-neutral-600">
+                        Corpo agile, frutti rossi croccanti e piacevole sapidità
+                        piemontese. Vino di pronta beva ideale per antipasti di
+                        carne, battuta al coltello e primi saporiti.
+                      </p>
+                    </div>
+
+                    <div class="flex items-center gap-2 pt-1">
+                      <button
+                        type="button"
+                        class="flex-1 cursor-pointer rounded-xl bg-[#158154] py-2 text-center text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#126b46]"
+                      >
+                        Scarica 1 BT (Tavolo)
+                      </button>
+                      <button
+                        type="button"
+                        class="cursor-pointer rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50"
+                      >
+                        Vedi storia
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Panel 4: Trebbiano */}
+                  <div
+                    data-wine-panel="trebbiano"
+                    class="hidden space-y-3 rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs"
+                  >
+                    <div class="flex items-center justify-between border-b border-neutral-100 pb-2.5">
+                      <span class="text-[11px] font-bold tracking-wider text-neutral-400 uppercase">
+                        Scheda Bottiglia
+                      </span>
+                      <span class="inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700">
+                        In Carta · Terrazza
+                      </span>
+                    </div>
+
+                    <div>
+                      <span class="text-[10px] font-semibold text-emerald-600 uppercase">
+                        Trebbiano d'Abruzzo DOC · Bio
+                      </span>
+                      <h4 class="font-serif text-lg font-bold text-neutral-900">
+                        Trebbiano - Jasci
+                      </h4>
+                      <p class="text-xs text-neutral-500">
+                        Azienda Agricola Jasci & Marchesani · Annata 2024
+                      </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-1 text-xs">
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Giacenza cantina
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          31 BT{' '}
+                          <span class="text-[10px] font-semibold text-emerald-600">
+                            (Ottimale)
+                          </span>
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Posizione
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          Scaffale A6 · R2
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Prezzo in carta
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          29,00 €{' '}
+                          <span class="text-[10px] font-normal text-neutral-500">
+                            (Cal. 6,00 €)
+                          </span>
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-neutral-100 bg-neutral-50/70 p-2.5">
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">
+                          Temperatura
+                        </span>
+                        <p class="mt-0.5 font-extrabold text-neutral-900">
+                          8° - 10° C
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="rounded-xl border border-amber-200/60 bg-amber-50/50 p-2.5 text-xs">
+                      <div class="flex items-center gap-1.5 font-bold text-amber-900">
+                        <svg
+                          class="size-3.5 text-amber-600"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span>Note sommelier & servizio</span>
+                      </div>
+                      <p class="mt-1 text-[11px] leading-relaxed text-neutral-600">
+                        Note agrumate, mela cotogna e piacevole freschezza
+                        sapida da agricoltura biologica. Ottimo aperitivo
+                        estivo, ideale con fritti di mare, formaggi freschi e
+                        insalate.
+                      </p>
+                    </div>
+
+                    <div class="flex items-center gap-2 pt-1">
+                      <button
+                        type="button"
+                        class="flex-1 cursor-pointer rounded-xl bg-[#158154] py-2 text-center text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#126b46]"
+                      >
+                        Scarica 1 BT (Tavolo)
+                      </button>
+                      <button
+                        type="button"
+                        class="cursor-pointer rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50"
+                      >
+                        Vedi storia
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom App Navigation Bar (4 tabs matching real screenshots) */}
+            <div class="mt-auto border-t border-neutral-200/90 bg-white px-4 py-2 sm:px-6">
+              <div class="flex items-center justify-around">
+                {/* Tab 1: Scansione (Active) */}
+                <button
+                  type="button"
+                  class="flex cursor-pointer flex-col items-center gap-1 text-[#158154]"
+                >
+                  <svg
+                    class="size-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect width="6" height="6" x="3" y="3" rx="1" />
+                    <rect width="6" height="6" x="15" y="3" rx="1" />
+                    <rect width="6" height="6" x="15" y="15" rx="1" />
+                    <path d="M7 17h.01" />
+                    <path d="M17 7h.01" />
+                    <path d="M7 7h.01" />
+                    <path d="M3 15h4v4H3z" />
+                  </svg>
+                  <span class="text-[11px] font-black">Scansione</span>
+                </button>
+
+                {/* Tab 2: Inventario */}
+                <button
+                  type="button"
+                  class="flex cursor-pointer flex-col items-center gap-1 text-neutral-500 hover:text-neutral-900"
+                >
+                  <svg
+                    class="size-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                    <path d="m3.3 7 8.7 5 8.7-5" />
+                    <path d="M12 22V12" />
+                  </svg>
+                  <span class="text-[11px] font-semibold">Inventario</span>
+                </button>
+
+                {/* Tab 3: Posizioni */}
+                <button
+                  type="button"
+                  class="flex cursor-pointer flex-col items-center gap-1 text-neutral-500 hover:text-neutral-900"
+                >
+                  <svg
+                    class="size-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span class="text-[11px] font-semibold">Posizioni</span>
+                </button>
+
+                {/* Tab 4: Menu */}
+                <button
+                  type="button"
+                  class="flex cursor-pointer flex-col items-center gap-1 text-neutral-500 hover:text-neutral-900"
+                >
+                  <svg
+                    class="size-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                  </svg>
+                  <span class="text-[11px] font-semibold">Menu</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+
+  {/* External Context Line beneath the iPad */}
+  <div class="mx-auto mt-3.5 flex max-w-4xl items-center justify-between px-3 text-xs text-neutral-500">
+    <span data-context-caption>
+      Interfaccia tablet di sala per camerieri e pass
+    </span>
+    <a
+      data-context-link
+      href="/soluzioni/comande/"
+      class="inline-flex items-center gap-1 font-semibold text-brand-700 transition-colors hover:text-brand-800"
+    >
+      <span data-context-label>Scopri SeasonsJob Comande</span>
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</div>
+
+<style>
+  /* The tab rail scrolls horizontally on mobile without showing a scrollbar. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  /*
+    Progressive enhancement for the tablist and stepper counter:
+    The panels and counts are server-rendered static HTML, enhanced with zero external dependencies.
+  */
+  const TAB_ACTIVE_CLASSES = ['bg-[#333333]', 'text-white'];
+  const TAB_INACTIVE_CLASSES = [
+    'text-neutral-600',
+    'hover:bg-neutral-100',
+    'hover:text-ink',
+  ];
+
+  const CONTEXT_MAP: Record<
+    string,
+    { caption: string; href: string; label: string }
+  > = {
+    comande: {
+      caption: 'Interfaccia tablet di sala per camerieri e pass',
+      href: '/soluzioni/comande/',
+      label: 'Scopri SeasonsJob Comande',
+    },
+    lavoro: {
+      caption: 'Ricerca e gestione del personale stagionale alberghiero',
+      href: '/soluzioni/lavoro/',
+      label: 'Scopri SeasonsJob Lavoro',
+    },
+    procuro: {
+      caption: 'Gestione acquisti merci, riordini e fornitori',
+      href: '/soluzioni/procuro/',
+      label: 'Scopri SeasonsJob Procuro',
+    },
+    wine: {
+      caption: 'Carta dei vini digitale e inventario cantina',
+      href: '/soluzioni/wine/',
+      label: 'Scopri SeasonsJob Wine',
+    },
+  };
+
+  const initTablist = (root: HTMLElement): void => {
+    if (root.dataset.tabsReady === 'true') return;
+
+    const buttons = Array.from(
+      root.querySelectorAll<HTMLButtonElement>('[data-tab-target]'),
+    );
+    const panels = Array.from(
+      root.querySelectorAll<HTMLElement>('[data-tab-panel]'),
+    );
+    if (buttons.length === 0 || panels.length === 0) return;
+
+    root.dataset.tabsReady = 'true';
+
+    const activate = (target: string): void => {
+      for (const button of buttons) {
+        const isActive = button.dataset.tabTarget === target;
+        button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        button.tabIndex = isActive ? 0 : -1;
+        for (const className of TAB_ACTIVE_CLASSES) {
+          button.classList.toggle(className, isActive);
+        }
+        for (const className of TAB_INACTIVE_CLASSES) {
+          button.classList.toggle(className, !isActive);
+        }
+      }
+
+      for (const panel of panels) {
+        const isActive = panel.dataset.tabPanel === target;
+        panel.classList.toggle('hidden', !isActive);
+      }
+
+      const contextData = CONTEXT_MAP[target];
+      if (contextData) {
+        const captionEl = root.querySelector('[data-context-caption]');
+        const linkEl = root.querySelector<HTMLAnchorElement>(
+          '[data-context-link]',
+        );
+        const labelEl = root.querySelector('[data-context-label]');
+        if (captionEl) captionEl.textContent = contextData.caption;
+        if (linkEl) linkEl.href = contextData.href;
+        if (labelEl) labelEl.textContent = contextData.label;
+      }
+    };
+
+    /** Standard tablist keyboard pattern: arrows wrap, Home/End jump. */
+    const focusTab = (index: number): void => {
+      const next = (index + buttons.length) % buttons.length;
+      const button = buttons[next];
+      const target = button.dataset.tabTarget;
+      if (target === undefined) return;
+      activate(target);
+      button.focus();
+    };
+
+    buttons.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.tabTarget;
+        if (target !== undefined) activate(target);
+      });
+
+      button.addEventListener('keydown', (event: KeyboardEvent) => {
+        let next: number | undefined;
+
+        switch (event.key) {
+          case 'ArrowRight':
+            next = index + 1;
+            break;
+          case 'ArrowLeft':
+            next = index - 1;
+            break;
+          case 'Home':
+            next = 0;
+            break;
+          case 'End':
+            next = buttons.length - 1;
+            break;
+          default:
+            return;
+        }
+
+        event.preventDefault();
+        focusTab(next);
+      });
+    });
+  };
+
+  const initSteppers = (): void => {
+    document
+      .querySelectorAll<HTMLButtonElement>('[data-stepper-btn]')
+      .forEach((btn) => {
+        if (btn.dataset.stepperReady === 'true') return;
+        btn.dataset.stepperReady = 'true';
+        btn.addEventListener('click', () => {
+          const action = btn.dataset.stepperBtn;
+          const container = btn.closest('.stepper-container');
+          const valEl = container?.querySelector<HTMLElement>(
+            '[data-stepper-value]',
+          );
+          if (!valEl) return;
+          let count = parseInt(valEl.textContent?.trim() || '0', 10);
+          if (action === 'plus') {
+            count += 1;
+          } else if (action === 'minus' && count > 0) {
+            count -= 1;
+          }
+          valEl.textContent = count.toString();
+        });
+      });
+  };
+
+  const initLavoroSubtabs = (): void => {
+    document
+      .querySelectorAll<HTMLElement>('[data-tab-panel="lavoro"]')
+      .forEach((panel) => {
+        if (panel.dataset.lavoroReady === 'true') return;
+        panel.dataset.lavoroReady = 'true';
+
+        const tabButtons = Array.from(
+          panel.querySelectorAll<HTMLButtonElement>('[data-lavoro-tab]'),
+        );
+        const tabPanels = Array.from(
+          panel.querySelectorAll<HTMLElement>('[data-lavoro-panel]'),
+        );
+
+        tabButtons.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const target = btn.dataset.lavoroTab;
+            tabButtons.forEach((b) => {
+              const isActive = b.dataset.lavoroTab === target;
+              b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+              b.classList.toggle('border-neutral-900', isActive);
+              b.classList.toggle('text-neutral-900', isActive);
+              b.classList.toggle('font-extrabold', isActive);
+              b.classList.toggle('border-transparent', !isActive);
+              b.classList.toggle('text-neutral-500', !isActive);
+              b.classList.toggle('font-semibold', !isActive);
+            });
+            tabPanels.forEach((p) => {
+              const isActive = p.dataset.lavoroPanel === target;
+              p.classList.toggle('hidden', !isActive);
+            });
+          });
+        });
+      });
+  };
+
+  const initProcuroMasterDetail = (): void => {
+    document
+      .querySelectorAll<HTMLElement>('[data-tab-panel="procuro"]')
+      .forEach((panel) => {
+        if (panel.dataset.procuroReady === 'true') return;
+        panel.dataset.procuroReady = 'true';
+
+        const itemButtons = Array.from(
+          panel.querySelectorAll<HTMLButtonElement>('[data-procuro-target]'),
+        );
+        const detailPanels = Array.from(
+          panel.querySelectorAll<HTMLElement>('[data-procuro-panel]'),
+        );
+
+        itemButtons.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const target = btn.dataset.procuroTarget;
+            itemButtons.forEach((b) => {
+              const isActive = b.dataset.procuroTarget === target;
+              b.classList.toggle('border-2', isActive);
+              b.classList.toggle('border-[#158154]', isActive);
+              b.classList.toggle('bg-[#f0fdf4]/40', isActive);
+              b.classList.toggle('border-neutral-200/90', !isActive);
+              b.classList.toggle('bg-white', !isActive);
+            });
+            detailPanels.forEach((p) => {
+              const isActive = p.dataset.procuroPanel === target;
+              p.classList.toggle('hidden', !isActive);
+            });
+          });
+        });
+      });
+  };
+
+  const initWineMasterDetail = (): void => {
+    document
+      .querySelectorAll<HTMLElement>('[data-tab-panel="wine"]')
+      .forEach((panel) => {
+        if (panel.dataset.wineReady === 'true') return;
+        panel.dataset.wineReady = 'true';
+
+        const itemButtons = Array.from(
+          panel.querySelectorAll<HTMLButtonElement>('[data-wine-target]'),
+        );
+        const detailPanels = Array.from(
+          panel.querySelectorAll<HTMLElement>('[data-wine-panel]'),
+        );
+
+        itemButtons.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const target = btn.dataset.wineTarget;
+            itemButtons.forEach((b) => {
+              const isActive = b.dataset.wineTarget === target;
+              b.classList.toggle('ring-2', isActive);
+              b.classList.toggle('ring-[#158154]', isActive);
+              b.classList.toggle('bg-[#f0fdf4]/30', isActive);
+              b.classList.toggle('border-neutral-300', isActive);
+              b.classList.toggle('border-neutral-200/90', !isActive);
+              b.classList.toggle('bg-white', !isActive);
+            });
+            detailPanels.forEach((p) => {
+              const isActive = p.dataset.winePanel === target;
+              p.classList.toggle('hidden', !isActive);
+            });
+          });
+        });
+      });
+  };
+
+  const initAll = (): void => {
+    const roots = document.querySelectorAll<HTMLElement>(
+      '[data-solutions-tabs]',
+    );
+    roots.forEach(initTablist);
+    initSteppers();
+    initLavoroSubtabs();
+    initProcuroMasterDetail();
+    initWineMasterDetail();
+  };
+
+  initAll();
+  document.addEventListener('astro:page-load', initAll);
+</script>

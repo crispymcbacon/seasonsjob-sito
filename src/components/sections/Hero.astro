@@ -1,106 +1,91 @@
 ---
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
-import HeroEcosystem from './HeroEcosystem.astro';
 
 /*
-  Opening sequence: positioning + the ecosystem visual, followed by a compact
-  introduction. Kept in one section so the hero and the company introduction
-  read as a single movement.
+  Opening sequence: Centered high-impact layout.
+  Clean typography, standardized eyebrow, simple informative subtitle,
+  and dual action CTAs.
 */
-const INTRO_POINTS = [
-  {
-    title: 'Costruiti per l’hospitality',
-    text: 'Non software generico adattato: ogni prodotto nasce da come lavorano davvero hotel e ristoranti.',
-  },
-  {
-    title: 'Problemi concreti',
-    text: 'Turni da coprire, comande da passare, ordini da fare, bottiglie da contare. Da qui partiamo.',
-  },
-  {
-    title: 'Uno strumento per ogni parte del lavoro',
-    text: 'Persone, operatività, acquisti e inventario: aree diverse, stessa famiglia di prodotti.',
-  },
-];
 ---
 
-<section class="border-b border-neutral-200/80 bg-white">
-  <div class="mx-auto max-w-6xl px-4 sm:px-6">
-    <div class="grid items-center gap-14 pt-14 pb-16 lg:grid-cols-12 lg:gap-10 lg:pt-20 lg:pb-20">
-      <div class="hero-copy flex flex-col items-start lg:col-span-6">
-        <p class="eyebrow">Tecnologia per l’hospitality</p>
+<section class="relative overflow-hidden border-b border-neutral-200/80 bg-white">
+  {/* Ambient dot matrix grid background */}
+  <div
+    class="hero-bg-grid pointer-events-none absolute inset-0 opacity-40"
+    aria-hidden="true"
+  ></div>
 
-        <h1 class="mt-4 text-[2.25rem] leading-[1.1] sm:text-[2.75rem] lg:text-[3.25rem]">
-          Strumenti digitali pensati per chi lavora nell’ospitalità
-        </h1>
-
-        <p class="mt-6 max-w-xl text-lg leading-relaxed text-neutral-600 sm:text-xl">
-          SeasonsJob sviluppa una famiglia di prodotti specializzati per hotel,
-          ristoranti e strutture ricettive: personale stagionale, comande,
-          acquisti e cantina. Ogni strumento fa bene una cosa, e la fa dentro il
-          vostro modo di lavorare.
-        </p>
-
-        <div class="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-          <Button href="#soluzioni" size="lg">
-            Scopri le soluzioni
-            <Icon name="arrow-right" class="size-4" />
-          </Button>
-          <Button href="/contatti/" variant="secondary" size="lg">
-            Richiedi informazioni
-          </Button>
-        </div>
-      </div>
-
-      <div class="lg:col-span-6 lg:pl-6">
-        <HeroEcosystem />
-      </div>
-    </div>
-
-    <!-- Company introduction: same opening sequence, tighter rhythm. -->
-    <dl
-      class="grid gap-8 border-t border-neutral-200 py-12 sm:grid-cols-3 sm:grid-rows-[auto_auto] sm:gap-x-10 sm:gap-y-2 sm:py-14"
-      data-reveal
+  <div class="relative mx-auto max-w-4xl px-4 pt-16 pb-20 text-center sm:px-6 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-28">
+    {/* Subtitle / Eyebrow in standard site style */}
+    <p
+      class="hero-anim eyebrow inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]"
+      style="--anim-delay: 60ms;"
     >
-      {INTRO_POINTS.map((point, i) => (
-        <div class="flex max-w-sm flex-col gap-2 sm:row-span-2 sm:grid sm:grid-rows-subgrid sm:gap-2">
-          <dt class="flex items-baseline gap-2 font-semibold text-ink">
-            <span
-              class="text-xs font-semibold text-brand-500 tabular-nums"
-              aria-hidden="true"
-            >
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            {point.title}
-          </dt>
-          <dd class="text-[0.9375rem] leading-relaxed text-neutral-600">
-            {point.text}
-          </dd>
-        </div>
-      ))}
-    </dl>
+      <span class="size-2 rounded-[2px] bg-brand-500" aria-hidden="true"></span>
+      Ecosistema software per il settore alberghiero
+    </p>
+
+    {/* Hero Headline */}
+    <h1
+      class="hero-anim font-display mt-6 text-[2.35rem] leading-[1.1] tracking-tight text-ink sm:text-[3.25rem] md:text-[3.75rem] lg:text-[4.25rem]"
+      style="--anim-delay: 140ms;"
+    >
+      Lavora meglio con software{' '}
+      <em class="font-display font-normal text-brand-700 italic">
+        costruiti per il settore alberghiero
+      </em>
+    </h1>
+
+    {/* Simple clean subtitle text */}
+    <p
+      class="hero-anim mx-auto mt-6 max-w-2xl text-base leading-relaxed text-neutral-600 sm:text-lg"
+      style="--anim-delay: 220ms;"
+    >
+      SeasonsJob unisce gestione del personale, comande di sala, acquisti e
+      cantina in un unico ambiente operativo per pianificare i turni, coordinare
+      la sala e controllare la cantina.
+    </p>
+
+    {/* CTA Action Buttons */}
+    <div
+      class="hero-anim mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4"
+      style="--anim-delay: 300ms;"
+    >
+      <Button
+        href="#soluzioni"
+        size="lg"
+        class="shadow-md shadow-neutral-900/10"
+      >
+        Scopri le soluzioni
+        <Icon name="arrow-right" class="size-4" />
+      </Button>
+      <Button href="/contatti/" variant="secondary" size="lg">
+        Richiedi informazioni
+      </Button>
+    </div>
   </div>
 </section>
 
 <style>
-  /*
-    Load animation for the opening copy. Pure CSS, staggered with custom
-    properties, disabled by the global prefers-reduced-motion rules.
-  */
-  .hero-copy > * {
+  .hero-bg-grid {
+    background-image: radial-gradient(#d4d4d8 1.25px, transparent 1.25px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(
+      ellipse 70% 60% at 50% 40%,
+      black 20%,
+      transparent 80%
+    );
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 60% at 50% 40%,
+      black 20%,
+      transparent 80%
+    );
+  }
+
+  .hero-anim {
     animation: hero-in 700ms cubic-bezier(0.22, 0.7, 0.3, 1) both;
-  }
-  .hero-copy > :nth-child(1) {
-    animation-delay: 60ms;
-  }
-  .hero-copy > :nth-child(2) {
-    animation-delay: 130ms;
-  }
-  .hero-copy > :nth-child(3) {
-    animation-delay: 200ms;
-  }
-  .hero-copy > :nth-child(4) {
-    animation-delay: 270ms;
+    animation-delay: var(--anim-delay, 0ms);
   }
 
   @keyframes hero-in {
@@ -111,6 +96,12 @@ const INTRO_POINTS = [
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-anim {
+      animation: none;
     }
   }
 </style>

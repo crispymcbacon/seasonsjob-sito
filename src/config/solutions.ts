@@ -30,7 +30,7 @@ export const SOLUTIONS: Solution[] = [
     slug: 'lavoro',
     name: 'Lavoro',
     area: 'Persone',
-    tagline: 'Personale stagionale per l’hospitality',
+    tagline: 'Personale stagionale per il settore alberghiero',
     description:
       'La piattaforma che mette in contatto strutture ricettive e lavoratori per le stagioni: ricerca, candidature e selezione in un unico flusso.',
     href: '/soluzioni/lavoro/',

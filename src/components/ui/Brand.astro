@@ -9,7 +9,7 @@ const { size = 'md', class: className } = Astro.props;
 
 const words = {
   sm: 'text-base',
-  md: 'text-[1.2rem]',
+  md: 'text-[1.25rem]',
 };
 ---
 
@@ -19,13 +19,16 @@ const words = {
   aria-label="SeasonsJob — home"
 >
   <span
-    class="font-display grid size-8 place-items-center rounded-lg bg-brand-500 text-[1.0625rem] font-bold text-white leading-none"
+    class="font-display grid size-8.5 place-items-center rounded-lg bg-brand-500 text-[1.125rem] font-black text-white leading-none shadow-2xs"
     aria-hidden="true"
   >
     S
   </span>
   <span
-    class:list={['font-display font-bold tracking-tight text-ink', words[size]]}
+    class:list={[
+      'font-display font-black tracking-tight text-ink',
+      words[size],
+    ]}
   >
     SeasonsJob
   </span>

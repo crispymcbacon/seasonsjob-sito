@@ -1,0 +1,41 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+---
+
+<BaseLayout
+  title="Pagina non trovata"
+  description="La pagina cercata non esiste o è stata spostata. Tornate alla home oppure ripartite dalle soluzioni SeasonsJob."
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex" />
+  </Fragment>
+
+  <section>
+    <div class="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-32">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Errore 404</p>
+
+        <h1 class="mt-4 text-[2.25rem] leading-[1.1] sm:text-[2.75rem] lg:text-[3.25rem]">
+          Questa pagina non esiste
+        </h1>
+
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-neutral-600">
+          Il link può essere vecchio oppure contenere un errore di battitura. Da
+          qui potete tornare alla home o ripartire dalle soluzioni.
+        </p>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <Button href="/">
+            Torna alla home
+            <Icon name="arrow-right" class="size-4" />
+          </Button>
+          <Button href="/soluzioni/" variant="secondary">
+            Vedi le soluzioni
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

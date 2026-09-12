@@ -62,12 +62,9 @@
     text-wrap: balance;
   }
 
-  p,
-  li {
-    max-width: 65ch;
-  }
-
+  /* Readable measure for running copy; layout rows are left unconstrained. */
   p {
+    max-width: 65ch;
     text-wrap: pretty;
   }
 
@@ -91,8 +88,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     html {
+      /* Turn the smooth scrolling off, but keep the sticky-header offset. */
       scroll-behavior: auto;
-      scroll-padding-top: 0;
     }
     *,
     *::before,

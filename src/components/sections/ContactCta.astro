@@ -46,9 +46,9 @@ import SectionHeader from '@/components/ui/SectionHeader.astro';
             <li class="border-b border-brand-100/80 last:border-b-0">
               <a
                 href={solution.href}
-                class="group flex items-center justify-between gap-4 py-4"
+                class="group flex items-center justify-between gap-3 py-4 sm:gap-4"
               >
-                <span class="flex items-center gap-2.5 text-[0.9375rem] font-medium text-ink transition-colors group-hover:text-brand-700">
+                <span class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[0.9375rem] font-medium text-ink transition-colors group-hover:text-brand-700">
                   <Icon name={solution.icon} class="size-5 text-brand-600" />
                   {solution.name}
                   {solution.status === 'in-sviluppo' && (

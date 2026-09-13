@@ -1,106 +1,289 @@
 ---
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
-
-/*
-  Opening sequence: Centered high-impact layout.
-  Clean typography, standardized eyebrow, simple informative subtitle,
-  and dual action CTAs.
-*/
+import HeroEcosystem from './HeroEcosystem.astro';
 ---
 
-<section class="relative overflow-hidden border-b border-neutral-200/80 bg-white">
-  {/* Ambient dot matrix grid background */}
-  <div
-    class="hero-bg-grid pointer-events-none absolute inset-0 opacity-40"
-    aria-hidden="true"
-  ></div>
-
-  <div class="relative mx-auto max-w-4xl px-4 pt-16 pb-20 text-center sm:px-6 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-28">
-    {/* Subtitle / Eyebrow in standard site style */}
-    <p
-      class="hero-anim eyebrow inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]"
-      style="--anim-delay: 60ms;"
-    >
-      <span class="size-2 rounded-[2px] bg-brand-500" aria-hidden="true"></span>
-      Ecosistema software per il settore alberghiero
-    </p>
-
-    {/* Hero Headline */}
-    <h1
-      class="hero-anim font-display mt-6 text-[2.35rem] leading-[1.1] tracking-tight text-ink sm:text-[3.25rem] md:text-[3.75rem] lg:text-[4.25rem]"
-      style="--anim-delay: 140ms;"
-    >
-      Lavora meglio con software{' '}
-      <em class="font-display font-normal text-brand-700 italic">
-        costruiti per il settore alberghiero
-      </em>
-    </h1>
-
-    {/* Simple clean subtitle text */}
-    <p
-      class="hero-anim mx-auto mt-6 max-w-2xl text-base leading-relaxed text-neutral-600 sm:text-lg"
-      style="--anim-delay: 220ms;"
-    >
-      SeasonsJob unisce gestione del personale, comande di sala, acquisti e
-      cantina in un unico ambiente operativo per pianificare i turni, coordinare
-      la sala e controllare la cantina.
-    </p>
-
-    {/* CTA Action Buttons */}
-    <div
-      class="hero-anim mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4"
-      style="--anim-delay: 300ms;"
-    >
-      <Button
-        href="#soluzioni"
-        size="lg"
-        class="shadow-md shadow-neutral-900/10"
-      >
-        Scopri le soluzioni
-        <Icon name="arrow-right" class="size-4" />
-      </Button>
-      <Button href="/contatti/" variant="secondary" size="lg">
-        Richiedi informazioni
-      </Button>
+<section
+  class="hero"
+  aria-labelledby="hero-title"
+  data-hero
+  data-motion="paused"
+>
+  <div class="hero-stars" aria-hidden="true">
+    {Array.from({ length: 32 }, (_, i) => (
+      <span
+        style={`--x:${i % 2 === 0 ? 2 + ((i * 7) % 17) : 81 + ((i * 11) % 17)}%;--y:${5 + ((i * 23) % 89)}%;--size:${i % 5 === 0 ? 3 : 1.5}px;--star-delay:${-i * 0.7}s`}
+      />
+    ))}
+  </div>
+  <div class="hero-stage">
+    <div class="hero-copy">
+      <p class="hero-eyebrow">
+        <span aria-hidden="true"></span>Tecnologia per l’hospitality
+      </p>
+      <h1 id="hero-title">
+        Un unico ecosistema
+        <br />
+        <em>per la tua struttura</em>
+      </h1>
+      <p class="hero-description">
+        Strumenti digitali per persone, ordini, acquisti e cantina.{' '}
+        <br class="desktop-break" />
+        Ti aiutiamo a far funzionare meglio ogni parte{' '}
+        <br class="desktop-break" />
+        del tuo lavoro nell’hospitality.
+      </p>
+      <div class="hero-actions">
+        <Button href="#soluzioni" size="lg">
+          Scopri le soluzioni <Icon name="arrow-right" class="size-4" />
+        </Button>
+        <Button href="/contatti/" variant="secondary" size="lg">
+          Richiedi informazioni
+        </Button>
+      </div>
     </div>
+    <HeroEcosystem />
+    <a class="hero-explore" href="#soluzioni" aria-label="Esplora le soluzioni">
+      <span aria-hidden="true"></span>Esplora l’ecosistema{' '}
+      <span aria-hidden="true">↓</span>
+    </a>
   </div>
 </section>
 
+<script>
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  if (hero) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let visible = false;
+    const update = () => {
+      hero.dataset.motion =
+        visible && !document.hidden && !reduced.matches ? 'running' : 'paused';
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      update();
+    });
+    observer.observe(hero);
+    reduced.addEventListener('change', update);
+    document.addEventListener('visibilitychange', update);
+  }
+</script>
+
 <style>
-  .hero-bg-grid {
-    background-image: radial-gradient(#d4d4d8 1.25px, transparent 1.25px);
-    background-size: 24px 24px;
-    mask-image: radial-gradient(
-      ellipse 70% 60% at 50% 40%,
-      black 20%,
-      transparent 80%
-    );
-    -webkit-mask-image: radial-gradient(
-      ellipse 70% 60% at 50% 40%,
-      black 20%,
-      transparent 80%
-    );
+  .hero {
+    position: relative;
+    overflow: clip;
+    border-bottom: 1px solid #eae9e5;
+    background:
+      radial-gradient(ellipse at 3% 22%, #edf3f880, transparent 32%),
+      radial-gradient(ellipse at 97% 25%, #f0ecf780, transparent 30%),
+      radial-gradient(ellipse at 8% 90%, #edf4ef80, transparent 30%),
+      radial-gradient(ellipse at 93% 85%, #f8eeea80, transparent 28%), #fcfcfa;
   }
-
-  .hero-anim {
-    animation: hero-in 700ms cubic-bezier(0.22, 0.7, 0.3, 1) both;
-    animation-delay: var(--anim-delay, 0ms);
+  .hero-stage {
+    position: relative;
+    max-width: 1600px;
+    min-height: 750px;
+    margin: auto;
+    display: grid;
+    align-content: center;
+    padding: 130px 24px 155px;
   }
-
-  @keyframes hero-in {
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 740px);
+    margin: auto;
+    text-align: center;
+    animation: copy-in 700ms ease-out both;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #646a68;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow > span {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: #078660;
+  }
+  h1 {
+    font-size: clamp(2.4rem, 3.65vw, 3.65rem);
+    line-height: 1.18;
+    letter-spacing: -0.045em;
+  }
+  h1 em {
+    color: #078660;
+    font-weight: 400;
+  }
+  .hero-description {
+    margin: 26px auto 0;
+    font-size: 1.2rem;
+    line-height: 1.55;
+    color: #626765;
+  }
+  .hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 30px;
+  }
+  .hero-explore {
+    position: absolute;
+    z-index: 2;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    color: #656c68;
+    font-size: 0.8rem;
+  }
+  .hero-explore > span:first-child {
+    width: 1px;
+    height: 27px;
+    background: #078660;
+    margin-bottom: 4px;
+  }
+  @keyframes copy-in {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(12px);
     }
     to {
       opacity: 1;
       transform: none;
     }
   }
-
+  .hero-stars {
+    display: none;
+  }
+  @keyframes starlight {
+    0%,
+    100% {
+      opacity: 0.3;
+    }
+    50% {
+      opacity: 0.85;
+    }
+  }
+  @media (min-width: 1100px) {
+    .hero {
+      /* Static, locally generated cloud texture: no live noise filters or canvas.
+         Stretching keeps its clear center and neutral lower edge at all widths. */
+      background: #fcfcfa url('/images/hero-space.webp') center / 100% 100%
+        no-repeat;
+    }
+    .hero-stars {
+      display: block;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      mask-image: linear-gradient(to bottom, black 65%, transparent 94%);
+    }
+    .hero-stars span {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 4px #ffffff60;
+      animation: starlight 7s ease-in-out var(--star-delay) infinite;
+      animation-play-state: paused;
+    }
+    .hero-stars span:nth-child(5n) {
+      border-radius: 0;
+      clip-path: polygon(
+        50% 0,
+        62% 38%,
+        100% 50%,
+        62% 62%,
+        50% 100%,
+        38% 62%,
+        0 50%,
+        38% 38%
+      );
+      width: 7px;
+      height: 7px;
+    }
+    .hero[data-motion='running'] .hero-stars span {
+      animation-play-state: running;
+    }
+    .hero-stage {
+      max-width: 1440px;
+      min-height: 720px;
+      padding-top: 120px;
+      padding-bottom: 145px;
+    }
+    .hero-explore {
+      bottom: 28px;
+    }
+  }
+  @media (min-width: 1100px) and (max-width: 1300px) {
+    .hero-copy {
+      width: 650px;
+    }
+    h1 {
+      font-size: 3rem;
+    }
+  }
+  @media (max-width: 1099px) {
+    .hero-stage {
+      min-height: auto;
+      padding: 65px 28px 100px;
+    }
+    .hero-copy {
+      max-width: 720px;
+    }
+    h1 {
+      font-size: clamp(2.4rem, 5.6vw, 3.6rem);
+    }
+    .hero-explore {
+      bottom: 20px;
+    }
+    .hero-explore > span:first-child {
+      height: 15px;
+    }
+  }
+  @media (max-width: 599px) {
+    .hero-stage {
+      padding: 44px 18px 92px;
+    }
+    .hero-eyebrow {
+      font-size: 0.95rem;
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-size: clamp(1.9rem, 7.3vw, 2.7rem);
+      line-height: 1.24;
+    }
+    .hero-description {
+      font-size: 1.0625rem;
+      margin-top: 22px;
+    }
+    .desktop-break {
+      display: none;
+    }
+    .hero-actions {
+      flex-direction: column;
+      align-items: stretch;
+      max-width: 290px;
+      margin: 25px auto 0;
+      gap: 10px;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .hero-anim {
+    .hero-copy,
+    .hero-stars span {
       animation: none;
     }
   }

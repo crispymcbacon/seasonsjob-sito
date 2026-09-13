@@ -1,184 +1,509 @@
 ---
-import Icon from '@/components/ui/Icon.astro';
-import { SOLUTIONS } from '@/config/solutions';
-
-/*
-  Abstract representation of the SeasonsJob ecosystem: the four products
-  connected to the company in the centre.
-
-  Implemented with plain HTML (real, selectable product names) plus one static
-  SVG layer for the connectors — no canvas, no WebGL, no client JS. Positions
-  are percentages of a square container, which is also the SVG viewBox, so the
-  connectors stay aligned at every size.
-
-  The markup is prepared for richer motion later: each node already exposes a
-  `--delay` custom property.
-*/
-interface Node {
-  name: string;
-  href: string;
-  icon: (typeof SOLUTIONS)[number]['icon'];
-  /** Centre of the node, in percent of the container. */
-  x: number;
-  y: number;
-  /** Curved connector from the centre to the node. */
-  path: string;
-  delay: number;
-}
-
-const NODES: Node[] = [
+import HeroProduct from './HeroProduct.astro';
+// The SVG strokes and moving planets share the same geometry.
+const tracks = [
+  'M 227 418 C 147 225 409 35 738 58 C 1066 81 1271 306 1185 492 C 1117 639 774 706 465 610 C 350 570 260 498 227 418 Z',
+  'M 284 559 C 107 393 364 114 653 95 C 1010 72 1253 412 1080 572 C 925 720 455 725 284 559 Z',
+];
+const planets = [
+  { color: '#377ead', radius: 11, track: 0, duration: 58, start: 14 },
+  { color: '#629184', radius: 13, track: 1, duration: 76, start: 72 },
+  { color: '#b97579', radius: 8, track: 0, duration: 58, start: 59 },
+  { color: '#9586b4', radius: 6, track: 1, duration: 76, start: 35 },
+];
+const mobileTracks = [
+  'M 36 165 C 20 76 111 18 203 28 C 302 38 383 116 366 210 C 348 290 242 316 133 277 C 72 256 39 199 36 165 Z',
+  'M 77 217 C 54 128 169 50 267 86 C 340 112 349 226 266 261 C 188 296 100 281 77 217 Z',
+];
+const mobilePlanets = [
+  { ...planets[0], radius: 9, track: 0, start: 27 },
+  { ...planets[1], radius: 8, track: 0, start: 79 },
+  { ...planets[2], radius: 6, track: 1, start: 15 },
+  { ...planets[3], radius: 6, track: 1, start: 52 },
+];
+const paths = [
   {
-    ...SOLUTIONS[0],
-    x: 26,
-    y: 17,
-    path: 'M 50 50 Q 40 30 26 17',
-    delay: 220,
+    d: 'M 135 300 C 210 12 900 -35 1170 235 S 1230 625 885 668 C 530 710 60 588 135 300',
+    color: '#8b9ead',
   },
   {
-    ...SOLUTIONS[1],
-    x: 76,
-    y: 31,
-    path: 'M 50 50 Q 63 34 76 31',
-    delay: 300,
+    d: 'M -80 480 C 230 340 395 50 765 80 S 1090 590 1510 390',
+    color: '#b9aed1',
   },
   {
-    ...SOLUTIONS[2],
-    x: 22,
-    y: 73,
-    path: 'M 50 50 Q 37 69 22 73',
-    delay: 380,
-  },
-  {
-    ...SOLUTIONS[3],
-    x: 70,
-    y: 82,
-    path: 'M 50 50 Q 62 73 70 82',
-    delay: 460,
+    d: 'M 45 145 C 350 28 1140 52 1315 442 S 425 865 170 520',
+    color: '#d5b7a0',
   },
 ];
 ---
 
-<div class="relative mx-auto aspect-square w-full max-w-88 sm:max-w-96 lg:max-w-[26rem] xl:max-w-[30rem]">
-  <!-- Decorative depth: dot texture, brand glow, one orbit line. -->
-  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-    <div class="dot-grid absolute inset-0 opacity-60"></div>
-    <div class="absolute top-1/2 left-1/2 size-[74%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--color-brand-100)_0%,transparent_72%)] opacity-70"></div>
-    <div class="absolute top-1/2 left-1/2 size-[48%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-neutral-200"></div>
-  </div>
-
-  <svg
-    class="absolute inset-0 size-full"
-    viewBox="0 0 100 100"
-    aria-hidden="true"
-  >
-    {NODES.map((node) => (
-      <path
-        d={node.path}
-        class="connector"
-        vector-effect="non-scaling-stroke"
-        style={`--delay:${node.delay}ms`}
-      />
-    ))}
-  </svg>
-
-  <!-- Centre of the ecosystem. -->
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-    <div
-      class="hub font-display flex size-16 items-center justify-center rounded-full border border-brand-200 bg-white text-xl font-bold text-brand-600 sm:size-20 sm:text-2xl"
-      aria-hidden="true"
-    >
-      S
-    </div>
-  </div>
-
-  <!-- Products: real text, real links. -->
-  <ul class="absolute inset-0">
-    {NODES.map((node) => (
-      <li
-        class="absolute -translate-x-1/2 -translate-y-1/2"
-        style={`left:${node.x}%;top:${node.y}%;--delay:${node.delay}ms`}
+<div class="ecosystem">
+  <div class="orbit-layer" aria-hidden="true">
+    <svg viewBox="0 0 1440 750" preserveAspectRatio="none" class="orbits">
+      <defs>
+        {planets.map((planet, i) => (
+          <radialGradient id={`hero-planet-${i}`} cx="32%" cy="28%" r="78%">
+            <stop
+              offset="0"
+              stop-color={`color-mix(in srgb, ${planet.color} 72%, #e1e9ed)`}
+            />
+            <stop offset=".42" stop-color={planet.color} />
+            <stop
+              offset=".8"
+              stop-color={`color-mix(in srgb, ${planet.color} 70%, #101a2b)`}
+            />
+            <stop
+              offset="1"
+              stop-color={`color-mix(in srgb, ${planet.color} 45%, #101a2b)`}
+            />
+          </radialGradient>
+        ))}
+        <radialGradient id="hero-orbit-mask">
+          <stop offset="0.38" stop-color="black" />
+          <stop offset="0.77" stop-color="white" />
+        </radialGradient>
+        <mask id="hero-copy-clear">
+          <rect width="1440" height="750" fill="url(#hero-orbit-mask)" />
+        </mask>
+      </defs>
+      <g
+        class="desktop-orbits"
+        mask="url(#hero-copy-clear)"
+        fill="none"
+        stroke-width="1"
       >
-        <a
-          href={node.href}
-          class="node flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white py-1.5 pr-4 pl-1.5 shadow-[0_1px_3px_rgba(23,23,23,0.06)] transition-colors hover:border-brand-300 hover:bg-brand-50"
-        >
-          <span
-            class="grid size-8 shrink-0 place-items-center rounded-full bg-brand-50 text-brand-600"
-            aria-hidden="true"
-          >
-            <Icon name={node.icon} class="size-4" />
-          </span>
-          <span class="text-[0.8125rem] font-semibold whitespace-nowrap text-ink sm:text-sm">
-            {node.name}
-          </span>
-        </a>
-      </li>
-    ))}
+        <path d={tracks[0]} stroke="#8ba99e" />
+        <path d={tracks[1]} stroke="#b8aad0" stroke-dasharray="3 7" />
+        <path
+          d="M 71 364 C 262 133 504 5 800 31 M 1284 405 C 1275 674 684 768 290 576"
+          stroke="#d2bca8"
+        />
+      </g>
+      <g class="original-orbits" mask="url(#hero-copy-clear)">
+        {paths.map((path) => (
+          <path
+            d={path.d}
+            stroke={path.color}
+            fill="none"
+            stroke-width="1"
+            vector-effect="non-scaling-stroke"
+          />
+        ))}
+      </g>
+      <g class="planets">
+        {planets.map((planet, i) => (
+          <circle
+            class="planet"
+            r={planet.radius}
+            fill={`url(#hero-planet-${i})`}
+            style={`offset-path:path('${tracks[planet.track]}');--start:${planet.start}%;--duration:${planet.duration}s;--phase:${(-planet.duration * planet.start) / 100}s`}
+          />
+        ))}
+      </g>
+      <g class="compact-stars" fill="#fff">
+        <circle cx="65" cy="210" r="2" />
+        <circle cx="125" cy="350" r="1.5" />
+        <circle cx="90" cy="480" r="2.5" />
+        <circle cx="185" cy="570" r="1.5" />
+        <circle cx="1310" cy="230" r="1.5" />
+        <circle cx="1380" cy="390" r="2.5" />
+        <circle cx="1305" cy="525" r="2" />
+        <path
+          d="M 155 260 v 12 M 149 266 h 12 M 1330 435 v 12 M 1324 441 h 12"
+          stroke="#fff"
+          stroke-width="1.5"
+        />
+      </g>
+      <g class="quiet-nodes" fill="#789b90">
+        <circle cx="435" cy="82" r="5" />
+        <circle cx="1010" cy="128" r="3" />
+        <circle cx="377" cy="609" r="4" />
+        <circle cx="982" cy="652" r="3" />
+      </g>
+    </svg>
+    <svg
+      class="mobile-space"
+      viewBox="0 0 400 320"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <defs>
+        {mobilePlanets.map((planet, i) => (
+          <radialGradient id={`mobile-planet-${i}`} cx="30%" cy="25%" r="80%">
+            <stop
+              offset="0"
+              stop-color={`color-mix(in srgb, ${planet.color} 55%, #edf4ff)`}
+            />
+            <stop offset=".45" stop-color={planet.color} />
+            <stop
+              offset="1"
+              stop-color={`color-mix(in srgb, ${planet.color} 45%, #101a2b)`}
+            />
+          </radialGradient>
+        ))}
+      </defs>
+      <g fill="#ecf4ff">
+        {Array.from({ length: 64 }, (_, i) => (
+          <circle
+            class="mobile-star"
+            cx={12 + ((i * 83) % 376)}
+            cy={8 + ((i * 47) % 300)}
+            r={i % 9 === 0 ? 1.25 : 0.65}
+            opacity={0.3 + (i % 5) * 0.13}
+            style={`--twinkle-delay:${-i * 0.6}s`}
+          />
+        ))}
+        <path
+          d="M 202 143 l 1.1 4.9 4.9 1.1 -4.9 1.1 -1.1 4.9 -1.1 -4.9 -4.9 -1.1 4.9 -1.1 Z M 330 46 l .8 3.2 3.2 .8 -3.2 .8 -.8 3.2 -.8 -3.2 -3.2 -.8 3.2 -.8 Z"
+          opacity=".65"
+        />
+      </g>
+      <g fill="none" stroke-width=".8">
+        <path d={mobileTracks[0]} stroke="#b6ccdf" opacity=".55" />
+        <path
+          d={mobileTracks[1]}
+          stroke="#a9b8d0"
+          opacity=".25"
+          stroke-dasharray="2 5"
+        />
+      </g>
+      {mobilePlanets.map((planet, i) => (
+        <circle
+          class="planet"
+          r={planet.radius}
+          fill={`url(#mobile-planet-${i})`}
+          style={`offset-path:path('${mobileTracks[planet.track]}');--start:${planet.start}%;--duration:${planet.duration}s;--phase:${(-planet.duration * planet.start) / 100}s`}
+        />
+      ))}
+    </svg>
+    <span class="flow-node blue"></span>
+    <span class="flow-node coral"></span>
+    <span class="fixed-node purple"></span>
+    <span class="fixed-node orange"></span>
+  </div>
+  <ul class="products" aria-label="I prodotti dell’ecosistema SeasonsJob">
+    <HeroProduct
+      name="Lavoro"
+      description="Persone giuste, al posto giusto"
+      icon="users"
+      slug="lavoro"
+      color="#377ead"
+      delay={120}
+    />
+    <HeroProduct
+      name="Procuro"
+      description="Acquisti più semplici, fornitori sotto controllo"
+      icon="clipboard-list"
+      slug="procuro"
+      color="#8062af"
+      delay={220}
+      development
+    />
+    <HeroProduct
+      name="Comande"
+      description="Ordini più fluidi, servizi più efficienti"
+      icon="receipt-text"
+      slug="comande"
+      color="#b77835"
+      delay={320}
+    />
+    <HeroProduct
+      name="Wine"
+      description="La tua cantina sempre in ordine"
+      icon="wine"
+      slug="wine"
+      color="#b86468"
+      delay={420}
+    />
   </ul>
 </div>
-
 <style>
-  .connector {
-    fill: none;
-    /* Brand-tinted neutral: reads as a connection without adding an accent colour. */
-    stroke: color-mix(
-      in oklab,
-      var(--color-brand-500) 30%,
-      var(--color-neutral-400)
+  .ecosystem,
+  .orbit-layer,
+  .products {
+    position: absolute;
+    inset: 0;
+  }
+  .ecosystem {
+    pointer-events: none;
+  }
+  .products {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .products :global(a) {
+    pointer-events: auto;
+  }
+  .orbits {
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+  }
+  .orbit-layer {
+    animation: orbit-in 1s ease-out both;
+  }
+  .quiet-nodes {
+    opacity: 0.5;
+  }
+  .flow-node,
+  .fixed-node {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border: none;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 32% 28%,
+      color-mix(in srgb, var(--node) 72%, #e1e9ed),
+      var(--node) 42%,
+      color-mix(in srgb, var(--node) 45%, #101a2b)
     );
-    stroke-dasharray: 200;
-    stroke-dashoffset: 200;
-    animation: draw-connector 900ms cubic-bezier(0.33, 1, 0.68, 1) both;
-    animation-delay: var(--delay, 0ms);
   }
-
-  /* The only real motion: the four links draw out from the centre on load. */
-  @keyframes draw-connector {
-    to {
-      stroke-dashoffset: 0;
-    }
+  .blue {
+    --node: #377ead;
+    offset-path: xywh(12% 9% 75% 78% round 48% 42% 48% 40%);
+    offset-distance: 5%;
+    animation: flow 65s linear infinite;
   }
-
-  .node {
-    animation: node-in 620ms cubic-bezier(0.22, 0.7, 0.3, 1) both;
-    animation-delay: var(--delay, 0ms);
+  .coral {
+    --node: #c5797a;
+    offset-path: xywh(10% 12% 80% 79% round 40% 48% 43% 49%);
+    offset-distance: 43%;
+    animation: flow 80s linear -35s infinite reverse;
   }
-
-  @keyframes node-in {
+  .purple {
+    --node: #8062af;
+    left: 85%;
+    top: 48%;
+    animation: pulse 6s ease-in-out infinite;
+  }
+  .orange {
+    --node: #c58a4e;
+    left: 15%;
+    top: 50%;
+    animation: pulse 7s ease-in-out -3s infinite;
+  }
+  .flow-node,
+  .fixed-node {
+    animation-play-state: paused;
+  }
+  :global([data-motion='running']) .planet,
+  :global([data-motion='running']) .flow-node,
+  :global([data-motion='running']) .fixed-node {
+    animation-play-state: running;
+  }
+  .planet {
+    stroke: none;
+    offset-distance: var(--start);
+    offset-rotate: 0deg;
+    animation: planet-orbit var(--duration) linear var(--phase) infinite;
+    animation-play-state: paused;
+  }
+  @keyframes planet-orbit {
     from {
-      opacity: 0;
-      transform: translateY(6px);
+      offset-distance: 0%;
     }
     to {
-      opacity: 1;
-      transform: none;
+      offset-distance: 100%;
     }
   }
-
-  .hub {
-    animation:
-      hub-in 700ms cubic-bezier(0.22, 0.7, 0.3, 1) both,
-      hub-pulse 7s ease-in-out 1.4s infinite;
-  }
-
-  @keyframes hub-in {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
+  @keyframes flow {
     to {
-      opacity: 1;
-      transform: scale(1);
+      offset-distance: 100%;
     }
   }
-
-  @keyframes hub-pulse {
-    0%,
-    100% {
-      transform: scale(1);
-    }
+  @keyframes pulse {
     50% {
-      transform: scale(1.035);
+      opacity: 0.5;
+      transform: scale(0.85);
+    }
+  }
+  @keyframes orbit-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .mobile-space,
+  .desktop-orbits,
+  .planets,
+  .compact-stars {
+    display: none;
+  }
+  @media (min-width: 1100px) {
+    .flow-node {
+      display: none;
+    }
+    .planets {
+      display: block;
+    }
+    .desktop-orbits {
+      opacity: 0.42;
+    }
+    .desktop-orbits {
+      display: block;
+    }
+    .original-orbits {
+      display: none;
+    }
+    .orbits {
+      opacity: 1;
+    }
+    .quiet-nodes {
+      opacity: 0.2;
+    }
+    .desktop-orbits path:nth-child(2) {
+      opacity: 0.55;
+    }
+    .desktop-orbits path:nth-child(3) {
+      opacity: 0.45;
+    }
+    .purple {
+      left: 84%;
+      top: 51%;
+    }
+    .orange {
+      left: 16%;
+      top: 52%;
+    }
+  }
+  @media (max-width: 1099px) {
+    .ecosystem::before {
+      content: '';
+      position: absolute;
+      top: -260px;
+      bottom: -80px;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: url('/images/hero-space.webp') center / 100% 100% no-repeat;
+      opacity: 0.8;
+      mask-image: linear-gradient(
+        to bottom,
+        transparent,
+        #0003 20%,
+        black 50%,
+        black 74%,
+        transparent 100%
+      );
+    }
+    .compact-stars {
+      display: block;
+      opacity: 0.85;
+    }
+    .orbits {
+      opacity: 0.55;
+    }
+    .original-orbits path:not(:first-child) {
+      display: none;
+    }
+    .flow-node {
+      width: 12px;
+      height: 12px;
+    }
+    .ecosystem {
+      position: relative;
+      inset: auto;
+      margin: 60px auto 0;
+      width: min(100%, 660px);
+    }
+    .products {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 24px 40px;
+      align-items: start;
+    }
+    .orbit-layer {
+      inset: -45px -50px;
+    }
+  }
+  @keyframes mobile-twinkle {
+    50% {
+      opacity: 0.2;
+    }
+  }
+  @media (max-width: 599px) {
+    .mobile-space {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .orbits,
+    .flow-node,
+    .fixed-node {
+      display: none;
+    }
+    .mobile-star:nth-child(9n) {
+      animation: mobile-twinkle 6s ease-in-out var(--twinkle-delay) infinite;
+      animation-play-state: paused;
+    }
+    :global([data-motion='running']) .mobile-star {
+      animation-play-state: running;
+    }
+    .ecosystem::before {
+      top: -150px;
+      bottom: -80px;
+      opacity: 0.96;
+      background-color: #405875;
+      background-blend-mode: multiply;
+      mask-image: linear-gradient(
+        to bottom,
+        transparent,
+        black 36%,
+        black 70%,
+        transparent 100%
+      );
+    }
+    .ecosystem {
+      margin-top: 44px;
+    }
+    .products {
+      display: block;
+      height: 272px;
+    }
+    .orbits {
+      opacity: 0.7;
+    }
+    .compact-stars {
+      opacity: 1;
+    }
+    .orbits path:not(:first-child),
+    .quiet-nodes {
+      display: none;
+    }
+    .coral {
+      width: 8px;
+      height: 8px;
+    }
+    .orbit-layer {
+      inset: -10px -25px;
+    }
+    .orange {
+      left: 5%;
+      top: 55%;
+    }
+    .purple {
+      left: 92%;
+      top: 45%;
+    }
+  }
+  @media (max-width: 359px) {
+    .products {
+      height: 286px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-star:nth-child(9n),
+    .planet,
+    .orbit-layer,
+    .flow-node,
+    .fixed-node {
+      animation: none;
     }
   }
 </style>

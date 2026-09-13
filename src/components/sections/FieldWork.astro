@@ -9,6 +9,8 @@ interface UseCase {
   id: string;
   tabLabel: string;
   facility: string;
+  logo: string;
+  logoAlt: string;
   facilityType: string;
   scenarioTitle: string;
   badge: string;
@@ -19,61 +21,58 @@ interface UseCase {
 
 const USE_CASES: UseCase[] = [
   {
-    id: 'hotel-palace',
-    tabLabel: 'Hotel 4★ · Bibione',
-    facility: 'Hotel Palace',
-    facilityType: 'Hotel 4★ · Bibione · 80+ camere & Ristorante',
-    scenarioTitle: 'Pianificazione turni stagionali e coordinamento reparti',
-    badge: 'Albergo & Piani',
-    impact: 'Pianificazione presenze in tempo reale per 45+ collaboratori',
+    id: 'hotel-palace-danieli',
+    tabLabel: 'Hotel Palace & Hotel Danieli · Bibione',
+    facility: 'Hotel Palace & Hotel Danieli',
+    logo: '/images/clients/hotel-palace.webp',
+    logoAlt: 'Logo Hotel Palace',
+    facilityType:
+      'Hotel 4★ & Hotel 3★ · Bibione · Ristorazione e servizio di sala',
+    scenarioTitle: 'Comande digitali per il servizio di sala',
+    badge: 'Comande & Sala',
+    impact: 'Ordini digitali e stampa automatica senza riscrivere le comande',
     summary:
-      'Nei mesi di massima occupazione estiva, la gestione dei turni spezzati e la copertura dei turni extra richiedeva ore quotidiane tra telefonate e fogli cartacei. Con SeasonsJob, la pianificazione settimanale e la conferma automatica delle presenze avvengono in tempo reale, sincronizzando sala, piani e reception.',
+      'Hotel Palace e Hotel Danieli utilizzano SeasonsJob Comande per gestire digitalmente gli ordini dei clienti. La stampante dedicata stampa e taglia automaticamente ogni comanda, facendo risparmiare tempo al personale e evitando di dover trascrivere gli ordini a mano.',
     modules: [
-      'SeasonsJob Lavoro',
-      'Gestione Turni Extra',
-      'Sincronizzazione Presenze',
+      'SeasonsJob Comande',
+      'Ordini clienti digitali',
+      'Stampa e taglio automatici',
     ],
   },
   {
     id: 'hotel-helvetia',
     tabLabel: 'Hotel 4★ · Jesolo',
     facility: 'Hotel Helvetia',
+    logo: '/images/clients/hotel-helvetia.webp',
+    logoAlt: 'Logo Hotel Helvetia',
     facilityType: 'Hotel 4★ · Jesolo · Sala, Lounge Bar & Terrazza',
-    scenarioTitle: 'Gestione comande al tavolo e sincronizzazione comande',
-    badge: 'Sala & Bar',
-    impact: 'Azzeramento dei tempi morti tra ordini al bar e cucina',
+    scenarioTitle: 'Comande digitali e ordini ai fornitori con la voce',
+    badge: 'Comande & Procuro',
+    impact:
+      'Dal servizio in sala agli ordini ai fornitori, con meno attività manuali',
     summary:
-      'Durante i picchi del servizio serale e nei momenti di afflusso tra terrazza e sala, le ordinazioni verbali causavano ritardi al pass. Con la gestione digitale delle comande, ogni richiesta e variazione raggiunge istantaneamente la corretta partita, garantendo un servizio fluido e tempi certi.',
+      'Hotel Helvetia utilizza SeasonsJob Comande per gestire digitalmente gli ordini dei clienti. La stampante dedicata stampa e taglia automaticamente ogni comanda, evitando di riscrivere gli ordini a mano. La struttura sta inoltre testando SeasonsJob Procuro e ci sta aiutando a svilupparlo: insieme stiamo costruendo gli ordini ai fornitori usando i propri listini prezzi e l’AI vocale.',
     modules: [
       'SeasonsJob Comande',
-      'Gestione Tavoli & Bar',
-      'Sincronizzazione Pass',
+      'SeasonsJob Procuro · in sviluppo',
+      'Ordini con AI vocale',
     ],
-  },
-  {
-    id: 'hotel-danieli',
-    tabLabel: 'Hotel 3★ · Bibione',
-    facility: 'Hotel Danieli',
-    facilityType: 'Hotel 3★ · Bibione · Formula pensione & Ristorazione',
-    scenarioTitle: 'Approvvigionamenti cucina e controllo scorte F&B',
-    badge: 'Acquisti & Cucina',
-    impact: 'Riordino materie prime automatizzato sui volumi di pensione',
-    summary:
-      'La gestione dei rifornimenti alimentari per la pensione completa richiedeva verifiche continue sulle giacenze in dispensa e confronti tra listini fornitore. Con SeasonsJob Procuro, i fabbisogni della cucina generano automaticamente le distinte d’ordine, velocizzando gli scarichi merci ed evitando sprechi.',
-    modules: ['SeasonsJob Procuro', 'Controllo Giacenze', 'Listini Fornitori'],
   },
   {
     id: 'taverna-al-boccale',
     tabLabel: 'Ristorante & Taverna',
     facility: 'Taverna Al Boccale',
+    logo: '/images/clients/taverna-al-boccale.webp',
+    logoAlt: 'Logo Taverna Al Boccale',
     facilityType:
       'Ristorante & Taverna · 120 coperti · Birre artigianali & Cantina',
-    scenarioTitle: 'Inventario continuo delle referenze e scarico rapido',
-    badge: 'Sala & Cantina',
-    impact: 'Giacenze sempre allineate a ogni comanda servita',
+    scenarioTitle: 'Inventario della cantina e assistenza AI sul vino',
+    badge: 'Wine & AI',
+    impact:
+      'Ogni bottiglia sotto controllo, dall’inventario alle domande sul vino',
     summary:
-      'Con un’ampia offerta di referenze artigianali e vini del territorio, l’aggiornamento della carta bevande era una sfida continua nei fine settimana affollati. L’integrazione con SeasonsJob Wine assicura lo scarico automatico a ogni comanda servita, azzerando le ordinazioni su etichette esaurite.',
-    modules: ['SeasonsJob Wine', 'Inventario Cantina', 'Carta Digitale'],
+      'Taverna Al Boccale utilizza SeasonsJob Wine per organizzare l’inventario e sapere quali bottiglie sono presenti in cantina. Grazie all’AI, il personale può scansionare un vino e verificare se è presente, oltre a fare domande sulle caratteristiche e sulla disponibilità delle bottiglie.',
+    modules: ['SeasonsJob Wine', 'Inventario bottiglie', 'Scansione e AI'],
   },
 ];
 ---
@@ -221,16 +220,16 @@ const USE_CASES: UseCase[] = [
               {/* Facility Header */}
               <div class="flex flex-wrap items-start justify-between gap-4 border-b border-neutral-100 pb-5">
                 <div class="flex items-center gap-3">
-                  <div class="grid size-11 shrink-0 place-items-center rounded-xl border border-neutral-200/80 bg-neutral-50 text-brand-600 shadow-xs">
-                    <svg
-                      class="size-5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path d="M3 21h18M9 8h1m-1 4h1m-1 4h1m4-8h1m-1 4h1m-1 4h1M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
-                    </svg>
+                  <div class="grid size-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-neutral-200/80 bg-white p-1 shadow-xs">
+                    <img
+                      src={uc.logo}
+                      alt={uc.logoAlt}
+                      width="44"
+                      height="44"
+                      loading="lazy"
+                      decoding="async"
+                      class="size-full object-contain"
+                    />
                   </div>
                   <div>
                     <h3 class="text-base font-semibold tracking-tight text-ink sm:text-lg">

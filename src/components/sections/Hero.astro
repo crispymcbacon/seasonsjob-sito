@@ -20,28 +20,30 @@ import HeroEcosystem from './HeroEcosystem.astro';
   </div>
   <div class="hero-stage">
     <div class="hero-copy">
-      <div class="hero-brand">
-        <Brand size="lg" />
-      </div>
-      <h1 id="hero-title">
-        Un unico ecosistema
-        <br />
-        <em>per la tua struttura</em>
-      </h1>
-      <p class="hero-description">
-        Strumenti digitali per persone, ordini, acquisti e cantina.{' '}
-        <br class="desktop-break" />
-        Ti aiutiamo a far funzionare meglio ogni parte{' '}
-        <br class="desktop-break" />
-        del tuo lavoro nell’hospitality.
-      </p>
-      <div class="hero-actions">
-        <Button href="#soluzioni" size="lg">
-          Scopri le soluzioni <Icon name="arrow-right" class="size-4" />
-        </Button>
-        <Button href="/contatti/" variant="secondary" size="lg">
-          Richiedi informazioni
-        </Button>
+      <div class="hero-copy-inner">
+        <div class="hero-brand">
+          <Brand size="lg" />
+        </div>
+        <h1 id="hero-title">
+          Un unico ecosistema
+          <br />
+          <em>per la tua struttura</em>
+        </h1>
+        <p class="hero-description">
+          Strumenti digitali per persone, ordini, acquisti e cantina.{' '}
+          <br class="desktop-break" />
+          Ti aiutiamo a far funzionare meglio ogni parte{' '}
+          <br class="desktop-break" />
+          del tuo lavoro nel settore alberghiero.
+        </p>
+        <div class="hero-actions">
+          <Button href="#soluzioni" size="lg">
+            Scopri le soluzioni <Icon name="arrow-right" class="size-4" />
+          </Button>
+          <Button href="/contatti/" variant="secondary" size="lg">
+            Richiedi informazioni
+          </Button>
+        </div>
       </div>
     </div>
     <HeroEcosystem />
@@ -108,6 +110,7 @@ import HeroEcosystem from './HeroEcosystem.astro';
     font-size: clamp(2.4rem, 3.65vw, 3.65rem);
     line-height: 1.18;
     letter-spacing: -0.045em;
+    animation: hero-title-in 800ms 100ms ease-out both;
   }
   h1 em {
     color: #078660;
@@ -143,6 +146,16 @@ import HeroEcosystem from './HeroEcosystem.astro';
     background: #078660;
     margin-bottom: 4px;
   }
+  @keyframes hero-title-in {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
   @keyframes copy-in {
     from {
       opacity: 0;
@@ -151,6 +164,25 @@ import HeroEcosystem from './HeroEcosystem.astro';
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-copy-inner {
+        animation: hero-copy-scroll linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 75%;
+      }
+    }
+  }
+  @keyframes hero-copy-scroll {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0.35;
+      transform: translateY(-1.5rem) scale(0.985);
     }
   }
   .hero-stars {

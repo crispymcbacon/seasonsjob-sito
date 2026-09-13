@@ -59,7 +59,7 @@ const FAQS = [
     aria-labelledby="scrivici-title"
   >
     <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
-      <div class="relative" data-reveal>
+      <div class="relative">
         <div
           class="pointer-events-none absolute -top-32 -right-20 size-96 rounded-full bg-brand-500/20 blur-3xl"
           aria-hidden="true"
@@ -70,7 +70,10 @@ const FAQS = [
         ></div>
 
         <div class="relative z-10">
-          <p class="inline-flex items-center gap-2.5 text-base font-medium text-neutral-400">
+          <p
+            class="inline-flex items-center gap-2.5 text-base font-medium text-neutral-400"
+            data-page-enter="eyebrow"
+          >
             <span
               class="size-2 rounded-[2px] bg-brand-400"
               aria-hidden="true"
@@ -80,13 +83,17 @@ const FAQS = [
           <h1
             id="scrivici-title"
             class="font-display mt-4 max-w-2xl text-[2rem] leading-[1.15] text-white sm:text-[2.5rem]"
+            data-page-enter="title"
           >
             Tre dettagli per arrivare{' '}
             <em class="font-display font-normal text-brand-300 italic">
               subito al punto
             </em>
           </h1>
-          <p class="mt-4 max-w-2xl text-base leading-relaxed text-neutral-300 sm:text-lg">
+          <p
+            class="mt-4 max-w-2xl text-base leading-relaxed text-neutral-300 sm:text-lg"
+            data-page-enter="copy"
+          >
             Compila i campi e prepareremo un’email con le tue risposte. Potrai
             rileggerla e aggiungere quello che vuoi prima di inviarla.
           </p>
@@ -96,6 +103,7 @@ const FAQS = [
               class="space-y-5 lg:col-span-8"
               data-contact-form
               data-email={CONTACT_EMAIL}
+              data-page-enter="actions"
             >
               <div>
                 <label
@@ -165,7 +173,10 @@ const FAQS = [
               </div>
             </form>
 
-            <aside class="border-t border-white/10 pt-7 lg:col-span-4 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
+            <aside
+              class="border-t border-white/10 pt-7 lg:col-span-4 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8"
+              data-page-enter="actions"
+            >
               <span class="grid size-11 place-items-center rounded-xl border border-white/15 bg-white/10 text-brand-300">
                 <Icon name="mail" class="size-5" />
               </span>

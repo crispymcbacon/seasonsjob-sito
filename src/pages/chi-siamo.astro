@@ -33,8 +33,11 @@ const PARTNERS = [
   >
     <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
       <div class="grid items-start gap-12 lg:grid-cols-12 lg:gap-14">
-        <div class="flex flex-col lg:col-span-6" data-reveal>
-          <p class="eyebrow inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]">
+        <div class="flex flex-col lg:col-span-6">
+          <p
+            class="eyebrow inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]"
+            data-page-enter="eyebrow"
+          >
             <span
               class="size-2 rounded-[2px] bg-brand-500"
               aria-hidden="true"
@@ -42,17 +45,21 @@ const PARTNERS = [
             I fondatori
           </p>
 
-          <h2
+          <h1
             id="fondatori-title"
             class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.35rem]"
+            data-page-enter="title"
           >
-            Due soci, un solo{' '}
+            Un team, un solo{' '}
             <em class="font-display font-normal text-brand-700 italic">
               modo di lavorare
             </em>
-          </h2>
+          </h1>
 
-          <div class="mt-4 max-w-prose space-y-4 text-base leading-relaxed text-neutral-600 sm:text-lg">
+          <div
+            class="mt-4 max-w-prose space-y-4 text-base leading-relaxed text-neutral-600 sm:text-lg"
+            data-page-enter="copy"
+          >
             <p>
               SeasonsJob nasce dall’esperienza diretta nel settore alberghiero:
               stagioni passate tra reception, sala e cucina, a contatto con i
@@ -67,15 +74,17 @@ const PARTNERS = [
 
           {/* Partners */}
           <ul class="mt-10 flex flex-col gap-6">
-            {PARTNERS.map((partner) => (
+            {PARTNERS.map((partner, index) => (
               <li class="flex items-start gap-4">
                 <span
                   class="grid size-12 shrink-0 place-items-center rounded-full border border-brand-100 bg-brand-50 text-sm font-semibold text-brand-700"
                   aria-hidden="true"
+                  data-reveal="scale"
+                  data-reveal-delay={String(index + 1)}
                 >
                   {partner.initials}
                 </span>
-                <div>
+                <div data-reveal="right" data-reveal-delay={String(index + 1)}>
                   <h3 class="font-sans text-base font-semibold tracking-tight text-ink">
                     {partner.name}
                   </h3>
@@ -90,7 +99,7 @@ const PARTNERS = [
             ))}
           </ul>
 
-          <div class="mt-10 border-t border-neutral-200/80 pt-6">
+          <div class="mt-10 border-t border-neutral-200/80 pt-6" data-reveal>
             <Button href="/contatti/" variant="secondary">
               Parla con noi <Icon name="arrow-right" class="size-4" />
             </Button>
@@ -98,7 +107,7 @@ const PARTNERS = [
         </div>
 
         {/* Founders' photo: framed showcase */}
-        <div class="lg:col-span-6">
+        <div class="lg:col-span-6" data-reveal="right" data-reveal-delay="1">
           <div class="relative overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-50/60 p-4 shadow-xs sm:p-6">
             {/* Corner crosshairs registration marks */}
             <div

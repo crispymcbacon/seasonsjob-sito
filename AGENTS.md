@@ -4,7 +4,7 @@
 
 SeasonsJob corporate website for `seasonsjob.it`.
 
-The site is B2B, hospitality-focused, static-first, SEO-oriented, and performance-sensitive.
+The site is B2B, focused on the settore alberghiero, static-first, SEO-oriented, and performance-sensitive.
 
 ## Stack
 

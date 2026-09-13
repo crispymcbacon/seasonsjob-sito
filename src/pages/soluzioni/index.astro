@@ -87,7 +87,10 @@ const structuredData = {
   ></script>
   <section class="page-hero" aria-labelledby="page-title">
     <div class="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:py-28">
-      <p class="inline-flex items-center gap-2.5 text-base font-medium text-[#646a68]">
+      <p
+        class="inline-flex items-center gap-2.5 text-base font-medium text-[#646a68]"
+        data-page-enter="eyebrow"
+      >
         <span
           class="size-[7px] rounded-[2px] bg-brand-500"
           aria-hidden="true"
@@ -97,16 +100,23 @@ const structuredData = {
       <h1
         id="page-title"
         class="mt-5 text-[clamp(2.2rem,4.5vw,3.5rem)] leading-[1.15] tracking-[-0.035em] text-ink"
+        data-page-enter="title"
       >
         Ogni reparto lavora meglio con lo{' '}
         <em class="font-normal text-brand-700 italic">strumento giusto</em>
       </h1>
-      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#626765]">
+      <p
+        class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#626765]"
+        data-page-enter="copy"
+      >
         Quattro prodotti specializzati per i momenti che fanno funzionare una
         struttura: trovare persone, gestire il servizio, acquistare e tenere
         aggiornata la cantina.
       </p>
-      <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <div
+        class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
+        data-page-enter="actions"
+      >
         <Button href="#panoramica" size="lg">
           Esplora le soluzioni <Icon name="arrow-right" class="size-4" />
         </Button>
@@ -123,8 +133,8 @@ const structuredData = {
   >
     <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
       <div class="grid gap-10 lg:grid-cols-12 lg:gap-16">
-        <div class="lg:col-span-5" data-reveal>
-          <p class="eyebrow">
+        <div class="lg:col-span-5">
+          <p class="eyebrow" data-reveal="fade">
             <span
               class="size-2 rounded-[2px] bg-brand-500"
               aria-hidden="true"
@@ -134,13 +144,19 @@ const structuredData = {
           <h2
             id="ecosistema-title"
             class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.5rem]"
+            data-reveal="title"
+            data-reveal-delay="1"
           >
             Pensate insieme, adottate{' '}
             <em class="font-display font-normal text-brand-700 italic">
               con libertà
             </em>
           </h2>
-          <p class="mt-5 text-lg leading-relaxed text-neutral-600">
+          <p
+            class="mt-5 text-lg leading-relaxed text-neutral-600"
+            data-reveal
+            data-reveal-delay="2"
+          >
             Le soluzioni SeasonsJob condividono lo stesso approccio: interfacce
             chiare, pochi passaggi e attenzione al lavoro reale. Ogni struttura
             può partire dal prodotto che risponde alla sua priorità di oggi.
@@ -150,7 +166,11 @@ const structuredData = {
         <div class="lg:col-span-7">
           <ol class="relative grid gap-px overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-200/90 sm:grid-cols-2">
             {SOLUTIONS.map((solution, index) => (
-              <li class="group relative bg-white p-6 transition-colors hover:bg-neutral-50 sm:p-7">
+              <li
+                class="group relative bg-white p-6 transition-colors hover:bg-neutral-50 sm:p-7"
+                data-reveal="scale"
+                data-reveal-delay={String(index + 1)}
+              >
                 <div class="flex items-start justify-between gap-4">
                   <span class="grid size-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
                     <Icon name={solution.icon} class="size-5" />
@@ -186,8 +206,8 @@ const structuredData = {
     aria-labelledby="panoramica-title"
   >
     <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
-      <div class="max-w-3xl" data-reveal>
-        <p class="eyebrow">
+      <div class="max-w-3xl">
+        <p class="eyebrow" data-reveal="fade">
           <span
             class="size-2 rounded-[2px] bg-brand-500"
             aria-hidden="true"
@@ -197,13 +217,19 @@ const structuredData = {
         <h2
           id="panoramica-title"
           class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.5rem] md:text-[2.75rem]"
+          data-reveal="title"
+          data-reveal-delay="1"
         >
           Dalla stagione alla sala, fino a{' '}
           <em class="font-display font-normal text-brand-700 italic">
             magazzino e cantina
           </em>
         </h2>
-        <p class="mt-5 text-lg leading-relaxed text-neutral-600">
+        <p
+          class="mt-5 text-lg leading-relaxed text-neutral-600"
+          data-reveal
+          data-reveal-delay="2"
+        >
           Ogni prodotto nasce intorno a un flusso preciso. Niente funzioni
           generiche: solo ciò che serve alla struttura e alle persone che la
           fanno funzionare.
@@ -224,6 +250,7 @@ const structuredData = {
               <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
                 <div
                   class:list={['lg:col-span-5', visualFirst && 'lg:order-2']}
+                  data-reveal={visualFirst ? 'right' : 'left'}
                 >
                   <div class="flex items-center gap-3 text-xs font-semibold tracking-[0.13em] uppercase">
                     <span class="text-neutral-400">{detail.number}</span>
@@ -300,6 +327,8 @@ const structuredData = {
                 <div
                   class:list={['lg:col-span-7', visualFirst && 'lg:order-1']}
                   aria-hidden="true"
+                  data-reveal={visualFirst ? 'left' : 'right'}
+                  data-reveal-delay="1"
                 >
                   <div class="relative overflow-hidden rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-[0_12px_40px_rgba(0,0,0,0.045)] sm:p-6">
                     <div class="pointer-events-none absolute -top-24 -right-24 size-64 rounded-full bg-brand-100/50 blur-3xl"></div>
@@ -401,10 +430,7 @@ const structuredData = {
 
   <section class="bg-neutral-50" aria-labelledby="percorso-title">
     <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-      <div
-        class="relative overflow-hidden rounded-2xl border border-white/10 bg-night px-6 py-10 shadow-[0_12px_36px_rgba(15,22,19,0.12)] sm:px-10 sm:py-12 lg:px-12 lg:py-14"
-        data-reveal
-      >
+      <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-night px-6 py-10 shadow-[0_12px_36px_rgba(15,22,19,0.12)] sm:px-10 sm:py-12 lg:px-12 lg:py-14">
         <div
           class="pointer-events-none absolute inset-x-0 -top-24 h-64 bg-[radial-gradient(ellipse_60%_60%_at_70%_0%,rgba(7,134,96,0.24),transparent_70%)]"
           aria-hidden="true"
@@ -412,7 +438,7 @@ const structuredData = {
 
         <div class="relative z-10 grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div class="lg:col-span-6">
-            <p class="eyebrow text-neutral-400">
+            <p class="eyebrow text-neutral-400" data-reveal="fade">
               <span
                 class="size-2 rounded-[2px] bg-brand-400"
                 aria-hidden="true"
@@ -422,17 +448,27 @@ const structuredData = {
             <h2
               id="percorso-title"
               class="font-display mt-4 text-[2rem] leading-[1.15] text-white sm:text-[2.5rem]"
+              data-reveal="title"
+              data-reveal-delay="1"
             >
               Partiamo da come lavora la{' '}
               <em class="font-display font-normal text-brand-300 italic">
                 tua struttura
               </em>
             </h2>
-            <p class="mt-5 text-base leading-relaxed text-neutral-300 sm:text-lg">
+            <p
+              class="mt-5 text-base leading-relaxed text-neutral-300 sm:text-lg"
+              data-reveal
+              data-reveal-delay="2"
+            >
               Raccontaci dove perdi più tempo. Individuiamo insieme la priorità
               e introduciamo la soluzione con il ritmo giusto per il team.
             </p>
-            <div class="mt-7 flex flex-col items-start gap-3 sm:flex-row">
+            <div
+              class="mt-7 flex flex-col items-start gap-3 sm:flex-row"
+              data-reveal
+              data-reveal-delay="2"
+            >
               <Button href="/contatti/" variant="inverted">
                 Richiedi informazioni
                 <Icon name="arrow-right" class="size-4" />
@@ -443,7 +479,11 @@ const structuredData = {
             </div>
           </div>
 
-          <ol class="space-y-6 lg:col-span-6">
+          <ol
+            class="space-y-6 lg:col-span-6"
+            data-reveal="right"
+            data-reveal-delay="1"
+          >
             {[
               {
                 step: '01',

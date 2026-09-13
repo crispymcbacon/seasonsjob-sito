@@ -1,0 +1,20 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from './icon-set';
+
+interface Props {
+  label: string;
+  class?: string;
+}
+
+const { label, class: className = 'size-3.5 text-brand-600' } = Astro.props;
+const normalizedLabel = label.toLowerCase();
+
+const iconName: IconName = normalizedLabel.includes('wine')
+  ? 'wine'
+  : normalizedLabel.includes('comand') || normalizedLabel.includes('ordine')
+    ? 'receipt-text'
+    : 'clipboard-list';
+---
+
+<Icon name={iconName} class={className} />

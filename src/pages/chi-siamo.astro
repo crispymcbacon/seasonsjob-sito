@@ -1,16 +1,139 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import PagePlaceholder from '@/components/ui/PagePlaceholder.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import ContactCta from '@/components/sections/ContactCta.astro';
 
-const pageTitle = 'Chi siamo';
+const title = 'Chi siamo';
+const description =
+  'SeasonsJob è guidata direttamente dai suoi due soci: un team piccolo e vicino alle strutture, che progetta strumenti digitali per il settore alberghiero.';
+
+// Placeholder: i nomi e le bio reali verranno inseriti in una fase successiva.
+const PARTNERS = [
+  {
+    initials: 'TG',
+    name: 'Tomasz Grabarczuk',
+    role: 'Clienti e operazioni',
+    bio: 'Segue il rapporto con hotel e ristoranti, dall’ascolto dei bisogni all’avvio di ogni progetto.',
+  },
+  {
+    initials: 'AC',
+    name: 'Agustin Campagnolo',
+    role: 'Prodotto e tecnologia',
+    bio: 'Segue lo sviluppo degli strumenti e li prova sul campo, direttamente nelle strutture che li usano ogni giorno.',
+  },
+];
 ---
 
-<BaseLayout
-  title={pageTitle}
-  description="Pagina segnaposto per l'area Chi siamo."
->
-  <PagePlaceholder
-    title={pageTitle}
-    description="Pagina segnaposto per l'area Chi siamo. I contenuti reali verranno scritti in una fase successiva."
-  />
+<BaseLayout title={title} description={description} canonical="/chi-siamo/">
+  {/* Founders: asymmetric split — story & partners left, photo placeholder right */}
+  <section
+    class="border-b border-neutral-200/80 bg-white"
+    aria-labelledby="fondatori-title"
+  >
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+      <div class="grid items-start gap-12 lg:grid-cols-12 lg:gap-14">
+        <div class="flex flex-col lg:col-span-6" data-reveal>
+          <p class="eyebrow inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]">
+            <span
+              class="size-2 rounded-[2px] bg-brand-500"
+              aria-hidden="true"
+            ></span>
+            I fondatori
+          </p>
+
+          <h2
+            id="fondatori-title"
+            class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.35rem]"
+          >
+            Due soci, un solo{' '}
+            <em class="font-display font-normal text-brand-700 italic">
+              modo di lavorare
+            </em>
+          </h2>
+
+          <div class="mt-4 max-w-prose space-y-4 text-base leading-relaxed text-neutral-600 sm:text-lg">
+            <p>
+              SeasonsJob nasce dall’esperienza diretta nel settore alberghiero:
+              stagioni passate tra reception, sala e cucina, a contatto con i
+              problemi veri di chi lavora nelle strutture ricettive.
+            </p>
+            <p>
+              Oggi i due soci seguono personalmente ogni progetto, dalla prima
+              chiacchierata con la direzione fino all’uso quotidiano degli
+              strumenti da parte del personale.
+            </p>
+          </div>
+
+          {/* Partners */}
+          <ul class="mt-10 flex flex-col gap-6">
+            {PARTNERS.map((partner) => (
+              <li class="flex items-start gap-4">
+                <span
+                  class="grid size-12 shrink-0 place-items-center rounded-full border border-brand-100 bg-brand-50 text-sm font-semibold text-brand-700"
+                  aria-hidden="true"
+                >
+                  {partner.initials}
+                </span>
+                <div>
+                  <h3 class="font-sans text-base font-semibold tracking-tight text-ink">
+                    {partner.name}
+                  </h3>
+                  <p class="text-sm font-medium text-brand-700">
+                    {partner.role}
+                  </p>
+                  <p class="mt-1.5 max-w-md text-[0.9375rem] leading-relaxed text-neutral-600">
+                    {partner.bio}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div class="mt-10 border-t border-neutral-200/80 pt-6">
+            <Button href="/contatti/" variant="secondary">
+              Parla con noi <Icon name="arrow-right" class="size-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Founders' photo: framed showcase */}
+        <div class="lg:col-span-6">
+          <div class="relative overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-50/60 p-4 shadow-xs sm:p-6">
+            {/* Corner crosshairs registration marks */}
+            <div
+              class="pointer-events-none absolute top-3 left-3 size-3.5 border-t-2 border-l-2 border-brand-500/50"
+              aria-hidden="true"
+            ></div>
+            <div
+              class="pointer-events-none absolute top-3 right-3 size-3.5 border-t-2 border-r-2 border-brand-500/50"
+              aria-hidden="true"
+            ></div>
+            <div
+              class="pointer-events-none absolute bottom-3 left-3 size-3.5 border-b-2 border-l-2 border-brand-500/50"
+              aria-hidden="true"
+            ></div>
+            <div
+              class="pointer-events-none absolute right-3 bottom-3 size-3.5 border-r-2 border-b-2 border-brand-500/50"
+              aria-hidden="true"
+            ></div>
+
+            <div class="relative z-10 aspect-[4/3] overflow-hidden rounded-xl border border-neutral-200/80 bg-white">
+              <img
+                src="/images/about/founders.webp"
+                alt="Tomasz Grabarczuk e Agustin Campagnolo, soci di SeasonsJob"
+                width="1600"
+                height="1225"
+                loading="lazy"
+                decoding="async"
+                class="size-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ContactCta />
 </BaseLayout>

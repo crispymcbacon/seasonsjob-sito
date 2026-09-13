@@ -1,16 +1,483 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import PagePlaceholder from '@/components/ui/PagePlaceholder.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { SITE } from '@/config/site';
+import { SOLUTIONS } from '@/config/solutions';
 
-const pageTitle = 'Soluzioni';
+const title = 'Soluzioni digitali per hotel e ristoranti';
+const description =
+  'Scopri le soluzioni SeasonsJob per il settore alberghiero: personale stagionale, comande digitali, acquisti e gestione della cantina.';
+
+// Placeholder copy: benefits and interface data will be refined with the final product content.
+const DETAILS = {
+  lavoro: {
+    number: '01',
+    intro:
+      'Dalla ricerca del personale alla selezione, tutto ciò che serve per costruire la squadra della prossima stagione in modo più semplice.',
+    benefits: [
+      'Profili pensati per il lavoro stagionale',
+      'Candidature raccolte in un unico spazio',
+      'Contatto diretto con i candidati',
+    ],
+    metric: '24',
+    metricLabel: 'nuovi candidati',
+    note: 'Ultimi 7 giorni',
+  },
+  comande: {
+    number: '02',
+    intro:
+      'Reception, sala e cucina lavorano sulla stessa informazione, aggiornata nel momento in cui l’ospite comunica la propria scelta.',
+    benefits: [
+      'Comande leggibili da ogni reparto',
+      'Modifiche e note sempre tracciate',
+      'Meno passaggi manuali durante il servizio',
+    ],
+    metric: '38',
+    metricLabel: 'comande inviate',
+    note: 'Servizio cena',
+  },
+  procuro: {
+    number: '03',
+    intro:
+      'Un flusso ordinato per preparare gli acquisti, confrontare i fornitori e sapere cosa deve ancora essere consegnato.',
+    benefits: [
+      'Listini e fornitori organizzati',
+      'Ordini condivisi tra i reparti',
+      'Ricezione e difformità registrate',
+    ],
+    metric: '5',
+    metricLabel: 'consegne previste',
+    note: '3 già ricevute',
+  },
+  wine: {
+    number: '04',
+    intro:
+      'Una vista chiara sulla cantina, dalle giacenze alla posizione di ogni bottiglia, senza rincorrere fogli e aggiornamenti.',
+    benefits: [
+      'Etichette e annate facili da trovare',
+      'Movimenti registrati al momento',
+      'Scorte e riordini sotto controllo',
+    ],
+    metric: '428',
+    metricLabel: 'etichette in cantina',
+    note: 'Inventario aggiornato',
+  },
+} as const;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Soluzioni SeasonsJob',
+  itemListElement: SOLUTIONS.map((solution, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: `SeasonsJob ${solution.name}`,
+    url: new URL(solution.href, SITE.url).href,
+  })),
+};
 ---
 
-<BaseLayout
-  title={pageTitle}
-  description="Pagina segnaposto per l'area Soluzioni."
->
-  <PagePlaceholder
-    title={pageTitle}
-    description="Pagina segnaposto per l'area Soluzioni. Le quattro soluzioni avranno pagine dedicate."
-  />
+<BaseLayout title={title} description={description} canonical="/soluzioni/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify(structuredData)}
+  ></script>
+  <section class="page-hero" aria-labelledby="page-title">
+    <div class="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:py-28">
+      <p class="inline-flex items-center gap-2.5 text-base font-medium text-[#646a68]">
+        <span
+          class="size-[7px] rounded-[2px] bg-brand-500"
+          aria-hidden="true"
+        ></span>
+        Le nostre soluzioni
+      </p>
+      <h1
+        id="page-title"
+        class="mt-5 text-[clamp(2.2rem,4.5vw,3.5rem)] leading-[1.15] tracking-[-0.035em] text-ink"
+      >
+        Ogni reparto lavora meglio con lo{' '}
+        <em class="font-normal text-brand-700 italic">strumento giusto</em>
+      </h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#626765]">
+        Quattro prodotti specializzati per i momenti che fanno funzionare una
+        struttura: trovare persone, gestire il servizio, acquistare e tenere
+        aggiornata la cantina.
+      </p>
+      <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <Button href="#panoramica" size="lg">
+          Esplora le soluzioni <Icon name="arrow-right" class="size-4" />
+        </Button>
+        <Button href="/contatti/" variant="secondary" size="lg">
+          Raccontaci le tue esigenze
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="border-b border-neutral-200/80 bg-white"
+    aria-labelledby="ecosistema-title"
+  >
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+      <div class="grid gap-10 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-5" data-reveal>
+          <p class="eyebrow">
+            <span
+              class="size-2 rounded-[2px] bg-brand-500"
+              aria-hidden="true"
+            ></span>
+            Una famiglia, quattro ambiti
+          </p>
+          <h2
+            id="ecosistema-title"
+            class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.5rem]"
+          >
+            Pensate insieme, adottate{' '}
+            <em class="font-display font-normal text-brand-700 italic">
+              con libertà
+            </em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-neutral-600">
+            Le soluzioni SeasonsJob condividono lo stesso approccio: interfacce
+            chiare, pochi passaggi e attenzione al lavoro reale. Ogni struttura
+            può partire dal prodotto che risponde alla sua priorità di oggi.
+          </p>
+        </div>
+
+        <div class="lg:col-span-7">
+          <ol class="relative grid gap-px overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-200/90 sm:grid-cols-2">
+            {SOLUTIONS.map((solution, index) => (
+              <li class="group relative bg-white p-6 transition-colors hover:bg-neutral-50 sm:p-7">
+                <div class="flex items-start justify-between gap-4">
+                  <span class="grid size-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
+                    <Icon name={solution.icon} class="size-5" />
+                  </span>
+                  <span class="text-xs font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <p class="mt-5 text-xs font-semibold tracking-[0.12em] text-brand-700 uppercase">
+                  {solution.area}
+                </p>
+                <h3 class="mt-1 text-xl text-ink">{solution.name}</h3>
+                <p class="mt-2 text-sm leading-relaxed text-neutral-600">
+                  {solution.tagline}
+                </p>
+                <a
+                  href={`#${solution.slug}`}
+                  class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-700 transition-colors group-hover:text-brand-700"
+                >
+                  Vedi la soluzione <Icon name="arrow-right" class="size-3.5" />
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section
+    id="panoramica"
+    class="border-b border-neutral-200/80 bg-neutral-50"
+    aria-labelledby="panoramica-title"
+  >
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+      <div class="max-w-3xl" data-reveal>
+        <p class="eyebrow">
+          <span
+            class="size-2 rounded-[2px] bg-brand-500"
+            aria-hidden="true"
+          ></span>
+          Nel lavoro di ogni giorno
+        </p>
+        <h2
+          id="panoramica-title"
+          class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.5rem] md:text-[2.75rem]"
+        >
+          Dalla stagione alla sala, fino a{' '}
+          <em class="font-display font-normal text-brand-700 italic">
+            magazzino e cantina
+          </em>
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-neutral-600">
+          Ogni prodotto nasce intorno a un flusso preciso. Niente funzioni
+          generiche: solo ciò che serve alla struttura e alle persone che la
+          fanno funzionare.
+        </p>
+      </div>
+
+      <div class="mt-14 divide-y divide-neutral-200/90 border-y border-neutral-200/90">
+        {SOLUTIONS.map((solution, index) => {
+          const detail = DETAILS[solution.slug];
+          const visualFirst = index % 2 !== 0;
+
+          return (
+            <article
+              id={solution.slug}
+              class="scroll-mt-24 py-14 sm:py-16 lg:py-20"
+              aria-labelledby={`${solution.slug}-title`}
+            >
+              <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
+                <div
+                  class:list={['lg:col-span-5', visualFirst && 'lg:order-2']}
+                >
+                  <div class="flex items-center gap-3 text-xs font-semibold tracking-[0.13em] uppercase">
+                    <span class="text-neutral-400">{detail.number}</span>
+                    <span
+                      class="h-px w-8 bg-neutral-300"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="text-brand-700">{solution.area}</span>
+                  </div>
+
+                  <div class="mt-5 flex items-center gap-3">
+                    <span class="grid size-11 shrink-0 place-items-center rounded-xl border border-brand-100 bg-brand-50 text-brand-700">
+                      <Icon name={solution.icon} class="size-5" />
+                    </span>
+                    <div>
+                      <p class="text-sm font-medium text-neutral-500">
+                        SeasonsJob
+                      </p>
+                      <h3
+                        id={`${solution.slug}-title`}
+                        class="font-display text-[1.75rem] leading-tight text-ink sm:text-[2rem]"
+                      >
+                        {solution.name}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <p class="mt-5 text-xl font-semibold leading-snug text-ink">
+                    {solution.tagline}
+                  </p>
+                  <p class="mt-3 text-base leading-relaxed text-neutral-600 sm:text-lg">
+                    {detail.intro}
+                  </p>
+
+                  <ul class="mt-6 space-y-3">
+                    {detail.benefits.map((benefit) => (
+                      <li class="flex items-start gap-3 text-[0.9375rem] text-neutral-700">
+                        <span class="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-brand-50 text-brand-700">
+                          <svg
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            class="size-3"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="m5 10 3 3 7-7"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            ></path>
+                          </svg>
+                        </span>
+                        {benefit}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {solution.status === 'in-sviluppo' && (
+                    <p class="mt-6 inline-flex items-center gap-2 rounded-lg border border-brand-100 bg-brand-50/70 px-3 py-2 text-sm font-medium text-brand-900">
+                      <span class="size-2 rounded-full bg-brand-500"></span>
+                      {solution.statusNote}
+                    </p>
+                  )}
+
+                  <div class="mt-7">
+                    <Button href={solution.href} variant="secondary">
+                      Scopri {solution.name}
+                      <Icon name="arrow-right" class="size-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                <div
+                  class:list={['lg:col-span-7', visualFirst && 'lg:order-1']}
+                  aria-hidden="true"
+                >
+                  <div class="relative overflow-hidden rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-[0_12px_40px_rgba(0,0,0,0.045)] sm:p-6">
+                    <div class="pointer-events-none absolute -top-24 -right-24 size-64 rounded-full bg-brand-100/50 blur-3xl"></div>
+                    <div class="relative overflow-hidden rounded-xl border border-neutral-200/90 bg-[#f8faf9]">
+                      <div class="flex items-center justify-between border-b border-neutral-200/80 bg-white px-4 py-3 sm:px-5">
+                        <div class="flex items-center gap-2">
+                          <span class="size-2 rounded-full bg-brand-500"></span>
+                          <span class="text-xs font-semibold text-neutral-700">
+                            SeasonsJob {solution.name}
+                          </span>
+                        </div>
+                        <div class="flex gap-1.5">
+                          <span class="size-1.5 rounded-full bg-neutral-200"></span>
+                          <span class="size-1.5 rounded-full bg-neutral-200"></span>
+                          <span class="size-1.5 rounded-full bg-neutral-200"></span>
+                        </div>
+                      </div>
+
+                      <div class="grid min-h-[330px] gap-4 p-4 sm:min-h-[370px] sm:grid-cols-5 sm:p-6">
+                        <div class="flex flex-col justify-between rounded-xl bg-night p-5 text-white sm:col-span-2">
+                          <div>
+                            <span class="text-[0.6875rem] font-semibold tracking-[0.12em] text-brand-300 uppercase">
+                              {detail.note}
+                            </span>
+                            <p class="mt-5 font-display text-[2.5rem] leading-none font-bold">
+                              {detail.metric}
+                            </p>
+                            <p class="mt-2 text-sm leading-snug text-neutral-300">
+                              {detail.metricLabel}
+                            </p>
+                          </div>
+                          <div class="mt-8 flex items-end gap-1">
+                            {[38, 54, 46, 70, 58, 82, 74].map(
+                              (height, barIndex) => (
+                                <span
+                                  class:list={[
+                                    'flex-1 rounded-sm',
+                                    barIndex === 5
+                                      ? 'bg-brand-400'
+                                      : 'bg-white/15',
+                                  ]}
+                                  style={`height:${height}px`}
+                                ></span>
+                              ),
+                            )}
+                          </div>
+                        </div>
+
+                        <div class="space-y-3 sm:col-span-3">
+                          <div class="flex items-center justify-between px-1">
+                            <p class="text-xs font-semibold text-neutral-800">
+                              Attività recenti
+                            </p>
+                            <span class="text-[0.6875rem] text-neutral-400">
+                              Oggi
+                            </span>
+                          </div>
+                          {detail.benefits.map((benefit, benefitIndex) => (
+                            <div class="flex items-center gap-3 rounded-xl border border-neutral-200/80 bg-white p-3.5 shadow-xs">
+                              <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-xs font-bold text-brand-700">
+                                {String(benefitIndex + 1).padStart(2, '0')}
+                              </span>
+                              <div class="min-w-0 flex-1">
+                                <p class="truncate text-xs font-semibold text-neutral-800">
+                                  {benefit}
+                                </p>
+                                <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-100">
+                                  <div
+                                    class="h-full rounded-full bg-brand-500/70"
+                                    style={`width:${[78, 58, 88][benefitIndex]}%`}
+                                  ></div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                          <div class="rounded-xl border border-dashed border-neutral-200 bg-white/60 p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-[0.6875rem] font-medium text-neutral-400">
+                                Aggiornamento automatico
+                              </span>
+                              <span class="inline-flex items-center gap-1 text-[0.6875rem] font-semibold text-brand-700">
+                                <span class="size-1.5 rounded-full bg-brand-500"></span>
+                                Attivo
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-neutral-50" aria-labelledby="percorso-title">
+    <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+      <div
+        class="relative overflow-hidden rounded-2xl border border-white/10 bg-night px-6 py-10 shadow-[0_12px_36px_rgba(15,22,19,0.12)] sm:px-10 sm:py-12 lg:px-12 lg:py-14"
+        data-reveal
+      >
+        <div
+          class="pointer-events-none absolute inset-x-0 -top-24 h-64 bg-[radial-gradient(ellipse_60%_60%_at_70%_0%,rgba(7,134,96,0.24),transparent_70%)]"
+          aria-hidden="true"
+        ></div>
+
+        <div class="relative z-10 grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <div class="lg:col-span-6">
+            <p class="eyebrow text-neutral-400">
+              <span
+                class="size-2 rounded-[2px] bg-brand-400"
+                aria-hidden="true"
+              ></span>
+              Da dove si comincia
+            </p>
+            <h2
+              id="percorso-title"
+              class="font-display mt-4 text-[2rem] leading-[1.15] text-white sm:text-[2.5rem]"
+            >
+              Partiamo da come lavora la{' '}
+              <em class="font-display font-normal text-brand-300 italic">
+                tua struttura
+              </em>
+            </h2>
+            <p class="mt-5 text-base leading-relaxed text-neutral-300 sm:text-lg">
+              Raccontaci dove perdi più tempo. Individuiamo insieme la priorità
+              e introduciamo la soluzione con il ritmo giusto per il team.
+            </p>
+            <div class="mt-7 flex flex-col items-start gap-3 sm:flex-row">
+              <Button href="/contatti/" variant="inverted">
+                Richiedi informazioni
+                <Icon name="arrow-right" class="size-4" />
+              </Button>
+              <Button href="/casi-reali/" variant="inverted-secondary">
+                Guarda i casi reali
+              </Button>
+            </div>
+          </div>
+
+          <ol class="space-y-6 lg:col-span-6">
+            {[
+              {
+                step: '01',
+                title: 'Ascoltiamo',
+                text: 'Mappiamo il lavoro reale e i passaggi che oggi rallentano il team.',
+              },
+              {
+                step: '02',
+                title: 'Scegliamo',
+                text: 'Partiamo dal flusso che può generare subito più chiarezza.',
+              },
+              {
+                step: '03',
+                title: 'Accompagniamo',
+                text: 'Configuriamo lo strumento e restiamo vicini durante l’avvio.',
+              },
+            ].map((item) => (
+              <li class="flex gap-4 border-b border-white/10 pb-6 last:border-0 last:pb-0">
+                <span class="grid size-9 shrink-0 place-items-center rounded-lg border border-white/15 bg-white/10 text-xs font-bold text-brand-300">
+                  {item.step}
+                </span>
+                <div>
+                  <h3 class="font-sans text-base font-semibold tracking-tight text-white">
+                    {item.title}
+                  </h3>
+                  <p class="mt-1 text-sm leading-relaxed text-neutral-400 sm:text-[0.9375rem]">
+                    {item.text}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>

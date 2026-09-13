@@ -1,16 +1,275 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import PagePlaceholder from '@/components/ui/PagePlaceholder.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { SITE } from '@/config/site';
 
-const pageTitle = 'Contatti';
+const title = 'Contatti';
+const description =
+  'Parla con SeasonsJob delle esigenze della tua struttura alberghiera e scopri le soluzioni più adatte al tuo modo di lavorare.';
+
+const CONTACT_EMAIL = 'info@seasonsjob.it';
+const EMAIL_HREF = `mailto:${CONTACT_EMAIL}?subject=Parliamo%20della%20mia%20struttura`;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contatti SeasonsJob',
+  url: new URL('/contatti/', SITE.url).href,
+  mainEntity: {
+    '@type': 'Organization',
+    name: SITE.name,
+    email: CONTACT_EMAIL,
+    url: SITE.url,
+  },
+};
+
+const FAQS = [
+  {
+    question: 'Posso adottare una sola soluzione?',
+    answer:
+      'Sì. Ogni prodotto SeasonsJob può essere introdotto separatamente, partendo dalla priorità più concreta per la struttura.',
+  },
+  {
+    question: 'È possibile vedere una demo?',
+    answer:
+      'Sì. Dopo un primo confronto prepariamo una panoramica mirata sul flusso che vuoi migliorare, senza mostrarti funzioni che non ti servono.',
+  },
+  {
+    question: 'Seguite anche l’avvio in struttura?',
+    answer:
+      'Sì. Configurazione, introduzione al team e primi utilizzi fanno parte del percorso: restiamo vicini alle persone che useranno lo strumento.',
+  },
+  {
+    question: 'Lavorate solo con hotel?',
+    answer:
+      'Le soluzioni nascono per il settore alberghiero, ma alcuni flussi sono adatti anche a ristoranti e altre strutture ricettive.',
+  },
+];
 ---
 
-<BaseLayout
-  title={pageTitle}
-  description="Pagina segnaposto per l'area Contatti."
->
-  <PagePlaceholder
-    title={pageTitle}
-    description="Pagina segnaposto per l'area Contatti. I contenuti reali verranno scritti in una fase successiva."
-  />
+<BaseLayout title={title} description={description} canonical="/contatti/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify(structuredData)}
+  ></script>
+  <section
+    class="relative overflow-hidden border-b border-white/10 bg-night"
+    aria-labelledby="scrivici-title"
+  >
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+      <div class="relative" data-reveal>
+        <div
+          class="pointer-events-none absolute -top-32 -right-20 size-96 rounded-full bg-brand-500/20 blur-3xl"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="pointer-events-none absolute inset-0 dot-grid dot-grid--dark opacity-20"
+          aria-hidden="true"
+        ></div>
+
+        <div class="relative z-10">
+          <p class="inline-flex items-center gap-2.5 text-base font-medium text-neutral-400">
+            <span
+              class="size-2 rounded-[2px] bg-brand-400"
+              aria-hidden="true"
+            ></span>
+            Scrivici
+          </p>
+          <h1
+            id="scrivici-title"
+            class="font-display mt-4 max-w-2xl text-[2rem] leading-[1.15] text-white sm:text-[2.5rem]"
+          >
+            Tre dettagli per arrivare{' '}
+            <em class="font-display font-normal text-brand-300 italic">
+              subito al punto
+            </em>
+          </h1>
+          <p class="mt-4 max-w-2xl text-base leading-relaxed text-neutral-300 sm:text-lg">
+            Compila i campi e prepareremo un’email con le tue risposte. Potrai
+            rileggerla e aggiungere quello che vuoi prima di inviarla.
+          </p>
+
+          <div class="mt-9 grid gap-8 lg:grid-cols-12 lg:gap-10">
+            <form
+              class="space-y-5 lg:col-span-8"
+              data-contact-form
+              data-email={CONTACT_EMAIL}
+            >
+              <div>
+                <label
+                  for="problema"
+                  class="mb-2 block text-sm font-semibold text-white"
+                >
+                  01 · Qual è la difficoltà principale?
+                </label>
+                <textarea
+                  id="problema"
+                  name="problema"
+                  rows="4"
+                  required
+                  placeholder="Per esempio: le comande passano ancora su fogli e spesso arrivano incomplete in cucina…"
+                  class="w-full resize-y rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-base text-white placeholder:text-neutral-500 transition-colors hover:border-white/25 focus:border-brand-300 focus:outline-none"
+                ></textarea>
+              </div>
+
+              <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label
+                    for="reparti"
+                    class="mb-2 block text-sm font-semibold text-white"
+                  >
+                    02 · Chi è coinvolto?
+                  </label>
+                  <input
+                    id="reparti"
+                    name="reparti"
+                    type="text"
+                    required
+                    placeholder="Reception, sala, cucina…"
+                    class="min-h-12 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-base text-white placeholder:text-neutral-500 transition-colors hover:border-white/25 focus:border-brand-300 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="partenza"
+                    class="mb-2 block text-sm font-semibold text-white"
+                  >
+                    03 · Quando vorresti partire?
+                  </label>
+                  <input
+                    id="partenza"
+                    name="partenza"
+                    type="text"
+                    required
+                    placeholder="Il prima possibile, estate…"
+                    class="min-h-12 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-base text-white placeholder:text-neutral-500 transition-colors hover:border-white/25 focus:border-brand-300 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div class="flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center">
+                <button
+                  type="submit"
+                  class="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-lg bg-white px-6 text-base font-medium text-ink shadow-sm transition-colors hover:bg-neutral-100 focus-visible:outline-white"
+                >
+                  Scrivi a SeasonsJob
+                  <Icon name="arrow-right" class="size-4" />
+                </button>
+                <p class="text-xs leading-relaxed text-neutral-500">
+                  Si aprirà il tuo programma di posta con il messaggio
+                  compilato.
+                </p>
+              </div>
+            </form>
+
+            <aside class="border-t border-white/10 pt-7 lg:col-span-4 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
+              <span class="grid size-11 place-items-center rounded-xl border border-white/15 bg-white/10 text-brand-300">
+                <Icon name="mail" class="size-5" />
+              </span>
+              <h3 class="font-sans mt-5 text-base font-semibold tracking-tight text-white">
+                Preferisci scrivere liberamente?
+              </h3>
+              <a
+                href={EMAIL_HREF}
+                class="mt-2 inline-block text-lg font-semibold text-brand-300 underline decoration-white/20 decoration-2 underline-offset-4 transition-colors hover:text-white"
+              >
+                {CONTACT_EMAIL}
+              </a>
+              <div class="mt-6 rounded-xl border border-brand-400/25 bg-brand-500/10 p-4">
+                <p class="flex items-center gap-2 text-sm font-semibold text-white">
+                  <span
+                    class="size-2 rounded-[2px] bg-brand-400"
+                    aria-hidden="true"
+                  ></span>
+                  Telefono e WhatsApp
+                </p>
+                <p class="mt-2 text-sm leading-relaxed text-neutral-300">
+                  Richiedi via email il nostro contatto diretto.
+                </p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const contactForm = document.querySelector<HTMLFormElement>(
+      '[data-contact-form]',
+    );
+
+    contactForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const data = new FormData(contactForm);
+      const email = contactForm.dataset.email;
+      if (!email) return;
+
+      const problem = String(data.get('problema') ?? '').trim();
+      const departments = String(data.get('reparti') ?? '').trim();
+      const start = String(data.get('partenza') ?? '').trim();
+      const subject = 'Parliamo della mia struttura';
+      const body = [
+        'Ciao SeasonsJob,',
+        `La difficoltà principale:\n${problem}`,
+        `Le persone e i reparti coinvolti:\n${departments}`,
+        `Quando vorremmo partire:\n${start}`,
+      ].join('\n\n');
+
+      window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  </script>
+  <section
+    class="border-b border-neutral-200/80 bg-neutral-50"
+    aria-labelledby="dopo-title"
+  >
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+      <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-4" data-reveal>
+          <p class="eyebrow">
+            <span
+              class="size-2 rounded-[2px] bg-brand-500"
+              aria-hidden="true"
+            ></span>
+            Prima di scriverci
+          </p>
+          <h2
+            id="dopo-title"
+            class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.35rem]"
+          >
+            Qualche risposta{' '}
+            <em class="font-display font-normal text-brand-700 italic">
+              utile
+            </em>
+          </h2>
+          <a
+            href="/soluzioni/"
+            class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-800"
+          >
+            Esplora tutte le soluzioni
+            <Icon name="arrow-right" class="size-4" />
+          </a>
+        </div>
+
+        <div class="lg:col-span-8">
+          <dl class="divide-y divide-neutral-200/90 border-y border-neutral-200/90">
+            {FAQS.map((item) => (
+              <div class="grid gap-2 py-6 sm:grid-cols-5 sm:gap-8">
+                <dt class="font-semibold text-ink sm:col-span-2">
+                  {item.question}
+                </dt>
+                <dd class="text-[0.9375rem] leading-relaxed text-neutral-600 sm:col-span-3">
+                  {item.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>

@@ -1,0 +1,167 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/ui/Icon.astro';
+import CaseModuleIcon from '@/components/ui/CaseModuleIcon.astro';
+import CasePhotoFrame from '@/components/ui/CasePhotoFrame.astro';
+import ContactCta from '@/components/sections/ContactCta.astro';
+
+export async function getStaticPaths() {
+  const cases = await getCollection('casi-reali');
+  return cases.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { data } = entry;
+---
+
+<BaseLayout
+  title={`${data.facility} — ${data.title}`}
+  description={data.summary}
+  canonical={`/casi-reali/${entry.id}/`}
+>
+  {/* Case hero: eyebrow badge, scenario title, lede and identity panel */}
+  <section class="page-hero" aria-labelledby="case-title">
+    <div class="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:py-28">
+      <a
+        href="/casi-reali/"
+        class="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-ink"
+      >
+        <Icon name="arrow-left" class="size-4" />
+        Tutti i casi reali
+      </a>
+
+      <p class="mt-14 inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]">
+        <span
+          class="size-2 rounded-[2px] bg-brand-500"
+          aria-hidden="true"
+        ></span>
+        {data.badge}
+      </p>
+
+      <h1
+        id="case-title"
+        class="mt-4 text-[clamp(1.9rem,4vw,2.75rem)] leading-[1.18] tracking-[-0.02em] text-ink"
+      >
+        {data.title}
+      </h1>
+
+      <p class="mt-5 text-lg leading-relaxed text-[#626765]">{data.summary}</p>
+
+      {/* Facility identity + key result panel */}
+      <div class="mt-12 rounded-2xl border border-neutral-200/90 bg-white shadow-xs">
+        <div class="flex items-center gap-4 p-5 sm:p-6">
+          <div class="grid size-16 shrink-0 place-items-center overflow-hidden rounded-xl border border-neutral-200/80 bg-white p-1.5">
+            <img
+              src={data.logo}
+              alt={data.logoAlt}
+              width="64"
+              height="64"
+              decoding="async"
+              class="size-full object-contain"
+            />
+          </div>
+          <div>
+            <p class="text-lg font-semibold tracking-tight text-ink">
+              {data.facility}
+            </p>
+            <p class="mt-0.5 text-sm font-medium text-neutral-500">
+              {data.facilityType}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-2.5 border-t border-neutral-100 bg-brand-50/50 px-5 py-4 sm:px-6">
+          <svg
+            class="mt-0.5 size-4 shrink-0 text-brand-600"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            aria-hidden="true"
+          >
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <p class="text-sm leading-relaxed font-medium text-brand-900">
+            {data.impact}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Case body */}
+  <section class="border-b border-neutral-200/80 bg-white">
+    <div class="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:py-24">
+      <CasePhotoFrame
+        src={data.image}
+        alt={data.imageAlt}
+        width={data.imageWidth}
+        height={data.imageHeight}
+        fullBleed
+      />
+
+      <div class="mx-auto mt-16 max-w-3xl">
+        <div class="case-body text-[1.0625rem] leading-relaxed text-neutral-600">
+          <Content />
+        </div>
+
+        <div class="mt-12 flex flex-wrap items-center gap-2 border-t border-neutral-200/80 pt-6 text-xs">
+          <span class="font-semibold text-neutral-700">Moduli utilizzati:</span>
+          {data.modules.map((mod) => (
+            <span class="inline-flex items-center gap-1 rounded-md border border-neutral-200/80 bg-neutral-50 px-2.5 py-1.5 text-xs font-medium text-neutral-700">
+              <CaseModuleIcon label={mod} />
+              {mod}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ContactCta />
+</BaseLayout>
+
+<style is:global>
+  /* Typography for the markdown-rendered case body. */
+  .case-body > p + p {
+    margin-top: 1.25rem;
+  }
+  .case-body > h2 {
+    margin-top: 2.75rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--color-ink);
+  }
+  .case-body > h2:first-child {
+    margin-top: 0;
+  }
+  .case-body > ul {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding-left: 0;
+    list-style: none;
+  }
+  .case-body > ul > li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .case-body > ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.58em;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 2px;
+    background: var(--color-brand-500);
+  }
+  .case-body strong {
+    color: var(--color-ink);
+  }
+</style>

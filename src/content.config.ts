@@ -3,16 +3,35 @@ import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 /**
- * `casi-reali` — future case-study content.
- * Intentionally minimal: markdown files with title + summary for now.
- * The schema will grow (industry, product, results…) once the first real
- * case studies are written.
+ * `casi-reali` — case studies from real structures.
+ * Each markdown file is one case: the frontmatter carries the showcase data
+ * used by the summary page, the body tells the story on the detail page.
  */
 const casiReali = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: './src/content/casi-reali' }),
   schema: z.object({
+    /** Scenario title, e.g. "Comande digitali per il servizio di sala". */
     title: z.string(),
+    /** Short narrative used on cards and as meta description. */
     summary: z.string(),
+    /** Structure name(s), e.g. "Hotel Palace & Hotel Danieli". */
+    facility: z.string(),
+    /** Short descriptor: stars, location, departments involved. */
+    facilityType: z.string(),
+    logo: z.string(),
+    logoAlt: z.string(),
+    image: z.string(),
+    imageAlt: z.string(),
+    imageWidth: z.number(),
+    imageHeight: z.number(),
+    /** Product-area badge, e.g. "Comande & Sala". */
+    badge: z.string(),
+    /** Key operational result, one line. */
+    impact: z.string(),
+    /** SeasonsJob modules involved. */
+    modules: z.array(z.string()),
+    /** Sort order on the summary page. */
+    order: z.number().default(0),
   }),
 });
 

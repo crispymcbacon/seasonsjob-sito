@@ -1,0 +1,61 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  fullBleed?: boolean;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  fullBleed = false,
+  class: className,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'relative overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-50/60 shadow-xs',
+    fullBleed ? 'p-0' : 'p-4 sm:p-6',
+    className,
+  ]}
+>
+  <div
+    class="pointer-events-none absolute top-3 left-3 size-3.5 border-t-2 border-l-2 border-brand-500/50"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute top-3 right-3 size-3.5 border-t-2 border-r-2 border-brand-500/50"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute right-3 bottom-3 size-3.5 border-r-2 border-b-2 border-brand-500/50"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute bottom-3 left-3 size-3.5 border-b-2 border-l-2 border-brand-500/50"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class:list={[
+      'relative z-10 aspect-[16/9] overflow-hidden bg-white',
+      fullBleed ? 'rounded-2xl' : 'rounded-xl border border-neutral-200/80',
+    ]}
+  >
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading="lazy"
+      decoding="async"
+      class="size-full object-cover"
+    />
+  </div>
+</div>

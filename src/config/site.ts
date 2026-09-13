@@ -21,6 +21,7 @@ export interface NavLink {
 
 /** Primary navigation. */
 export const NAV_LINKS: NavLink[] = [
+  { label: 'Home', href: '/' },
   { label: 'Soluzioni', href: '/soluzioni/' },
   { label: 'Casi reali', href: '/casi-reali/' },
   { label: 'Chi siamo', href: '/chi-siamo/' },

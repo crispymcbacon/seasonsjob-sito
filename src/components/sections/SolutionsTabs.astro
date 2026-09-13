@@ -356,7 +356,7 @@ const panelId = (id: TabId): string => `soluzioni-panel-${id}`;
         data-tab-panel={tab.id}
         class:list={[
           tab.id !== ACTIVE_BY_DEFAULT && 'hidden',
-          'md:h-[620px] lg:h-[640px]',
+          'h-[560px] sm:h-[600px] md:h-[620px] lg:h-[640px]',
         ]}
       >
         {tab.id === 'comande' ? (
@@ -443,7 +443,7 @@ const panelId = (id: TabId): string => `soluzioni-panel-${id}`;
             </div>
 
             {/* App Body Content */}
-            <div class="min-h-0 flex-1 space-y-3.5 overflow-y-auto p-3.5 sm:space-y-4 sm:p-5 lg:p-6">
+            <div class="no-scrollbar min-h-0 flex-1 space-y-3.5 overflow-y-auto p-3.5 sm:space-y-4 sm:p-5 lg:p-6">
               {/* Comanda Modifica Title Row */}
               <div class="flex items-center justify-between gap-3">
                 <div>
@@ -744,7 +744,7 @@ const panelId = (id: TabId): string => `soluzioni-panel-${id}`;
             </div>
 
             {/* App Body Content: Responsive 2-column layout on tablet/desktop, stacked on mobile */}
-            <div class="flex-1 p-3.5 sm:p-5 lg:p-6">
+            <div class="no-scrollbar min-h-0 flex-1 overflow-y-auto p-3.5 sm:p-5 lg:p-6">
               <div class="grid grid-cols-1 gap-4 md:grid-cols-12 lg:gap-5">
                 {/* Left Column: Candidate Profile Overview */}
                 <div class="flex flex-col justify-between rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-2xs md:col-span-5 lg:col-span-4 lg:p-5">
@@ -1396,7 +1396,7 @@ const panelId = (id: TabId): string => `soluzioni-panel-${id}`;
             </div>
 
             {/* App Content Body */}
-            <div class="flex-1 space-y-2.5 p-3 sm:space-y-3 sm:p-4.5 lg:p-5">
+            <div class="no-scrollbar min-h-0 flex-1 space-y-2.5 overflow-y-auto p-3 sm:space-y-3 sm:p-4.5 lg:p-5">
               {/* Breadcrumb back link */}
               <div class="flex items-center gap-1.5 text-xs font-bold text-neutral-800 sm:text-sm">
                 <svg
@@ -2293,7 +2293,7 @@ const panelId = (id: TabId): string => `soluzioni-panel-${id}`;
             </div>
 
             {/* App Content Body */}
-            <div class="flex-1 space-y-3 p-3.5 sm:p-5 lg:p-6">
+            <div class="no-scrollbar min-h-0 flex-1 space-y-3 overflow-y-auto p-3.5 sm:p-5 lg:p-6">
               {/* Header: Scansione Rapida */}
               <div class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200/60 pb-2.5">
                 <div>

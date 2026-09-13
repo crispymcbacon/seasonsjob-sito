@@ -28,6 +28,8 @@ type IconKey =
 
 type TabId = 'comande' | 'lavoro' | 'procuro' | 'wine';
 
+import Icon from '@/components/ui/Icon.astro';
+
 interface Card {
   title: string;
   category: string;
@@ -293,32 +295,45 @@ const panelId = (id: TabId): string => `soluzioni-panel-${id}`;
 ---
 
 <div class="mt-8 sm:mt-10" data-solutions-tabs>
-  <!-- Reverted compact tab rail: centered inline capsule wrapping only the 4 tabs -->
+  <!-- Compact tab rail; on mobile the edge affordance makes horizontal scrolling discoverable. -->
   <div class="flex justify-center px-4">
-    <div
-      role="tablist"
-      aria-label="Soluzioni SeasonsJob"
-      class="no-scrollbar inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-2xl border border-neutral-200/80 bg-white/80 p-1.5 shadow-2xs backdrop-blur-xs"
-    >
-      {TABS.map((tab) => (
-        <button
-          type="button"
-          role="tab"
-          id={tabId(tab.id)}
-          aria-selected={tab.id === ACTIVE_BY_DEFAULT ? 'true' : 'false'}
-          aria-controls={panelId(tab.id)}
-          tabindex={tab.id === ACTIVE_BY_DEFAULT ? 0 : -1}
-          data-tab-target={tab.id}
-          class:list={[
-            'inline-flex shrink-0 cursor-pointer items-center rounded-xl px-3.5 py-1.5 text-xs font-semibold tracking-wide whitespace-nowrap transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:px-4 sm:py-2 sm:text-sm',
-            tab.id === ACTIVE_BY_DEFAULT
-              ? 'bg-[#333333] text-white'
-              : 'text-neutral-600 hover:bg-neutral-100 hover:text-ink',
-          ]}
-        >
-          {tab.label}
-        </button>
-      ))}
+    <div class="relative w-full sm:w-auto">
+      <div
+        role="tablist"
+        aria-label="Soluzioni SeasonsJob"
+        data-tabs-scroll
+        class="no-scrollbar inline-flex w-full max-w-full items-center justify-start gap-1 overflow-x-auto rounded-2xl border border-neutral-200/80 bg-white/80 p-1.5 pr-11 shadow-2xs backdrop-blur-xs sm:w-auto sm:justify-center sm:pr-1.5"
+      >
+        {TABS.map((tab) => (
+          <button
+            type="button"
+            role="tab"
+            id={tabId(tab.id)}
+            aria-selected={tab.id === ACTIVE_BY_DEFAULT ? 'true' : 'false'}
+            aria-controls={panelId(tab.id)}
+            tabindex={tab.id === ACTIVE_BY_DEFAULT ? 0 : -1}
+            data-tab-target={tab.id}
+            class:list={[
+              'inline-flex shrink-0 cursor-pointer items-center rounded-xl px-3.5 py-1.5 text-xs font-semibold tracking-wide whitespace-nowrap transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:px-4 sm:py-2 sm:text-sm',
+              tab.id === ACTIVE_BY_DEFAULT
+                ? 'bg-[#333333] text-white'
+                : 'text-neutral-600 hover:bg-neutral-100 hover:text-ink',
+            ]}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <div
+        data-tab-scroll-hint
+        class="pointer-events-none absolute inset-y-1.5 right-1.5 flex items-center rounded-r-xl bg-gradient-to-l from-white via-white/95 to-transparent pl-5 pr-1 text-neutral-500 sm:hidden"
+        aria-hidden="true"
+      >
+        <span class="flex items-center gap-0.5 rounded-md bg-[#333333] px-1.5 py-1 text-[11px] font-semibold whitespace-nowrap text-white shadow-2xs">
+          Scorri
+          <Icon name="arrow-right" class="size-3.5" />
+        </span>
+      </div>
     </div>
   </div>
 
@@ -3208,6 +3223,28 @@ const panelId = (id: TabId): string => `soluzioni-panel-${id}`;
     if (buttons.length === 0 || panels.length === 0) return;
 
     root.dataset.tabsReady = 'true';
+
+    const scrollableTablist =
+      root.querySelector<HTMLElement>('[data-tabs-scroll]');
+    const scrollHint = root.querySelector<HTMLElement>(
+      '[data-tab-scroll-hint]',
+    );
+    if (scrollableTablist && scrollHint) {
+      const updateScrollHint = (): void => {
+        const hasOverflow =
+          scrollableTablist.scrollWidth > scrollableTablist.clientWidth + 1;
+        const reachedEnd =
+          scrollableTablist.scrollLeft + scrollableTablist.clientWidth >=
+          scrollableTablist.scrollWidth - 1;
+        scrollHint.classList.toggle('hidden', !hasOverflow || reachedEnd);
+      };
+
+      updateScrollHint();
+      scrollableTablist.addEventListener('scroll', updateScrollHint, {
+        passive: true,
+      });
+      window.addEventListener('resize', updateScrollHint);
+    }
 
     const activate = (target: string): void => {
       for (const button of buttons) {

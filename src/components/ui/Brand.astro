@@ -14,9 +14,9 @@ const words = {
 };
 
 const marks = {
-  sm: 'size-8.5 text-[1.125rem]',
-  md: 'size-8.5 text-[1.125rem]',
-  lg: 'size-10 text-[1.3rem]',
+  sm: 'size-8.5',
+  md: 'size-8.5',
+  lg: 'size-10',
 };
 ---
 
@@ -27,12 +27,19 @@ const marks = {
 >
   <span
     class:list={[
-      'font-display grid place-items-center rounded-lg bg-brand-500 font-black text-white leading-none shadow-2xs',
+      'grid place-items-center overflow-hidden rounded-lg',
       marks[size],
     ]}
     aria-hidden="true"
   >
-    S
+    <img
+      src="/images/brand/seasonsjob-mark.webp"
+      alt=""
+      width="160"
+      height="160"
+      decoding="async"
+      class="size-full object-cover"
+    />
   </span>
   <span
     class:list={[

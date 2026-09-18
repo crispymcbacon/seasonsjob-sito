@@ -30,6 +30,18 @@ const casiReali = defineCollection({
     impact: z.string(),
     /** SeasonsJob modules involved. */
     modules: z.array(z.string()),
+    /** Key figures shown in the stats band (placeholder data welcome). */
+    stats: z
+      .array(z.object({ value: z.string(), label: z.string() }))
+      .default([]),
+    /** Day-in-the-life workflow steps rendered after the story body. */
+    steps: z
+      .array(z.object({ title: z.string(), text: z.string() }))
+      .default([]),
+    /** Testimonial quote (placeholder data welcome). */
+    quote: z.string().default(''),
+    quoteAuthor: z.string().default(''),
+    quoteRole: z.string().default(''),
     /** Sort order on the summary page. */
     order: z.number().default(0),
   }),

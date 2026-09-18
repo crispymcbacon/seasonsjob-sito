@@ -4,6 +4,7 @@
   Asymmetric 2-column layout: left column contains section narrative & vertical
   facility selectors; right column features the detailed framed architectural showcase.
 */
+import CasePhotoFrame from '@/components/ui/CasePhotoFrame.astro';
 
 interface UseCase {
   id: string;
@@ -12,6 +13,10 @@ interface UseCase {
   logo: string;
   logoAlt: string;
   facilityType: string;
+  image: string;
+  imageAlt: string;
+  imageWidth: number;
+  imageHeight: number;
   scenarioTitle: string;
   badge: string;
   impact: string;
@@ -28,11 +33,15 @@ const USE_CASES: UseCase[] = [
     logoAlt: 'Logo Hotel Palace',
     facilityType:
       'Hotel 4★ & Hotel 3★ · Bibione · Ristorazione e servizio di sala',
+    image: '/images/cases/hotel-palace-danieli.webp',
+    imageAlt: 'Hotel Palace e Hotel Danieli a Bibione con piscina',
+    imageWidth: 1024,
+    imageHeight: 768,
     scenarioTitle: 'Comande digitali per il servizio di sala',
     badge: 'Comande & Sala',
     impact: 'Ordini digitali e stampa automatica senza riscrivere le comande',
     summary:
-      'Hotel Palace e Hotel Danieli utilizzano SeasonsJob Comande per gestire digitalmente gli ordini dei clienti. La stampante dedicata stampa e taglia automaticamente ogni comanda, facendo risparmiare tempo al personale e evitando di dover trascrivere gli ordini a mano.',
+      'Hotel Palace e Hotel Danieli prendono gli ordini con SeasonsJob Comande. La stampante stampa e taglia da sola ogni comanda: niente più ordini ricopiati a mano e meno tempo perso per il personale.',
     modules: [
       'SeasonsJob Comande',
       'Ordini clienti digitali',
@@ -46,12 +55,16 @@ const USE_CASES: UseCase[] = [
     logo: '/images/clients/hotel-helvetia.webp',
     logoAlt: 'Logo Hotel Helvetia',
     facilityType: 'Hotel 4★ · Jesolo · Sala, Lounge Bar & Terrazza',
+    image: '/images/cases/hotel-helvetia.webp',
+    imageAlt: 'Hotel Helvetia a Jesolo illuminato di sera',
+    imageWidth: 900,
+    imageHeight: 500,
     scenarioTitle: 'Comande digitali e ordini ai fornitori con la voce',
     badge: 'Comande & Procuro',
     impact:
       'Dal servizio in sala agli ordini ai fornitori, con meno attività manuali',
     summary:
-      'Hotel Helvetia utilizza SeasonsJob Comande per gestire digitalmente gli ordini dei clienti. La stampante dedicata stampa e taglia automaticamente ogni comanda, evitando di riscrivere gli ordini a mano. La struttura sta inoltre testando SeasonsJob Procuro e ci sta aiutando a svilupparlo: insieme stiamo costruendo gli ordini ai fornitori usando i propri listini prezzi e l’AI vocale.',
+      'Hotel Helvetia prende gli ordini con SeasonsJob Comande, con la stessa stampa automatica. In più sta provando Procuro con noi: ordini ai fornitori con i suoi listini e la voce.',
     modules: [
       'SeasonsJob Comande',
       'SeasonsJob Procuro · in sviluppo',
@@ -66,12 +79,16 @@ const USE_CASES: UseCase[] = [
     logoAlt: 'Logo Taverna Al Boccale',
     facilityType:
       'Ristorante & Taverna · 120 coperti · Birre artigianali & Cantina',
+    image: '/images/cases/taverna-al-boccale.webp',
+    imageAlt: 'Sala interna della Taverna Al Boccale',
+    imageWidth: 550,
+    imageHeight: 309,
     scenarioTitle: 'Inventario della cantina e assistenza AI sul vino',
     badge: 'Wine & AI',
     impact:
       'Ogni bottiglia sotto controllo, dall’inventario alle domande sul vino',
     summary:
-      'Taverna Al Boccale utilizza SeasonsJob Wine per organizzare l’inventario e sapere quali bottiglie sono presenti in cantina. Grazie all’AI, il personale può scansionare un vino e verificare se è presente, oltre a fare domande sulle caratteristiche e sulla disponibilità delle bottiglie.',
+      'Taverna Al Boccale tiene l’inventario della cantina con SeasonsJob Wine. Il personale scansiona una bottiglia per vedere se c’è e chiede all’AI dettagli o disponibilità.',
     modules: ['SeasonsJob Wine', 'Inventario bottiglie', 'Scansione e AI'],
   },
 ];
@@ -82,21 +99,16 @@ const USE_CASES: UseCase[] = [
     <div class="grid items-start gap-12 lg:grid-cols-12 lg:gap-14">
       {/* Left Column: Contextual Header + Vertical Facility Selector */}
       <div class="flex flex-col lg:col-span-5">
-        <p
-          class="eyebrow inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]"
-          data-reveal="fade"
-        >
+        <p class="eyebrow" data-reveal="fade">
           <span
-            class="size-2 rounded-[2px] bg-brand-500"
+            class="size-1.5 rounded-[2px] bg-brand-500"
             aria-hidden="true"
-          ></span>
+          />
           Casi reali
         </p>
-
         <h2
           class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.35rem]"
           data-reveal="title"
-          data-reveal-delay="1"
         >
           Applicazioni concrete{' '}
           <em class="font-display font-normal text-brand-700 italic">
@@ -107,11 +119,10 @@ const USE_CASES: UseCase[] = [
         <p
           class="mt-4 text-base leading-relaxed text-neutral-600 sm:text-lg"
           data-reveal
-          data-reveal-delay="2"
+          data-reveal-delay="1"
         >
-          Scenari operativi e implementazioni sul campo: come gli strumenti
-          SeasonsJob risolvono le complessità quotidiane di hotel, ristoranti e
-          cantine.
+          Come li usano hotel, ristoranti e cantine, con esempi presi dal lavoro
+          di tutti i giorni.
         </p>
 
         {/* Vertical Selector List */}
@@ -186,7 +197,7 @@ const USE_CASES: UseCase[] = [
             href="/contatti/"
             class="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-800"
           >
-            Vuoi valutare uno scenario per la tua struttura?
+            Vuoi vedere come funzionerebbe da te?
             <span aria-hidden="true">→</span>
           </a>
         </div>
@@ -254,6 +265,15 @@ const USE_CASES: UseCase[] = [
                   </div>
                 </div>
               </div>
+
+              <CasePhotoFrame
+                src={uc.image}
+                alt={uc.imageAlt}
+                width={uc.imageWidth}
+                height={uc.imageHeight}
+                fullBleed
+                class="mt-6"
+              />
 
               {/* Scenario & Narrative */}
               <div class="py-6">

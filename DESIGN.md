@@ -65,7 +65,7 @@ Use emerald for:
 - brand recognition
 - links and interactive emphasis
 - the italic emphasis phrase inside display headings
-- selected visual accents (eyebrow indicators, status dots, ambient glows on dark sections)
+- selected visual accents (status dots, ambient glows on dark sections)
 - important product relationships
 
 Primary buttons use an off-black tone (`#333333`) rather than emerald. This keeps core calls to action strong, grounded, and clear, while reserving the brand emerald for identity and selective accents.
@@ -94,7 +94,7 @@ Signature emphasis: display headings highlight their key phrase with an italic, 
 
 Body copy: Source Sans 3, base size `1.0625rem` with line-height `1.6`, measure capped around `65ch`.
 
-Micro-labels (marquee captions, card metadata, scenario tags) may use uppercase `text-xs` with wide tracking in `neutral-400`. This treatment is reserved for tiny metadata and must not be used for section eyebrows.
+Micro-labels (marquee captions, card metadata, scenario tags) may use uppercase `text-xs` with wide tracking in `neutral-400`. This treatment is reserved for tiny metadata.
 
 Merriweather should create recognizable character without making the site feel editorial, traditional, or luxurious.
 
@@ -145,7 +145,7 @@ Use moderately soft corners.
 
 Radius scale: `0.625rem` (buttons, inputs, small controls), `0.875rem` (inner panels), `1rem` (cards, showcase containers, product imagery).
 
-Use pill shapes primarily for small badges, tags, or compact controls. Do not use pills for section eyebrows or subtitles.
+Use pill shapes primarily for small badges, tags, or compact controls.
 
 Avoid excessive rounding.
 
@@ -172,16 +172,17 @@ Shared: `rounded-lg`, `font-medium`, inline-flex with `gap-2`, and a visible key
 - **Inverted** (dark sections only): White background with ink text, `neutral-100` hover, and a subtle shadow.
 - **Inverted secondary** (dark sections only): Translucent `white/10` background, `white/20` border, white text, `white/20` hover.
 
-### Eyebrows / Subtitles
+### Eyebrows / Section labels
 
-Section eyebrows sit above main headings to establish category or context.
+An optional compact label may sit above a heading, but only when it adds
+context the heading doesn't already give (category, section name, page
+role). Skip it wherever it would just restate the heading.
 
-- **Style**: Minimalist text with an inline square accent indicator. Do not enclose eyebrows in pill badges or bordered containers.
-- **Indicator**: Small square dot (`size-2 rounded-[2px] bg-brand-500` on light sections, `bg-brand-400` on dark sections).
-- **Typography**: Source Sans 3, `text-lg` (1.125rem), `font-medium`, `#777777` (`text-neutral-400` on dark sections). Natural / sentence case (do not use uppercase or wide letter-spacing).
-- **Spacing**: `gap-2.5` between indicator and text; `mt-4`–`mt-5` between eyebrow and heading.
-
-The hero uses a slightly smaller variant (1rem, `#646A68`, 7px square).
+- **Length**: 1–3 words, sentence case. Never a full sentence or a slogan.
+- **Style**: bare text with a small square dot; no pill, border or background.
+- **Dot**: `size-1.5 rounded-[2px]`, `bg-brand-500` on light sections, `bg-brand-400` on dark ones.
+- **Typography**: Source Sans 3, `text-lg` (1.125rem), `font-normal` (400), `#777777`; `text-neutral-400` on dark sections.
+- **Spacing**: `gap-2.5` between dot and text; `mt-4`–`mt-5` between eyebrow and heading.
 
 ## Motion
 
@@ -236,7 +237,7 @@ Important content and text must remain accessible independently of animation, We
 - Do not turn every content block into a card.
 - Do not use heavy shadows throughout the site.
 - Do not use gratuitous gradients or glassmorphism.
-- Do not use uppercase wide-tracked styling for eyebrows; reserve it for tiny metadata labels.
+- Reserve uppercase wide-tracked styling for tiny metadata labels only.
 - Do not make each SeasonsJob product look like an independent brand.
 - Do not use Three.js where normal HTML, CSS, or motion would work better.
 - Do not sacrifice readability or performance for visual effects.

@@ -12,9 +12,9 @@ const description =
 // Placeholder copy: benefits and interface data will be refined with the final product content.
 const DETAILS = {
   lavoro: {
-    number: '01',
+    number: '03',
     intro:
-      'Dalla ricerca del personale alla selezione, tutto ciò che serve per costruire la squadra della prossima stagione in modo più semplice.',
+      'Dalla ricerca alla selezione, per mettere insieme la squadra della prossima stagione.',
     benefits: [
       'Profili pensati per il lavoro stagionale',
       'Candidature raccolte in un unico spazio',
@@ -25,9 +25,9 @@ const DETAILS = {
     note: 'Ultimi 7 giorni',
   },
   comande: {
-    number: '02',
+    number: '01',
     intro:
-      'Reception, sala e cucina lavorano sulla stessa informazione, aggiornata nel momento in cui l’ospite comunica la propria scelta.',
+      'Reception, sala e cucina lavorano sulla stessa comanda, aggiornata appena l’ospite ordina.',
     benefits: [
       'Comande leggibili da ogni reparto',
       'Modifiche e note sempre tracciate',
@@ -38,9 +38,9 @@ const DETAILS = {
     note: 'Servizio cena',
   },
   procuro: {
-    number: '03',
+    number: '04',
     intro:
-      'Un flusso ordinato per preparare gli acquisti, confrontare i fornitori e sapere cosa deve ancora essere consegnato.',
+      'Un flusso ordinato per preparare gli acquisti, confrontare i fornitori e sapere cosa deve ancora arrivare.',
     benefits: [
       'Listini e fornitori organizzati',
       'Ordini condivisi tra i reparti',
@@ -51,9 +51,9 @@ const DETAILS = {
     note: '3 già ricevute',
   },
   wine: {
-    number: '04',
+    number: '02',
     intro:
-      'Una vista chiara sulla cantina, dalle giacenze alla posizione di ogni bottiglia, senza rincorrere fogli e aggiornamenti.',
+      'Dalle giacenze alla posizione di ogni bottiglia, senza fogli da rincorrere.',
     benefits: [
       'Etichette e annate facili da trovare',
       'Movimenti registrati al momento',
@@ -87,14 +87,8 @@ const structuredData = {
   ></script>
   <section class="page-hero" aria-labelledby="page-title">
     <div class="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:py-28">
-      <p
-        class="inline-flex items-center gap-2.5 text-base font-medium text-[#646a68]"
-        data-page-enter="eyebrow"
-      >
-        <span
-          class="size-[7px] rounded-[2px] bg-brand-500"
-          aria-hidden="true"
-        ></span>
+      <p class="eyebrow" data-page-enter="eyebrow">
+        <span class="size-1.5 rounded-[2px] bg-brand-500" aria-hidden="true" />
         Le nostre soluzioni
       </p>
       <h1
@@ -109,9 +103,8 @@ const structuredData = {
         class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#626765]"
         data-page-enter="copy"
       >
-        Quattro prodotti specializzati per i momenti che fanno funzionare una
-        struttura: trovare persone, gestire il servizio, acquistare e tenere
-        aggiornata la cantina.
+        Quattro prodotti per il lavoro di ogni giorno: trovare le persone,
+        gestire il servizio, fare gli acquisti, tenere aggiornata la cantina.
       </p>
       <div
         class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
@@ -136,20 +129,19 @@ const structuredData = {
         <div class="lg:col-span-5">
           <p class="eyebrow" data-reveal="fade">
             <span
-              class="size-2 rounded-[2px] bg-brand-500"
+              class="size-1.5 rounded-[2px] bg-brand-500"
               aria-hidden="true"
-            ></span>
-            Una famiglia, quattro ambiti
+            />
+            I prodotti
           </p>
           <h2
             id="ecosistema-title"
             class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.5rem]"
             data-reveal="title"
-            data-reveal-delay="1"
           >
-            Pensate insieme, adottate{' '}
+            Quattro prodotti indipendenti,{' '}
             <em class="font-display font-normal text-brand-700 italic">
-              con libertà
+              pensati per stare insieme
             </em>
           </h2>
           <p
@@ -157,9 +149,8 @@ const structuredData = {
             data-reveal
             data-reveal-delay="2"
           >
-            Le soluzioni SeasonsJob condividono lo stesso approccio: interfacce
-            chiare, pochi passaggi e attenzione al lavoro reale. Ogni struttura
-            può partire dal prodotto che risponde alla sua priorità di oggi.
+            Hanno tutti lo stesso taglio: interfacce semplici, pochi passaggi. E
+            si parte dal prodotto che serve, senza dover prendere il resto.
           </p>
         </div>
 
@@ -209,16 +200,15 @@ const structuredData = {
       <div class="max-w-3xl">
         <p class="eyebrow" data-reveal="fade">
           <span
-            class="size-2 rounded-[2px] bg-brand-500"
+            class="size-1.5 rounded-[2px] bg-brand-500"
             aria-hidden="true"
-          ></span>
-          Nel lavoro di ogni giorno
+          />
+          Nel quotidiano
         </p>
         <h2
           id="panoramica-title"
           class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.5rem] md:text-[2.75rem]"
           data-reveal="title"
-          data-reveal-delay="1"
         >
           Dalla stagione alla sala, fino a{' '}
           <em class="font-display font-normal text-brand-700 italic">
@@ -230,9 +220,8 @@ const structuredData = {
           data-reveal
           data-reveal-delay="2"
         >
-          Ogni prodotto nasce intorno a un flusso preciso. Niente funzioni
-          generiche: solo ciò che serve alla struttura e alle persone che la
-          fanno funzionare.
+          Ogni prodotto segue un flusso preciso, quello di chi lo usa ogni
+          giorno. Niente funzioni generiche.
         </p>
       </div>
 
@@ -440,16 +429,15 @@ const structuredData = {
           <div class="lg:col-span-6">
             <p class="eyebrow text-neutral-400" data-reveal="fade">
               <span
-                class="size-2 rounded-[2px] bg-brand-400"
+                class="size-1.5 rounded-[2px] bg-brand-400"
                 aria-hidden="true"
               ></span>
-              Da dove si comincia
+              Il percorso
             </p>
             <h2
               id="percorso-title"
               class="font-display mt-4 text-[2rem] leading-[1.15] text-white sm:text-[2.5rem]"
               data-reveal="title"
-              data-reveal-delay="1"
             >
               Partiamo da come lavora la{' '}
               <em class="font-display font-normal text-brand-300 italic">
@@ -461,8 +449,7 @@ const structuredData = {
               data-reveal
               data-reveal-delay="2"
             >
-              Raccontaci dove perdi più tempo. Individuiamo insieme la priorità
-              e introduciamo la soluzione con il ritmo giusto per il team.
+              Raccontaci dove perdi più tempo: da lì decidiamo il primo passo.
             </p>
             <div
               class="mt-7 flex flex-col items-start gap-3 sm:flex-row"
@@ -493,7 +480,7 @@ const structuredData = {
               {
                 step: '02',
                 title: 'Scegliamo',
-                text: 'Partiamo dal flusso che può generare subito più chiarezza.',
+                text: 'Partiamo da dove serve di più.',
               },
               {
                 step: '03',

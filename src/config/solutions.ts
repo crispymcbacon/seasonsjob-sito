@@ -27,16 +27,6 @@ export interface Solution {
 /** Public SeasonsJob product family, in ecosystem order. */
 export const SOLUTIONS: Solution[] = [
   {
-    slug: 'lavoro',
-    name: 'Lavoro',
-    area: 'Persone',
-    tagline: 'Personale stagionale per il settore alberghiero',
-    description:
-      'La piattaforma che mette in contatto strutture ricettive e lavoratori per le stagioni: ricerca, candidature e selezione in un unico flusso.',
-    href: '/soluzioni/lavoro/',
-    icon: 'users',
-  },
-  {
     slug: 'comande',
     name: 'Comande',
     area: 'Operatività',
@@ -45,6 +35,26 @@ export const SOLUTIONS: Solution[] = [
       'Gestione digitale di pasti e ordini: le informazioni passano tra i reparti senza fogli, telefonate e trascrizioni.',
     href: '/soluzioni/comande/',
     icon: 'receipt-text',
+  },
+  {
+    slug: 'wine',
+    name: 'Wine',
+    area: 'Inventario',
+    tagline: 'La cantina, sempre aggiornata',
+    description:
+      'Gestione digitale dell’inventario vini: giacenze, posizioni e movimenti registrati man mano che avvengono.',
+    href: '/soluzioni/wine/',
+    icon: 'wine',
+  },
+  {
+    slug: 'lavoro',
+    name: 'Lavoro',
+    area: 'Persone',
+    tagline: 'Personale stagionale per il settore alberghiero',
+    description:
+      'La piattaforma che mette in contatto strutture ricettive e lavoratori per le stagioni: ricerca, candidature e selezione in un unico flusso.',
+    href: '/soluzioni/lavoro/',
+    icon: 'users',
   },
   {
     slug: 'procuro',
@@ -58,16 +68,6 @@ export const SOLUTIONS: Solution[] = [
     status: 'in-sviluppo',
     statusNote:
       'In sviluppo: lo stiamo costruendo insieme alle prime strutture.',
-  },
-  {
-    slug: 'wine',
-    name: 'Wine',
-    area: 'Inventario',
-    tagline: 'La cantina, sempre aggiornata',
-    description:
-      'Gestione digitale dell’inventario vini: giacenze, posizioni e movimenti registrati man mano che avvengono.',
-    href: '/soluzioni/wine/',
-    icon: 'wine',
   },
 ];
 

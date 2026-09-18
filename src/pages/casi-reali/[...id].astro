@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import CaseModuleIcon from '@/components/ui/CaseModuleIcon.astro';
 import CasePhotoFrame from '@/components/ui/CasePhotoFrame.astro';
@@ -17,64 +18,103 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const { data } = entry;
+
+// Reading order across cases, also used by the sidebar navigation.
+const allCases = (await getCollection('casi-reali')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const currentIndex = allCases.findIndex((c) => c.id === entry.id);
+const prevCase = currentIndex > 0 ? allCases[currentIndex - 1] : null;
+const nextCase =
+  currentIndex >= 0 && currentIndex < allCases.length - 1
+    ? allCases[currentIndex + 1]
+    : null;
+
+const caseNumber = String(currentIndex + 1).padStart(2, '0');
+const caseTotal = String(allCases.length).padStart(2, '0');
 ---
 
 <BaseLayout
-  title={`${data.facility} — ${data.title}`}
+  title={`${data.facility} · ${data.title}`}
   description={data.summary}
   canonical={`/casi-reali/${entry.id}/`}
 >
-  {/* Case hero: eyebrow badge, scenario title, lede and identity panel */}
-  <section class="page-hero" aria-labelledby="case-title">
-    <div class="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:py-28">
-      <a
-        href="/casi-reali/"
-        class="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-ink"
+  {/*
+    Case dossier: a single editorial report instead of the usual page hero.
+    A slim index bar opens the page, the case facts sit next to the story, and
+    the sidebar keeps modules and sibling cases reachable while reading.
+  */}
+  <div class="border-b border-neutral-200/80 bg-white">
+    {/* Index bar: back to the archive + position within it */}
+    <div class="border-b border-neutral-200/80 bg-neutral-50/60">
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
+        <a
+          href="/casi-reali/"
+          class="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-ink"
+        >
+          <Icon name="arrow-left" class="size-4" />
+          Casi reali
+        </a>
+        <p class="text-xs font-semibold tracking-[0.14em] text-neutral-500 uppercase">
+          Caso {caseNumber} / {caseTotal}
+        </p>
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
+      {/* Case opening: badge, scenario title and lede */}
+      <div class="max-w-3xl">
+        <p class="eyebrow" data-page-enter="eyebrow">
+          <span
+            class="size-1.5 rounded-[2px] bg-brand-500"
+            aria-hidden="true"
+          />
+          {data.badge}
+        </p>
+
+        <h1
+          id="case-title"
+          class="mt-4 text-[clamp(1.9rem,4vw,2.75rem)] leading-[1.18] tracking-[-0.02em] text-ink"
+          data-page-enter="title"
+        >
+          {data.title}
+        </h1>
+
+        <p
+          class="mt-5 text-lg leading-relaxed text-[#626765]"
+          data-page-enter="copy"
+        >
+          {data.summary}
+        </p>
+      </div>
+
+      {/* Case facts: who the structure is and the key result, side by side */}
+      <div
+        class="mt-10 grid gap-4 sm:grid-cols-2 lg:gap-6"
+        data-page-enter="copy"
       >
-        <Icon name="arrow-left" class="size-4" />
-        Tutti i casi reali
-      </a>
-
-      <p class="mt-14 inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]">
-        <span
-          class="size-2 rounded-[2px] bg-brand-500"
-          aria-hidden="true"
-        ></span>
-        {data.badge}
-      </p>
-
-      <h1
-        id="case-title"
-        class="mt-4 text-[clamp(1.9rem,4vw,2.75rem)] leading-[1.18] tracking-[-0.02em] text-ink"
-      >
-        {data.title}
-      </h1>
-
-      <p class="mt-5 text-lg leading-relaxed text-[#626765]">{data.summary}</p>
-
-      {/* Facility identity + key result panel */}
-      <div class="mt-12 rounded-2xl border border-neutral-200/90 bg-white shadow-xs">
-        <div class="flex items-center gap-4 p-5 sm:p-6">
-          <div class="grid size-16 shrink-0 place-items-center overflow-hidden rounded-xl border border-neutral-200/80 bg-white p-1.5">
+        <div class="flex items-start gap-4 rounded-2xl border border-neutral-200/90 bg-white p-5 shadow-xs sm:p-6">
+          <div class="grid size-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-neutral-200/80 bg-white p-1.5">
             <img
               src={data.logo}
               alt={data.logoAlt}
-              width="64"
-              height="64"
+              width="56"
+              height="56"
               decoding="async"
               class="size-full object-contain"
             />
           </div>
-          <div>
-            <p class="text-lg font-semibold tracking-tight text-ink">
+          <div class="min-w-0">
+            <p class="text-base font-semibold tracking-tight text-ink">
               {data.facility}
             </p>
-            <p class="mt-0.5 text-sm font-medium text-neutral-500">
+            <p class="mt-1 text-sm leading-relaxed font-medium text-neutral-500">
               {data.facilityType}
             </p>
           </div>
         </div>
-        <div class="flex items-start gap-2.5 border-t border-neutral-100 bg-brand-50/50 px-5 py-4 sm:px-6">
+
+        <div class="flex items-start gap-2.5 rounded-2xl border border-neutral-200/90 bg-white p-5 shadow-xs sm:p-6">
           <svg
             class="mt-0.5 size-4 shrink-0 text-brand-600"
             viewBox="0 0 24 24"
@@ -85,49 +125,208 @@ const { data } = entry;
           >
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <p class="text-sm leading-relaxed font-medium text-brand-900">
-            {data.impact}
-          </p>
+          <div>
+            <p class="text-[0.6875rem] font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+              Impatto
+            </p>
+            <p class="mt-2 text-[0.9375rem] leading-relaxed font-medium text-brand-900">
+              {data.impact}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  {/* Case body */}
-  <section class="border-b border-neutral-200/80 bg-white">
-    <div class="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:py-24">
+      {/* Location: the case photo opens the report at full width */}
       <CasePhotoFrame
         src={data.image}
         alt={data.imageAlt}
         width={data.imageWidth}
         height={data.imageHeight}
         fullBleed
+        class="mt-10"
       />
 
-      <div class="mx-auto mt-16 max-w-3xl">
-        <div class="case-body text-[1.0625rem] leading-relaxed text-neutral-600">
-          <Content />
+      {/* Key figures, read as a single data band */}
+      {data.stats.length > 0 && (
+        <dl class="mt-6 grid overflow-hidden rounded-2xl border border-neutral-200/90 bg-white shadow-xs sm:grid-cols-3 lg:mt-8">
+          {data.stats.map((stat, index) => (
+            <div
+              class:list={[
+                'flex flex-col-reverse px-6 py-6 sm:py-7',
+                index > 0 &&
+                  'border-t border-neutral-200/80 sm:border-t-0 sm:border-l',
+              ]}
+            >
+              <dt class="mt-2 text-xs leading-relaxed font-medium text-neutral-500">
+                {stat.label}
+              </dt>
+              <dd class="text-3xl font-semibold tracking-tight text-ink">
+                {stat.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      {/* Story + sidebar: asymmetric report layout */}
+      <div class="mt-14 grid gap-12 lg:mt-16 lg:grid-cols-12 lg:gap-14">
+        <div class="lg:col-span-8">
+          <div class="case-body max-w-3xl text-[1.0625rem] leading-relaxed text-neutral-600">
+            <Content />
+          </div>
+
+          {data.steps.length > 0 && (
+            <div class="mt-14 max-w-3xl">
+              <h2 class="font-sans text-xs font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+                Nella giornata tipo
+              </h2>
+              <ol class="mt-6 flex flex-col gap-4">
+                {data.steps.map((step, index) => (
+                  <li class="flex items-center gap-4 rounded-2xl border border-neutral-200/90 bg-white p-5 shadow-xs sm:p-6">
+                    <span
+                      class="grid size-8 shrink-0 place-items-center rounded-lg bg-neutral-900 text-xs font-bold text-white"
+                      aria-hidden="true"
+                    >
+                      {index + 1}
+                    </span>
+                    <div>
+                      <p class="text-base font-semibold tracking-tight text-ink">
+                        {step.title}
+                      </p>
+                      <p class="mt-1.5 text-[0.9375rem] leading-relaxed text-neutral-600">
+                        {step.text}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {data.quote && (
+            <figure class="mt-14 max-w-3xl rounded-2xl border border-neutral-200/90 bg-neutral-50/60 p-6 shadow-xs sm:p-8">
+              <blockquote class="text-lg leading-relaxed font-medium text-neutral-800">
+                “{data.quote}”
+              </blockquote>
+              {(data.quoteAuthor || data.quoteRole) && (
+                <figcaption class="mt-4 text-sm text-neutral-500">
+                  {data.quoteAuthor && (
+                    <span class="font-semibold text-ink">
+                      {data.quoteAuthor}
+                    </span>
+                  )}
+                  {data.quoteAuthor && data.quoteRole && ' · '}
+                  {data.quoteRole}
+                </figcaption>
+              )}
+            </figure>
+          )}
         </div>
 
-        <div class="mt-12 flex flex-wrap items-center gap-2 border-t border-neutral-200/80 pt-6 text-xs">
-          <span class="font-semibold text-neutral-700">Moduli utilizzati:</span>
-          {data.modules.map((mod) => (
-            <span class="inline-flex items-center gap-1 rounded-md border border-neutral-200/80 bg-neutral-50 px-2.5 py-1.5 text-xs font-medium text-neutral-700">
-              <CaseModuleIcon label={mod} />
-              {mod}
-            </span>
-          ))}
-        </div>
+        {/* Sidebar: stays in view while the story scrolls. The aside keeps the
+            default grid stretch so the sticky rail has room to travel. */}
+        <aside class="lg:col-span-4">
+          <div class="flex flex-col gap-6 lg:sticky lg:top-24">
+            <div class="rounded-2xl border border-neutral-200/90 bg-white p-5 shadow-xs">
+              <h2 class="text-[0.6875rem] font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+                Usano
+              </h2>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {data.modules.map((mod) => (
+                  <li class="inline-flex items-center gap-1.5 rounded-md border border-neutral-200/80 bg-neutral-50 px-2.5 py-1.5 text-xs font-medium text-neutral-700">
+                    <CaseModuleIcon label={mod} />
+                    {mod}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <nav
+              aria-label="Altri casi reali"
+              class="overflow-hidden rounded-2xl border border-neutral-200/90 bg-white shadow-xs"
+            >
+              {prevCase && (
+                <a
+                  href={`/casi-reali/${prevCase.id}/`}
+                  class="group flex items-center gap-3 border-b border-neutral-100 px-5 py-4 transition-colors hover:bg-neutral-50"
+                >
+                  <Icon
+                    name="arrow-left"
+                    class="size-4 shrink-0 text-neutral-400 transition-colors group-hover:text-ink"
+                  />
+                  <span class="min-w-0">
+                    <span class="block text-[0.6875rem] font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+                      Caso precedente
+                    </span>
+                    <span class="block truncate text-sm font-medium text-ink">
+                      {prevCase.data.facility}
+                    </span>
+                  </span>
+                </a>
+              )}
+
+              {nextCase ? (
+                <a
+                  href={`/casi-reali/${nextCase.id}/`}
+                  class="group flex items-center gap-3 px-5 py-4 transition-colors hover:bg-neutral-50"
+                >
+                  <span class="min-w-0">
+                    <span class="block text-[0.6875rem] font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+                      Caso successivo
+                    </span>
+                    <span class="block truncate text-sm font-medium text-ink">
+                      {nextCase.data.facility}
+                    </span>
+                  </span>
+                  <Icon
+                    name="arrow-right"
+                    class="size-4 shrink-0 text-neutral-400 transition-colors group-hover:text-ink"
+                  />
+                </a>
+              ) : (
+                <a
+                  href="/casi-reali/"
+                  class="group flex items-center gap-3 px-5 py-4 transition-colors hover:bg-neutral-50"
+                >
+                  <span class="min-w-0">
+                    <span class="block text-[0.6875rem] font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+                      Archivio
+                    </span>
+                    <span class="block truncate text-sm font-medium text-ink">
+                      Tutti i casi reali
+                    </span>
+                  </span>
+                  <Icon
+                    name="arrow-right"
+                    class="size-4 shrink-0 text-neutral-400 transition-colors group-hover:text-ink"
+                  />
+                </a>
+              )}
+            </nav>
+
+            <div class="rounded-2xl border border-dashed border-neutral-300 bg-neutral-50/60 p-5">
+              <p class="text-sm leading-relaxed text-neutral-600">
+                Vuoi provarlo nella tua struttura?
+              </p>
+              <Button href="/contatti/" class="mt-4 w-full">
+                Richiedi informazioni
+                <Icon name="arrow-right" class="size-4" />
+              </Button>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
-  </section>
+  </div>
 
   <ContactCta />
 </BaseLayout>
 
 <style is:global>
   /* Typography for the markdown-rendered case body. */
-  .case-body > p + p {
+  /* Vertical rhythm between rendered markdown blocks. Element-specific rules
+     below override this base spacing where they need more room. */
+  .case-body > * + * {
     margin-top: 1.25rem;
   }
   .case-body > h2 {
@@ -138,6 +337,21 @@ const { data } = entry;
   }
   .case-body > h2:first-child {
     margin-top: 0;
+  }
+  .case-body > blockquote {
+    margin-top: 1.25rem;
+    border-left: 3px solid var(--color-brand-500);
+    padding-left: 1rem;
+    font-style: italic;
+    color: var(--color-ink);
+  }
+  .case-body > ol {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding-left: 1.5rem;
+    list-style: decimal;
   }
   .case-body > ul {
     margin-top: 1.25rem;

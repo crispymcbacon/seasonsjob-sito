@@ -22,7 +22,7 @@ const structuredData = {
   itemListElement: cases.map((entry, index) => ({
     '@type': 'ListItem',
     position: index + 1,
-    name: `${entry.data.facility} — ${entry.data.title}`,
+    name: `${entry.data.facility} · ${entry.data.title}`,
     url: new URL(`/casi-reali/${entry.id}/`, SITE.url).href,
   })),
 };
@@ -38,14 +38,8 @@ const structuredData = {
   {/* Page hero */}
   <section class="page-hero" aria-labelledby="page-title">
     <div class="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 lg:py-28">
-      <p
-        class="inline-flex items-center gap-2.5 text-base font-medium text-[#646a68]"
-        data-page-enter="eyebrow"
-      >
-        <span
-          class="size-[7px] rounded-[2px] bg-brand-500"
-          aria-hidden="true"
-        ></span>
+      <p class="eyebrow" data-page-enter="eyebrow">
+        <span class="size-1.5 rounded-[2px] bg-brand-500" aria-hidden="true" />
         Casi reali
       </p>
       <h1
@@ -60,9 +54,8 @@ const structuredData = {
         class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#626765]"
         data-page-enter="copy"
       >
-        Hotel, ristoranti e taverne che usano i nostri strumenti ogni giorno:
-        storie concrete di comande digitali, ordini ai fornitori e cantine sotto
-        controllo.
+        Hotel, ristoranti e taverne che usano SeasonsJob ogni giorno: comande,
+        ordini ai fornitori, cantina.
       </p>
     </div>
   </section>
@@ -131,9 +124,7 @@ const structuredData = {
                 </p>
 
                 <div class="mt-6 flex flex-wrap items-center gap-2 border-t border-neutral-100 pt-5 text-xs">
-                  <span class="font-semibold text-neutral-700">
-                    Moduli utilizzati:
-                  </span>
+                  <span class="font-semibold text-neutral-700">Usano:</span>
                   {entry.data.modules.map((mod) => (
                     <span class="inline-flex items-center gap-1 rounded-md border border-neutral-200/80 bg-neutral-50 px-2.5 py-1.5 text-xs font-medium text-neutral-700">
                       <CaseModuleIcon label={mod} />
@@ -147,7 +138,7 @@ const structuredData = {
                   class="mt-8"
                   size="md"
                 >
-                  Leggi il caso completo
+                  Leggi il caso
                   <Icon name="arrow-right" class="size-4" />
                 </Button>
               </div>
@@ -161,8 +152,7 @@ const structuredData = {
           data-reveal="fade"
         >
           <p class="text-sm font-medium text-neutral-500">
-            Altri casi in arrivo — stiamo raccogliendo nuove storie dalle
-            strutture che usano SeasonsJob.
+            Altri casi in arrivo: stiamo raccogliendo le prossime storie.
           </p>
         </div>
       </div>

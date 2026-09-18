@@ -6,7 +6,7 @@ import ContactCta from '@/components/sections/ContactCta.astro';
 
 const title = 'Chi siamo';
 const description =
-  'SeasonsJob è guidata direttamente dai suoi due soci: un team piccolo e vicino alle strutture, che progetta strumenti digitali per il settore alberghiero.';
+  'SeasonsJob è guidata dai suoi due soci, vicini alle strutture: strumenti digitali per il settore alberghiero, provati sul campo.';
 
 // Placeholder: i nomi e le bio reali verranno inseriti in una fase successiva.
 const PARTNERS = [
@@ -14,13 +14,13 @@ const PARTNERS = [
     initials: 'TG',
     name: 'Tomasz Grabarczuk',
     role: 'Clienti e operazioni',
-    bio: 'Segue il rapporto con hotel e ristoranti, dall’ascolto dei bisogni all’avvio di ogni progetto.',
+    bio: 'Segue il rapporto con hotel e ristoranti, dai primi incontri all’avvio di ogni progetto.',
   },
   {
     initials: 'AC',
     name: 'Agustin Campagnolo',
     role: 'Prodotto e tecnologia',
-    bio: 'Segue lo sviluppo degli strumenti e li prova sul campo, direttamente nelle strutture che li usano ogni giorno.',
+    bio: 'Segue lo sviluppo degli strumenti e li testa sul campo, direttamente nelle strutture che li usano ogni giorno.',
   },
 ];
 ---
@@ -34,14 +34,11 @@ const PARTNERS = [
     <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
       <div class="grid items-start gap-12 lg:grid-cols-12 lg:gap-14">
         <div class="flex flex-col lg:col-span-6">
-          <p
-            class="eyebrow inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]"
-            data-page-enter="eyebrow"
-          >
+          <p class="eyebrow" data-page-enter="eyebrow">
             <span
-              class="size-2 rounded-[2px] bg-brand-500"
+              class="size-1.5 rounded-[2px] bg-brand-500"
               aria-hidden="true"
-            ></span>
+            />
             I fondatori
           </p>
 
@@ -50,9 +47,9 @@ const PARTNERS = [
             class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.35rem]"
             data-page-enter="title"
           >
-            Un team, un solo{' '}
+            Guidata da chi la usa{' '}
             <em class="font-display font-normal text-brand-700 italic">
-              modo di lavorare
+              sul campo
             </em>
           </h1>
 
@@ -61,14 +58,12 @@ const PARTNERS = [
             data-page-enter="copy"
           >
             <p>
-              SeasonsJob nasce dall’esperienza diretta nel settore alberghiero:
-              stagioni passate tra reception, sala e cucina, a contatto con i
-              problemi veri di chi lavora nelle strutture ricettive.
+              SeasonsJob nasce da stagioni passate tra reception, sala e cucina,
+              con i problemi veri di chi lavora nelle strutture.
             </p>
             <p>
-              Oggi i due soci seguono personalmente ogni progetto, dalla prima
-              chiacchierata con la direzione fino all’uso quotidiano degli
-              strumenti da parte del personale.
+              Oggi i due soci seguono ogni progetto di persona, dalla prima
+              chiacchierata fino all’uso quotidiano in struttura.
             </p>
           </div>
 

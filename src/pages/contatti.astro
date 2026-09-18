@@ -5,7 +5,7 @@ import { SITE } from '@/config/site';
 
 const title = 'Contatti';
 const description =
-  'Parla con SeasonsJob delle esigenze della tua struttura alberghiera e scopri le soluzioni più adatte al tuo modo di lavorare.';
+  'Scrivi a SeasonsJob: raccontaci come lavora la tua struttura e da dove vuoi partire.';
 
 const CONTACT_EMAIL = 'info@seasonsjob.it';
 const EMAIL_HREF = `mailto:${CONTACT_EMAIL}?subject=Parliamo%20della%20mia%20struttura`;
@@ -27,22 +27,22 @@ const FAQS = [
   {
     question: 'Posso adottare una sola soluzione?',
     answer:
-      'Sì. Ogni prodotto SeasonsJob può essere introdotto separatamente, partendo dalla priorità più concreta per la struttura.',
+      'Sì. Puoi partire da un solo prodotto, quello che per te conta di più adesso.',
   },
   {
     question: 'È possibile vedere una demo?',
     answer:
-      'Sì. Dopo un primo confronto prepariamo una panoramica mirata sul flusso che vuoi migliorare, senza mostrarti funzioni che non ti servono.',
+      'Sì. Dopo un primo confronto ti mostriamo il flusso che ti interessa, non tutto il catalogo.',
   },
   {
     question: 'Seguite anche l’avvio in struttura?',
     answer:
-      'Sì. Configurazione, introduzione al team e primi utilizzi fanno parte del percorso: restiamo vicini alle persone che useranno lo strumento.',
+      'Sì. Configuriamo lo strumento, lo presentiamo al team e restiamo vicini nei primi utilizzi.',
   },
   {
     question: 'Lavorate solo con hotel?',
     answer:
-      'Le soluzioni nascono per il settore alberghiero, ma alcuni flussi sono adatti anche a ristoranti e altre strutture ricettive.',
+      'Nascono per l’alberghiero, ma comande, cantina e altri flussi valgono anche per ristoranti e strutture ricettive.',
   },
 ];
 ---
@@ -70,12 +70,9 @@ const FAQS = [
         ></div>
 
         <div class="relative z-10">
-          <p
-            class="inline-flex items-center gap-2.5 text-base font-medium text-neutral-400"
-            data-page-enter="eyebrow"
-          >
+          <p class="eyebrow text-neutral-400" data-page-enter="eyebrow">
             <span
-              class="size-2 rounded-[2px] bg-brand-400"
+              class="size-1.5 rounded-[2px] bg-brand-400"
               aria-hidden="true"
             ></span>
             Scrivici
@@ -94,8 +91,8 @@ const FAQS = [
             class="mt-4 max-w-2xl text-base leading-relaxed text-neutral-300 sm:text-lg"
             data-page-enter="copy"
           >
-            Compila i campi e prepareremo un’email con le tue risposte. Potrai
-            rileggerla e aggiungere quello che vuoi prima di inviarla.
+            Compila i tre campi: si apre una email con le tue risposte, che puoi
+            modificare prima di inviare.
           </p>
 
           <div class="mt-9 grid gap-8 lg:grid-cols-12 lg:gap-10">
@@ -117,7 +114,7 @@ const FAQS = [
                   name="problema"
                   rows="4"
                   required
-                  placeholder="Per esempio: le comande passano ancora su fogli e spesso arrivano incomplete in cucina…"
+                  placeholder="Es. le comande sono ancora su fogli e in cucina arrivano incomplete…"
                   class="w-full resize-y rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-base text-white placeholder:text-neutral-500 transition-colors hover:border-white/25 focus:border-brand-300 focus:outline-none"
                 ></textarea>
               </div>
@@ -167,8 +164,7 @@ const FAQS = [
                   <Icon name="arrow-right" class="size-4" />
                 </button>
                 <p class="text-xs leading-relaxed text-neutral-500">
-                  Si aprirà il tuo programma di posta con il messaggio
-                  compilato.
+                  Si apre il programma di posta con il messaggio già compilato.
                 </p>
               </div>
             </form>
@@ -198,7 +194,8 @@ const FAQS = [
                   Telefono e WhatsApp
                 </p>
                 <p class="mt-2 text-sm leading-relaxed text-neutral-300">
-                  Richiedi via email il nostro contatto diretto.
+                  Scrivici a info@seasonsjob.it e ti passiamo il contatto
+                  diretto.
                 </p>
               </div>
             </aside>
@@ -226,9 +223,9 @@ const FAQS = [
       const subject = 'Parliamo della mia struttura';
       const body = [
         'Ciao SeasonsJob,',
-        `La difficoltà principale:\n${problem}`,
-        `Le persone e i reparti coinvolti:\n${departments}`,
-        `Quando vorremmo partire:\n${start}`,
+        `Difficoltà principale:\n${problem}`,
+        `Chi è coinvolto:\n${departments}`,
+        `Quando vorreste partire:\n${start}`,
       ].join('\n\n');
 
       window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -243,18 +240,18 @@ const FAQS = [
         <div class="lg:col-span-4" data-reveal>
           <p class="eyebrow">
             <span
-              class="size-2 rounded-[2px] bg-brand-500"
+              class="size-1.5 rounded-[2px] bg-brand-500"
               aria-hidden="true"
-            ></span>
+            />
             Prima di scriverci
           </p>
           <h2
             id="dopo-title"
             class="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.35rem]"
           >
-            Qualche risposta{' '}
+            Domande{' '}
             <em class="font-display font-normal text-brand-700 italic">
-              utile
+              frequenti
             </em>
           </h2>
           <a

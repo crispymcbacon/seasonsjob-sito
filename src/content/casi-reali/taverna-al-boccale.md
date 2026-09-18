@@ -1,10 +1,9 @@
 ---
 title: 'Inventario della cantina e assistenza AI sul vino'
 summary: >-
-  Taverna Al Boccale utilizza SeasonsJob Wine per organizzare l’inventario e
-  sapere quali bottiglie sono presenti in cantina. Grazie all’AI, il personale
-  può scansionare un vino e verificare se è presente, oltre a fare domande
-  sulle caratteristiche e sulla disponibilità delle bottiglie.
+  Taverna Al Boccale tiene l’inventario della cantina con SeasonsJob Wine.
+  Il personale scansiona una bottiglia per vedere se c’è e chiede all’AI
+  dettagli o disponibilità.
 facility: 'Taverna Al Boccale'
 facilityType: 'Ristorante & Taverna · 120 coperti · Birre artigianali & Cantina'
 logo: '/images/clients/taverna-al-boccale.webp'
@@ -14,32 +13,80 @@ imageAlt: 'Sala interna della Taverna Al Boccale'
 imageWidth: 550
 imageHeight: 309
 badge: 'Wine & AI'
-impact: 'Ogni bottiglia sotto controllo, dall’inventario alle domande sul vino'
+impact: 'Cantina sotto controllo e risposte al tavolo in pochi secondi'
 modules:
   - 'SeasonsJob Wine'
   - 'Inventario bottiglie'
   - 'Scansione e AI'
+stats:
+  - value: '450'
+    label: 'Bottiglie registrate in cantina (dato dimostrativo)'
+  - value: '30 sec'
+    label: 'Tempo stimato per verificare una bottiglia al tavolo (dato dimostrativo)'
+  - value: '120'
+    label: 'Coperti serviti con carta dei vini aggiornata (dato dimostrativo)'
+steps:
+  - title: 'Scansione in cantina'
+    text: >-
+      Le bottiglie vengono registrate scansionando l'etichetta: la cantina
+      diventa un inventario sempre aggiornato (scenario dimostrativo).
+  - title: 'Verifica al tavolo'
+    text: >-
+      Il personale controlla in pochi secondi se un vino è disponibile, senza
+      scendere in cantina nel pieno del servizio (scenario dimostrativo).
+  - title: 'Consiglio assistito'
+    text: >-
+      Grazie all'AI si possono chiedere caratteristiche e abbinamenti per
+      consigliare il vino giusto al cliente (scenario dimostrativo).
+quote: >-
+  Adesso so sempre cosa abbiamo in cantina senza doverci scendere. E quando un
+  cliente chiede un consiglio, ho la risposta in mano.
+quoteAuthor: 'Giulia Verdi'
+quoteRole: 'Responsabile di sala (nominativo dimostrativo)'
 order: 3
 ---
 
-<!-- Contenuto placeholder: il racconto definitivo del caso verrà scritto con la struttura. -->
+<!-- Contenuto dimostrativo: numeri, nomi e citazioni sono inventati come placeholder in attesa dei dati reali della struttura. -->
 
 ## Il contesto
 
-Un ristorante e taverna da 120 coperti, con una cantina ampia di vini e birre
-artigianali. L'inventario era tenuto su fogli sparsi: sapere se una bottiglia
-fosse davvero disponibile richiedeva ogni volta un controllo fisico in
-cantina, anche nel pieno del servizio.
+> Dati dimostrativi: un ristorante e taverna da 120 coperti, con una cantina
+> di vini e birre artigianali gestita finora su fogli sparsi.
+
+Per sapere se una bottiglia c'era davvero bisognava scendere in cantina,
+anche nel pieno del servizio. Nei weekend pieni
+capitava di proporre un vino e scoprire al momento di prenderlo che l'ultima
+bottiglia era già stata servita: imbarazzo al tavolo e tempo perso a cercare
+un'alternativa.
+
+La titolare voleva una cantina ordinata una volta per tutte, e uno strumento
+che aiutasse anche il personale più giovane a rispondere alle domande dei
+clienti sui vini.
 
 ## La soluzione
 
-Con SeasonsJob Wine la cantina è diventata un inventario digitale: ogni
-bottiglia è registrata e aggiornata. Grazie all'AI il personale può scansionare
-un'etichetta per verificare la disponibilità e fare domande sulle
-caratteristiche dei vini, anche al tavolo con il cliente.
+Con **SeasonsJob Wine** la cantina è un inventario digitale: ogni bottiglia
+registrata e aggiornata. Il personale scansiona un'etichetta per vedere se il
+vino c'è e chiede all'AI caratteristiche e disponibilità, anche al tavolo.
+
+Il lavoro in cantina si è organizzato così:
+
+1. **Carico iniziale guidato:** scaffale per scaffale, ogni bottiglia è
+   stata registrata con quantità e posizione.
+2. **Aggiornamento durante il servizio:** ogni bottiglia stappata scala
+   subito dall'inventario, senza fogli da aggiornare a fine serata.
+3. **AI al tavolo:** il personale chiede caratteristiche, annate e
+   disponibilità direttamente dal telefono, davanti al cliente.
+
+La carta dei vini rispecchia la cantina reale, e il personale propone e
+racconta con più sicurezza.
 
 ## I risultati
 
-- Ogni bottiglia sotto controllo, dall'inventario al servizio
+- Inventario aggiornato a ogni bottiglia stappata
 - Risposte immediate sulle disponibilità, senza scendere in cantina
 - Un aiuto concreto per consigliare i vini ai clienti
+
+> Nota: i numeri in questa pagina sono dimostrativi e servono solo a mostrare
+> il formato del caso completo. Verranno sostituiti con i dati reali
+> concordati con la struttura.

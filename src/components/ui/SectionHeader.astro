@@ -1,5 +1,6 @@
 ---
 interface Props {
+  /** Compact label above the heading: 1–3 words. */
   eyebrow?: string;
   title: string;
   description?: string;
@@ -24,15 +25,10 @@ const Heading = level;
 
 <div class:list={['flex flex-col gap-5', className]}>
   {eyebrow && (
-    <p
-      class:list={[
-        'eyebrow inline-flex items-center gap-2.5 text-lg font-medium text-[#777777]',
-        tone === 'dark' && 'text-neutral-400',
-      ]}
-    >
+    <p class:list={['eyebrow', tone === 'dark' && 'text-neutral-400']}>
       <span
         class:list={[
-          'size-2 rounded-[2px]',
+          'size-1.5 rounded-[2px]',
           tone === 'dark' ? 'bg-brand-400' : 'bg-brand-500',
         ]}
         aria-hidden="true"

@@ -1,16 +1,36 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import PagePlaceholder from '@/components/ui/PagePlaceholder.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { LAVORO_APP } from '@/config/site';
 
 const pageTitle = 'Soluzioni · Lavoro';
+const description =
+  'La piattaforma SeasonsJob Lavoro per il personale stagionale è ora su lavoro.seasonsjob.it.';
 ---
 
-<BaseLayout
-  title={pageTitle}
-  description="Pagina segnaposto per la soluzione Lavoro."
->
-  <PagePlaceholder
-    title={pageTitle}
-    description="Pagina segnaposto per la soluzione Lavoro. I contenuti reali verranno scritti in una fase successiva."
-  />
+<BaseLayout title={pageTitle} description={description}>
+  <section>
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-28">
+      <div class="max-w-2xl">
+        <SectionHeader
+          eyebrow="Piattaforma"
+          level="h1"
+          title="Lavoro si è spostata"
+          description="La piattaforma per strutture e lavoratori stagionali non è più su seasonsjob.it. Da oggi si accede su lavoro.seasonsjob.it. Segnalibri e accessi precedenti vanno aggiornati al nuovo indirizzo."
+        />
+
+        <div class="mt-10 flex flex-wrap gap-3">
+          <Button href={LAVORO_APP.url}>
+            {LAVORO_APP.label}
+            <Icon name="arrow-right" class="size-4" />
+          </Button>
+          <Button href="/contatti/" variant="secondary">
+            Richiedi informazioni
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>

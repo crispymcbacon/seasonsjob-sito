@@ -1,4 +1,5 @@
 ---
+import { LAVORO_APP } from '@/config/site';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 
@@ -67,6 +68,20 @@ import Icon from '@/components/ui/Icon.astro';
             Scopri le soluzioni
           </Button>
         </div>
+        <p
+          class="mt-5 text-sm text-neutral-400"
+          data-reveal
+          data-reveal-delay="1"
+        >
+          Già utente Lavoro?{' '}
+          <a
+            href={LAVORO_APP.url}
+            class="font-medium text-neutral-200 underline decoration-white/25 underline-offset-2 transition-colors hover:text-white"
+          >
+            Accedi sulla nuova piattaforma
+          </a>
+          .
+        </p>
       </div>
     </div>
   </div>

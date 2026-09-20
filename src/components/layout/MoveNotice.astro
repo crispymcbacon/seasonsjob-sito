@@ -1,0 +1,53 @@
+---
+import { LAVORO_APP } from '@/config/site';
+import Icon from '@/components/ui/Icon.astro';
+
+const STORAGE_KEY = 'sj-lavoro-moved-notice';
+---
+
+<div
+  class="move-notice border-b border-brand-200 bg-brand-50"
+  data-move-notice
+  data-storage-key={STORAGE_KEY}
+  role="region"
+  aria-label="Avviso sul trasferimento di Lavoro"
+>
+  <div class="mx-auto flex max-w-6xl items-center gap-2 px-4 py-1.5 sm:px-6">
+    <p class="min-w-0 flex-1 text-[0.75rem] leading-tight text-brand-800 sm:text-[0.8125rem]">
+      <span class="font-medium">Lavoro</span> è ora su{' '}
+      <a
+        href={LAVORO_APP.url}
+        class="font-medium text-brand-700 underline decoration-brand-700/35 underline-offset-2 transition-colors hover:text-brand-600"
+      >
+        lavoro.seasonsjob.it
+      </a>
+    </p>
+    <button
+      type="button"
+      class="inline-flex size-7 shrink-0 items-center justify-center rounded-md text-brand-700 transition-colors hover:bg-brand-100"
+      data-move-notice-dismiss
+      aria-label="Nascondi l’avviso"
+    >
+      <Icon name="x" class="size-3.5" />
+    </button>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-move-notice]');
+  if (root) {
+    const key = root.dataset.storageKey;
+    const hide = () => {
+      root.hidden = true;
+    };
+    if (key && sessionStorage.getItem(key) === '1') {
+      hide();
+    }
+    root
+      .querySelector('[data-move-notice-dismiss]')
+      ?.addEventListener('click', () => {
+        if (key) sessionStorage.setItem(key, '1');
+        hide();
+      });
+  }
+</script>

@@ -32,3 +32,9 @@ export const NAV_LINKS: NavLink[] = [
  * primary action rather than as a fourth destination.
  */
 export const CONTACT_LINK: NavLink = { label: 'Contatti', href: '/contatti/' };
+
+/** Live Lavoro application, now on its own subdomain. */
+export const LAVORO_APP = {
+  url: 'https://lavoro.seasonsjob.it',
+  label: 'Accedi a Lavoro',
+} as const;

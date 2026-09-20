@@ -1,4 +1,5 @@
 ---
+import { LAVORO_APP } from '@/config/site';
 import { SOLUTIONS } from '@/config/solutions';
 import Brand from '@/components/ui/Brand.astro';
 
@@ -8,6 +9,7 @@ const COMPANY_LINKS = [
   { label: 'Chi siamo', href: '/chi-siamo/' },
   { label: 'Casi reali', href: '/casi-reali/' },
   { label: 'Contatti', href: '/contatti/' },
+  { label: LAVORO_APP.label, href: LAVORO_APP.url },
 ];
 
 const linkClass =

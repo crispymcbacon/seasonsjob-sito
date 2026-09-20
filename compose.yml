@@ -8,21 +8,21 @@ services:
     networks:
       - traefik_public
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.seasonsjob-sito-http.rule=Host(`seasonsjob.it`)"
-      - "traefik.http.routers.seasonsjob-sito-http.priority=5"
-      - "traefik.http.routers.seasonsjob-sito-http.entrypoints=websecure"
-      - "traefik.http.routers.seasonsjob-sito-http.tls.certresolver=myresolver"
-      - "traefik.http.services.seasonsjob-sito-http.loadbalancer.server.port=80"
-      - "traefik.http.routers.seasonsjob-sito-www.rule=Host(`www.seasonsjob.it`)"
-      - "traefik.http.routers.seasonsjob-sito-www.priority=5"
-      - "traefik.http.routers.seasonsjob-sito-www.entrypoints=websecure"
-      - "traefik.http.routers.seasonsjob-sito-www.tls.certresolver=myresolver"
-      - "traefik.http.routers.seasonsjob-sito-www.middlewares=seasonsjob-sito-www-redirect"
-      - "traefik.http.routers.seasonsjob-sito-www.service=seasonsjob-sito-http"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.seasonsjob-sito-http.rule=Host(`seasonsjob.it`)'
+      - 'traefik.http.routers.seasonsjob-sito-http.priority=5'
+      - 'traefik.http.routers.seasonsjob-sito-http.entrypoints=websecure'
+      - 'traefik.http.routers.seasonsjob-sito-http.tls.certresolver=myresolver'
+      - 'traefik.http.services.seasonsjob-sito-http.loadbalancer.server.port=80'
+      - 'traefik.http.routers.seasonsjob-sito-www.rule=Host(`www.seasonsjob.it`)'
+      - 'traefik.http.routers.seasonsjob-sito-www.priority=5'
+      - 'traefik.http.routers.seasonsjob-sito-www.entrypoints=websecure'
+      - 'traefik.http.routers.seasonsjob-sito-www.tls.certresolver=myresolver'
+      - 'traefik.http.routers.seasonsjob-sito-www.middlewares=seasonsjob-sito-www-redirect'
+      - 'traefik.http.routers.seasonsjob-sito-www.service=seasonsjob-sito-http'
       - "traefik.http.middlewares.seasonsjob-sito-www-redirect.redirectregex.regex=^https://www\\.seasonsjob\\.it(.*)"
-      - "traefik.http.middlewares.seasonsjob-sito-www-redirect.redirectregex.replacement=https://seasonsjob.it$${1}"
-      - "traefik.http.middlewares.seasonsjob-sito-www-redirect.redirectregex.permanent=true"
+      - 'traefik.http.middlewares.seasonsjob-sito-www-redirect.redirectregex.replacement=https://seasonsjob.it$${1}'
+      - 'traefik.http.middlewares.seasonsjob-sito-www-redirect.redirectregex.permanent=true'
 
 networks:
   traefik_public:

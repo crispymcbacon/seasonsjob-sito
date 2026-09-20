@@ -305,7 +305,13 @@ const structuredData = {
                     </p>
                   )}
 
-                  <div class="mt-7">
+                  <div class="mt-7 flex flex-wrap gap-3">
+                    {solution.appHref && (
+                      <Button href={solution.appHref}>
+                        {`Apri ${solution.name}`}
+                        <Icon name="arrow-right" class="size-4" />
+                      </Button>
+                    )}
                     <Button href={solution.href} variant="secondary">
                       Scopri {solution.name}
                       <Icon name="arrow-right" class="size-4" />

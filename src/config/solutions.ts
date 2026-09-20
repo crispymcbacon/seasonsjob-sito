@@ -5,6 +5,7 @@
  * integrated platform: they are independent tools that can be adopted separately.
  */
 import type { IconName } from '@/components/ui/icon-set';
+import { LAVORO_APP } from '@/config/site';
 
 export interface Solution {
   slug: 'lavoro' | 'comande' | 'procuro' | 'wine';
@@ -17,6 +18,8 @@ export interface Solution {
   /** Short explanation of the problem addressed. */
   description: string;
   href: string;
+  /** Live product origin, when the tool is already reachable online. */
+  appHref?: string;
   icon: IconName;
   /** Set only for products that are not generally available yet. */
   status?: 'in-sviluppo';
@@ -54,6 +57,7 @@ export const SOLUTIONS: Solution[] = [
     description:
       'La piattaforma che mette in contatto strutture ricettive e lavoratori per le stagioni: ricerca, candidature e selezione in un unico flusso.',
     href: '/soluzioni/lavoro/',
+    appHref: LAVORO_APP.url,
     icon: 'users',
   },
   {

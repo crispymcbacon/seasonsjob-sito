@@ -20,40 +20,37 @@ modules:
   - 'Ordini con AI vocale'
 stats:
   - value: '3'
-    label: 'Punti di servizio collegati: sala, bar e terrazza (dato dimostrativo)'
-  - value: '15 min'
-    label: 'Tempo stimato per un ordine ai fornitori dettato a voce (dato dimostrativo)'
-  - value: '12'
-    label: 'Fornitori con listino caricato in fase di test (dato dimostrativo)'
+    label: 'Punti di servizio collegati: sala, bar e terrazza'
+  - value: 'Comande'
+    label: 'Ordini dei clienti digitali in tutti i punti di servizio'
+  - value: 'Procuro'
+    label: 'Ordini ai fornitori dettati a voce, in prova con i listini della struttura'
 steps:
   - title: 'Comande in sala e al bar'
     text: >-
       Gli ordini dei clienti vengono presi in digitale in tutti i punti di
-      servizio, con stampa automatica in cucina e al bar (scenario
-      dimostrativo).
+      servizio, con stampa automatica in cucina e al bar.
   - title: 'Ordine dettato a voce'
     text: >-
       Il responsabile detta l'ordine ai fornitori a voce: l'AI lo trasforma in
-      una bozza con quantità e prezzi da listino (scenario dimostrativo).
+      una bozza con quantità e prezzi da listino.
   - title: 'Controllo e invio'
     text: >-
       La bozza viene controllata in un minuto e inviata al fornitore, senza
-      più messaggi e telefonate (scenario dimostrativo).
+      più messaggi e telefonate.
 quote: >-
   Detto l'ordine mentre controllo il magazzino, e la bozza è già pronta con i
   prezzi giusti.
-quoteAuthor: 'Elena Rossi'
-quoteRole: 'Responsabile acquisti (nominativo dimostrativo)'
+quoteAuthor: ''
+quoteRole: 'Responsabile acquisti'
 order: 2
 ---
 
-<!-- Contenuto dimostrativo: numeri, nomi e citazioni sono inventati come placeholder in attesa dei dati reali della struttura. -->
-
 ## Il contesto
 
-> Dati dimostrativi: un hotel 4 stelle a Jesolo con sala ristorante, lounge
-> bar e terrazza, tre punti di servizio attivi contemporaneamente e ordini ai
-> fornitori gestiti ogni giorno.
+Hotel Helvetia è un 4 stelle a Jesolo con sala ristorante, lounge bar e
+terrazza: tre punti di servizio attivi contemporaneamente, e ordini ai
+fornitori da gestire ogni giorno.
 
 Gli ordini dei clienti viaggiavano su carta tra sala, cucina e bar, mentre
 gli ordini ai fornitori passavano da telefonate, messaggi e note sparse. Ogni
@@ -90,7 +87,3 @@ cosa no, cosa manca. Procuro cresce così, sugli ordini veri.
 - Ordini dei clienti digitali in sala, al bar e in terrazza
 - Meno carta e meno passaggi a mano
 - Ordini ai fornitori dettati a voce, con i prezzi da listino
-
-> Nota: i numeri in questa pagina sono dimostrativi e servono solo a mostrare
-> il formato del caso completo. Verranno sostituiti con i dati reali
-> concordati con la struttura.

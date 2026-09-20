@@ -19,40 +19,37 @@ modules:
   - 'Ordini clienti digitali'
   - 'Stampa e taglio automatici'
 stats:
-  - value: '320'
-    label: 'Coperti serviti ogni giorno in alta stagione (dato dimostrativo)'
-  - value: '−40%'
-    label: 'Tempo stimato tra presa ordine e cucina (dato dimostrativo)'
   - value: '2'
-    label: 'Hotel coperti dallo stesso sistema (dato dimostrativo)'
+    label: 'Hotel coperti dallo stesso sistema'
+  - value: 'Al tavolo'
+    label: 'Ordini presi su smartphone o tablet, senza foglietti da ricopiare'
+  - value: 'Al pass'
+    label: 'Ogni comanda stampata e tagliata in automatico'
 steps:
   - title: 'Ordine al tavolo'
     text: >-
       Il cameriere prende l'ordine direttamente al tavolo da smartphone o
-      tablet, senza più foglietti da trascrivere (scenario dimostrativo).
+      tablet, senza più foglietti da trascrivere.
   - title: 'Stampa automatica in cucina'
     text: >-
       Ogni comanda arriva al pass già formattata: la stampante dedicata la
-      stampa e la taglia da sola, pronta da lavorare (scenario dimostrativo).
+      stampa e la taglia da sola, pronta da lavorare.
   - title: 'Servizio senza interruzioni'
     text: >-
       Sala e cucina restano sincronizzate anche nei picchi di colazioni e cene,
-      senza corse avanti e indietro (scenario dimostrativo).
+      senza corse avanti e indietro.
 quote: >-
   Prima riscrivevamo ogni comanda a mano, adesso l'ordine arriva in cucina da
   solo. Nelle sere piene la differenza si sente tantissimo.
-quoteAuthor: 'Marco Bianchi'
-quoteRole: 'Direttore di sala (nominativo dimostrativo)'
+quoteAuthor: ''
+quoteRole: 'Direzione di sala'
 order: 1
 ---
 
-<!-- Contenuto dimostrativo: numeri, nomi e citazioni sono inventati come placeholder in attesa dei dati reali della struttura. -->
-
 ## Il contesto
 
-> Dati dimostrativi: Hotel Palace e Hotel Danieli, due hotel sul lungomare di
-> Bibione, servono ogni giorno centinaia di ospiti tra sala colazioni,
-> ristorante e servizio al tavolo.
+Hotel Palace e Hotel Danieli, due hotel sul lungomare di Bibione, servono
+ogni giorno gli ospiti tra sala colazioni, ristorante e servizio al tavolo.
 
 Le comande si scrivevano a mano in sala e si ricopiavano per la cucina. Nei
 momenti pieni arrivavano errori di trascrizione, attese e piatti sbagliati. Nelle sere di agosto, con
@@ -90,7 +87,3 @@ anche per chi non conosce ancora il menu a memoria.
 - Niente più riscrittura delle comande a mano
 - Meno errori di trascrizione tra sala e cucina
 - Servizio più veloce nei momenti di massima affluenza
-
-> Nota: i numeri in questa pagina sono dimostrativi e servono solo a mostrare
-> il formato del caso completo. Verranno sostituiti con i dati reali
-> concordati con la struttura.

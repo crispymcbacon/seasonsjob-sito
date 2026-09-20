@@ -19,39 +19,37 @@ modules:
   - 'Inventario bottiglie'
   - 'Scansione e AI'
 stats:
-  - value: '450'
-    label: 'Bottiglie registrate in cantina (dato dimostrativo)'
-  - value: '30 sec'
-    label: 'Tempo stimato per verificare una bottiglia al tavolo (dato dimostrativo)'
   - value: '120'
-    label: 'Coperti serviti con carta dei vini aggiornata (dato dimostrativo)'
+    label: 'Coperti, con carta dei vini allineata alla cantina'
+  - value: 'Inventario'
+    label: 'Ogni bottiglia registrata e aggiornata a ogni stappatura'
+  - value: 'AI'
+    label: 'Caratteristiche e disponibilità consultabili al tavolo'
 steps:
   - title: 'Scansione in cantina'
     text: >-
       Le bottiglie vengono registrate scansionando l'etichetta: la cantina
-      diventa un inventario sempre aggiornato (scenario dimostrativo).
+      diventa un inventario sempre aggiornato.
   - title: 'Verifica al tavolo'
     text: >-
       Il personale controlla in pochi secondi se un vino è disponibile, senza
-      scendere in cantina nel pieno del servizio (scenario dimostrativo).
+      scendere in cantina nel pieno del servizio.
   - title: 'Consiglio assistito'
     text: >-
       Grazie all'AI si possono chiedere caratteristiche e abbinamenti per
-      consigliare il vino giusto al cliente (scenario dimostrativo).
+      consigliare il vino giusto al cliente.
 quote: >-
   Adesso so sempre cosa abbiamo in cantina senza doverci scendere. E quando un
   cliente chiede un consiglio, ho la risposta in mano.
-quoteAuthor: 'Giulia Verdi'
-quoteRole: 'Responsabile di sala (nominativo dimostrativo)'
+quoteAuthor: ''
+quoteRole: 'Responsabile di sala'
 order: 3
 ---
 
-<!-- Contenuto dimostrativo: numeri, nomi e citazioni sono inventati come placeholder in attesa dei dati reali della struttura. -->
-
 ## Il contesto
 
-> Dati dimostrativi: un ristorante e taverna da 120 coperti, con una cantina
-> di vini e birre artigianali gestita finora su fogli sparsi.
+Taverna Al Boccale è un ristorante e taverna da 120 coperti, con una cantina
+di vini e birre artigianali.
 
 Per sapere se una bottiglia c'era davvero bisognava scendere in cantina,
 anche nel pieno del servizio. Nei weekend pieni
@@ -86,7 +84,3 @@ racconta con più sicurezza.
 - Inventario aggiornato a ogni bottiglia stappata
 - Risposte immediate sulle disponibilità, senza scendere in cantina
 - Un aiuto concreto per consigliare i vini ai clienti
-
-> Nota: i numeri in questa pagina sono dimostrativi e servono solo a mostrare
-> il formato del caso completo. Verranno sostituiti con i dati reali
-> concordati con la struttura.

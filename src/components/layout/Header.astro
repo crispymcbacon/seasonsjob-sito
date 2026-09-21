@@ -18,13 +18,12 @@ const { links = NAV_LINKS } = Astro.props;
 
     <div class="hidden items-center gap-6 md:flex">
       <SiteNav links={links} />
-      <a
-        href={LAVORO_APP.url}
-        class="inline-flex min-h-10 items-center text-[0.9375rem] font-medium text-neutral-600 transition-colors hover:text-ink"
-      >
-        {LAVORO_APP.label}
-      </a>
-      <Button href={CONTACT_LINK.href}>{CONTACT_LINK.label}</Button>
+      <div class="flex items-center gap-2.5">
+        <Button href={LAVORO_APP.url} variant="secondary">
+          {LAVORO_APP.label}
+        </Button>
+        <Button href={CONTACT_LINK.href}>{CONTACT_LINK.label}</Button>
+      </div>
     </div>
 
     <details class="group md:hidden">

@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
+import SolutionsTabs from '@/components/sections/SolutionsTabs.astro';
 import { SITE } from '@/config/site';
 import { SOLUTIONS } from '@/config/solutions';
 
@@ -9,7 +10,7 @@ const title = 'Soluzioni digitali per hotel e ristoranti';
 const description =
   'Scopri le soluzioni SeasonsJob per il settore alberghiero: personale stagionale, comande digitali, acquisti e gestione della cantina.';
 
-// Placeholder copy: benefits and interface data will be refined with the final product content.
+// Placeholder copy: benefits will be refined with the final product content.
 const DETAILS = {
   lavoro: {
     number: '03',
@@ -20,9 +21,6 @@ const DETAILS = {
       'Candidature raccolte in un unico spazio',
       'Contatto diretto con i candidati',
     ],
-    metric: '24',
-    metricLabel: 'nuovi candidati',
-    note: 'Ultimi 7 giorni',
   },
   comande: {
     number: '01',
@@ -33,9 +31,6 @@ const DETAILS = {
       'Modifiche e note sempre tracciate',
       'Meno passaggi manuali durante il servizio',
     ],
-    metric: '38',
-    metricLabel: 'comande inviate',
-    note: 'Servizio cena',
   },
   procuro: {
     number: '04',
@@ -46,9 +41,6 @@ const DETAILS = {
       'Ordini condivisi tra i reparti',
       'Ricezione e difformità registrate',
     ],
-    metric: '5',
-    metricLabel: 'consegne previste',
-    note: '3 già ricevute',
   },
   wine: {
     number: '02',
@@ -59,9 +51,6 @@ const DETAILS = {
       'Movimenti registrati al momento',
       'Scorte e riordini sotto controllo',
     ],
-    metric: '428',
-    metricLabel: 'etichette in cantina',
-    note: 'Inventario aggiornato',
   },
 } as const;
 
@@ -321,99 +310,10 @@ const structuredData = {
 
                 <div
                   class:list={['lg:col-span-7', visualFirst && 'lg:order-1']}
-                  aria-hidden="true"
                   data-reveal={visualFirst ? 'left' : 'right'}
                   data-reveal-delay="1"
                 >
-                  <div class="relative overflow-hidden rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-[0_12px_40px_rgba(0,0,0,0.045)] sm:p-6">
-                    <div class="pointer-events-none absolute -top-24 -right-24 size-64 rounded-full bg-brand-100/50 blur-3xl"></div>
-                    <div class="relative overflow-hidden rounded-xl border border-neutral-200/90 bg-[#f8faf9]">
-                      <div class="flex items-center justify-between border-b border-neutral-200/80 bg-white px-4 py-3 sm:px-5">
-                        <div class="flex items-center gap-2">
-                          <span class="size-2 rounded-full bg-brand-500"></span>
-                          <span class="text-xs font-semibold text-neutral-700">
-                            SeasonsJob {solution.name}
-                          </span>
-                        </div>
-                        <div class="flex gap-1.5">
-                          <span class="size-1.5 rounded-full bg-neutral-200"></span>
-                          <span class="size-1.5 rounded-full bg-neutral-200"></span>
-                          <span class="size-1.5 rounded-full bg-neutral-200"></span>
-                        </div>
-                      </div>
-
-                      <div class="grid min-h-[330px] gap-4 p-4 sm:min-h-[370px] sm:grid-cols-5 sm:p-6">
-                        <div class="flex flex-col justify-between rounded-xl bg-night p-5 text-white sm:col-span-2">
-                          <div>
-                            <span class="text-[0.6875rem] font-semibold tracking-[0.12em] text-brand-300 uppercase">
-                              {detail.note}
-                            </span>
-                            <p class="mt-5 font-display text-[2.5rem] leading-none font-bold">
-                              {detail.metric}
-                            </p>
-                            <p class="mt-2 text-sm leading-snug text-neutral-300">
-                              {detail.metricLabel}
-                            </p>
-                          </div>
-                          <div class="mt-8 flex items-end gap-1">
-                            {[38, 54, 46, 70, 58, 82, 74].map(
-                              (height, barIndex) => (
-                                <span
-                                  class:list={[
-                                    'flex-1 rounded-sm',
-                                    barIndex === 5
-                                      ? 'bg-brand-400'
-                                      : 'bg-white/15',
-                                  ]}
-                                  style={`height:${height}px`}
-                                ></span>
-                              ),
-                            )}
-                          </div>
-                        </div>
-
-                        <div class="space-y-3 sm:col-span-3">
-                          <div class="flex items-center justify-between px-1">
-                            <p class="text-xs font-semibold text-neutral-800">
-                              Attività recenti
-                            </p>
-                            <span class="text-[0.6875rem] text-neutral-400">
-                              Oggi
-                            </span>
-                          </div>
-                          {detail.benefits.map((benefit, benefitIndex) => (
-                            <div class="flex items-center gap-3 rounded-xl border border-neutral-200/80 bg-white p-3.5 shadow-xs">
-                              <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-xs font-bold text-brand-700">
-                                {String(benefitIndex + 1).padStart(2, '0')}
-                              </span>
-                              <div class="min-w-0 flex-1">
-                                <p class="truncate text-xs font-semibold text-neutral-800">
-                                  {benefit}
-                                </p>
-                                <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-100">
-                                  <div
-                                    class="h-full rounded-full bg-brand-500/70"
-                                    style={`width:${[78, 58, 88][benefitIndex]}%`}
-                                  ></div>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                          <div class="rounded-xl border border-dashed border-neutral-200 bg-white/60 p-4">
-                            <div class="flex items-center justify-between">
-                              <span class="text-[0.6875rem] font-medium text-neutral-400">
-                                Aggiornamento automatico
-                              </span>
-                              <span class="inline-flex items-center gap-1 text-[0.6875rem] font-semibold text-brand-700">
-                                <span class="size-1.5 rounded-full bg-brand-500"></span>
-                                Attivo
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <SolutionsTabs only={solution.slug} />
                 </div>
               </div>
             </article>

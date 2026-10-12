@@ -10,50 +10,6 @@ const title = 'Soluzioni digitali per hotel e ristoranti';
 const description =
   'Scopri le soluzioni SeasonsJob per il settore alberghiero: personale stagionale, comande digitali, acquisti e gestione della cantina.';
 
-// Placeholder copy: benefits will be refined with the final product content.
-const DETAILS = {
-  lavoro: {
-    number: '03',
-    intro:
-      'Dalla ricerca alla selezione, per mettere insieme la squadra della prossima stagione.',
-    benefits: [
-      'Profili pensati per il lavoro stagionale',
-      'Candidature raccolte in un unico spazio',
-      'Contatto diretto con i candidati',
-    ],
-  },
-  comande: {
-    number: '01',
-    intro:
-      'Reception, sala e cucina lavorano sulla stessa comanda, aggiornata appena l’ospite ordina.',
-    benefits: [
-      'Comande leggibili da ogni reparto',
-      'Modifiche e note sempre tracciate',
-      'Meno passaggi manuali durante il servizio',
-    ],
-  },
-  procuro: {
-    number: '04',
-    intro:
-      'Un flusso ordinato per preparare gli acquisti, confrontare i fornitori e sapere cosa deve ancora arrivare.',
-    benefits: [
-      'Listini e fornitori organizzati',
-      'Ordini condivisi tra i reparti',
-      'Ricezione e difformità registrate',
-    ],
-  },
-  wine: {
-    number: '02',
-    intro:
-      'Dalle giacenze alla posizione di ogni bottiglia, senza fogli da rincorrere.',
-    benefits: [
-      'Etichette e annate facili da trovare',
-      'Movimenti registrati al momento',
-      'Scorte e riordini sotto controllo',
-    ],
-  },
-} as const;
-
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -216,7 +172,6 @@ const structuredData = {
 
       <div class="mt-14 divide-y divide-neutral-200/90 border-y border-neutral-200/90">
         {SOLUTIONS.map((solution, index) => {
-          const detail = DETAILS[solution.slug];
           const visualFirst = index % 2 !== 0;
 
           return (
@@ -231,7 +186,9 @@ const structuredData = {
                   data-reveal={visualFirst ? 'right' : 'left'}
                 >
                   <div class="flex items-center gap-3 text-xs font-semibold tracking-[0.13em] uppercase">
-                    <span class="text-neutral-400">{detail.number}</span>
+                    <span class="text-neutral-400">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
                     <span
                       class="h-px w-8 bg-neutral-300"
                       aria-hidden="true"
@@ -260,11 +217,11 @@ const structuredData = {
                     {solution.tagline}
                   </p>
                   <p class="mt-3 text-base leading-relaxed text-neutral-600 sm:text-lg">
-                    {detail.intro}
+                    {solution.intro}
                   </p>
 
                   <ul class="mt-6 space-y-3">
-                    {detail.benefits.map((benefit) => (
+                    {solution.benefits.map((benefit) => (
                       <li class="flex items-start gap-3 text-[0.9375rem] text-neutral-700">
                         <span class="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-brand-50 text-brand-700">
                           <svg

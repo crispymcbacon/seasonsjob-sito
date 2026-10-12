@@ -1,0 +1,205 @@
+---
+/*
+  Shared layout for the individual product pages (/soluzioni/<slug>/).
+  Copy comes from SOLUTIONS so the overview and product pages stay in sync.
+  The default slot renders an optional notice under the hero actions.
+*/
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import ContactCta from '@/components/sections/ContactCta.astro';
+import SolutionsTabs from '@/components/sections/SolutionsTabs.astro';
+import { SITE } from '@/config/site';
+import { SOLUTIONS, type Solution } from '@/config/solutions';
+
+interface Props {
+  slug: Solution['slug'];
+  /** Overrides the default meta description. */
+  description?: string;
+}
+
+const { slug, description } = Astro.props;
+const solution = SOLUTIONS.find((item) => item.slug === slug)!;
+const others = SOLUTIONS.filter((item) => item.slug !== slug);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: `SeasonsJob ${solution.name}`,
+  applicationCategory: 'BusinessApplication',
+  description: solution.description,
+  url: new URL(solution.href, SITE.url).href,
+};
+---
+
+<BaseLayout
+  title={`SeasonsJob ${solution.name}: ${solution.tagline}`}
+  description={description ?? solution.description}
+  canonical={solution.href}
+>
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify(structuredData)}
+  ></script>
+  <section class="page-hero" aria-labelledby="page-title">
+    <div class="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:py-28">
+      <a
+        href="/soluzioni/"
+        class="eyebrow transition-colors hover:text-brand-700"
+        data-page-enter="eyebrow"
+      >
+        <span
+          class="size-1.5 rounded-[2px] bg-brand-500"
+          aria-hidden="true"
+        ></span>
+        Soluzioni · {solution.area}
+      </a>
+      <h1
+        id="page-title"
+        class="mt-5 text-[clamp(2.2rem,4.5vw,3.5rem)] leading-[1.15] tracking-[-0.035em] text-ink"
+        data-page-enter="title"
+      >
+        SeasonsJob{' '}
+        <em class="font-normal text-brand-700 italic">{solution.name}</em>
+      </h1>
+      <p
+        class="mx-auto mt-5 text-xl font-semibold leading-snug text-ink"
+        data-page-enter="copy"
+      >
+        {solution.tagline}
+      </p>
+      <p
+        class="mx-auto mt-3 max-w-2xl text-lg leading-relaxed text-[#626765]"
+        data-page-enter="copy"
+      >
+        {solution.description}
+      </p>
+
+      {solution.statusNote && (
+        <p class="mx-auto mt-6 inline-flex items-center gap-2 rounded-lg border border-brand-100 bg-brand-50/70 px-3 py-2 text-sm font-medium text-brand-900">
+          <span class="size-2 rounded-full bg-brand-500" />
+          {solution.statusNote}
+        </p>
+      )}
+
+      <div
+        class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
+        data-page-enter="actions"
+      >
+        {solution.appHref && (
+          <Button href={solution.appHref} size="lg">
+            {`Apri ${solution.name}`}
+            <Icon name="arrow-right" class="size-4" />
+          </Button>
+        )}
+        <Button
+          href="/contatti/"
+          variant={solution.appHref ? 'secondary' : 'primary'}
+          size="lg"
+        >
+          Richiedi informazioni
+          {!solution.appHref && <Icon name="arrow-right" class="size-4" />}
+        </Button>
+      </div>
+
+      <slot />
+    </div>
+  </section>
+
+  <section
+    class="border-b border-neutral-200/80 bg-neutral-50"
+    aria-labelledby="dettagli-title"
+  >
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+      <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-5" data-reveal="left">
+          <p class="eyebrow" data-reveal="fade">
+            <span
+              class="size-1.5 rounded-[2px] bg-brand-500"
+              aria-hidden="true"
+            ></span>
+            Nel quotidiano
+          </p>
+          <h2
+            id="dettagli-title"
+            class="font-display mt-4 text-[1.75rem] leading-[1.2] text-ink sm:text-[2rem]"
+          >
+            {solution.intro}
+          </h2>
+
+          <ul class="mt-7 space-y-3">
+            {solution.benefits.map((benefit) => (
+              <li class="flex items-start gap-3 text-[0.9375rem] text-neutral-700">
+                <span class="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-brand-50 text-brand-700">
+                  <svg
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    class="size-3"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="m5 10 3 3 7-7"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                {benefit}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="lg:col-span-7" data-reveal="right" data-reveal-delay="1">
+          <SolutionsTabs only={solution.slug} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white" aria-labelledby="altre-title">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+      <h2
+        id="altre-title"
+        class="font-display text-[1.75rem] leading-[1.15] text-ink sm:text-[2rem]"
+        data-reveal="title"
+      >
+        Le altre{' '}
+        <em class="font-display font-normal text-brand-700 italic">
+          soluzioni
+        </em>
+      </h2>
+
+      <ul class="mt-10 grid gap-px overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-200/90 md:grid-cols-3">
+        {others.map((item) => (
+          <li class="group relative bg-white p-6 transition-colors hover:bg-neutral-50 sm:p-7">
+            <span class="grid size-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
+              <Icon name={item.icon} class="size-5" />
+            </span>
+            <p class="mt-5 text-xs font-semibold tracking-[0.12em] text-brand-700 uppercase">
+              {item.area}
+            </p>
+            <h3 class="mt-1 text-xl text-ink">
+              <a href={item.href} class="after:absolute after:inset-0">
+                {item.name}
+              </a>
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-600">
+              {item.tagline}
+            </p>
+            <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-700 transition-colors group-hover:text-brand-700">
+              Scopri {item.name}
+              <Icon name="arrow-right" class="size-3.5" />
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <ContactCta />
+</BaseLayout>

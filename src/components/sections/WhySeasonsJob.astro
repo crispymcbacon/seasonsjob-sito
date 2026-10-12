@@ -71,7 +71,7 @@
               </div>
 
               {/* Incoming request bubble */}
-              <div class="rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-sm">
+              <div class="why-msg rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-xs text-neutral-800 shadow-sm">
                 <p class="font-medium leading-snug">
                   Tavolo 14: 2 risotti alla zucca senza glutine e anticipo
                   secondi
@@ -79,7 +79,7 @@
               </div>
 
               {/* System action confirmation */}
-              <div class="rounded-xl border border-brand-500/30 bg-brand-50 p-3 text-[0.75rem] text-brand-800">
+              <div class="why-confirm rounded-xl border border-brand-500/30 bg-brand-50 p-3 text-[0.75rem] text-brand-800">
                 <p class="flex items-center gap-1.5 font-semibold text-brand-700">
                   <svg
                     class="size-3.5 shrink-0 text-brand-600"
@@ -119,7 +119,7 @@
           <div class="relative mb-8 flex min-h-[170px] items-center justify-center overflow-hidden rounded-xl border border-neutral-200/80 bg-neutral-50 p-4">
             <div class="relative flex items-center justify-center">
               {/* Document 1: HACCP */}
-              <div class="relative z-0 -mr-4 -rotate-6 rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+              <div class="why-float relative z-0 -mr-4 -rotate-6 rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
                 <span class="block text-xs font-bold tracking-wider text-rose-600 uppercase">
                   HACCP
                 </span>
@@ -129,7 +129,7 @@
               </div>
 
               {/* Document 2: Turni */}
-              <div class="relative z-10 rotate-3 rounded-xl border border-brand-500/40 bg-brand-50 p-4 shadow-md">
+              <div class="why-float relative z-10 rotate-3 [animation-delay:-1.3s] rounded-xl border border-brand-500/40 bg-brand-50 p-4 shadow-md">
                 <span class="block text-xs font-bold tracking-wider text-brand-600 uppercase">
                   CCNL
                 </span>
@@ -139,7 +139,7 @@
               </div>
 
               {/* Document 3: Cantina */}
-              <div class="relative z-0 -ml-4 rotate-12 rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+              <div class="why-float relative z-0 -ml-4 rotate-12 [animation-delay:-2.6s] rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
                 <span class="block text-xs font-bold tracking-wider text-amber-600 uppercase">
                   WINE
                 </span>
@@ -243,21 +243,21 @@
             </div>
 
             {/* Connecting dashed line */}
-            <div class="h-5 w-px border-l-2 border-dashed border-neutral-300"></div>
+            <div class="why-flow-y h-5 w-0.5"></div>
 
             {/* Central node cluster */}
             <div class="flex items-center gap-3">
-              <span class="grid size-9 place-items-center rounded-xl bg-brand-500 text-xs font-bold text-white shadow-sm">
+              <span class="why-glow grid size-9 place-items-center rounded-xl bg-brand-500 text-xs font-bold text-white shadow-sm">
                 S
               </span>
-              <span class="h-px w-4 border-t-2 border-dashed border-neutral-300"></span>
+              <span class="why-flow-x h-0.5 w-4"></span>
               <span class="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[0.6875rem] font-medium text-neutral-600 shadow-xs">
                 <span>Scarico bottiglie</span>
               </span>
             </div>
 
             {/* Connecting dashed line */}
-            <div class="h-5 w-px border-l-2 border-dashed border-neutral-300"></div>
+            <div class="why-flow-y h-5 w-0.5"></div>
 
             {/* Bottom action pill */}
             <div class="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-800 shadow-xs">
@@ -301,6 +301,10 @@
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
               <span>Cerca comanda, turno o fornitore...</span>
+              <span
+                class="why-caret -ml-1.5 h-3.5 w-px bg-neutral-800"
+                aria-hidden="true"
+              ></span>
             </div>
 
             {/* Floating Tags */}
@@ -308,7 +312,7 @@
               <span class="rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[0.6875rem] font-medium text-neutral-600 shadow-xs">
                 Turno Sous Chef (Venerdì)
               </span>
-              <span class="rounded-full border border-brand-500/40 bg-brand-50 px-2.5 py-1 text-[0.6875rem] font-medium text-brand-700 shadow-xs">
+              <span class="why-glow rounded-full border border-brand-500/40 bg-brand-50 px-2.5 py-1 text-[0.6875rem] font-medium text-brand-700 shadow-xs">
                 Tavolo 14 · Sala Veranda
               </span>
               <span class="rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[0.6875rem] font-medium text-neutral-600 shadow-xs">
@@ -368,6 +372,8 @@
                 />
                 <path
                   d="M 0 50 Q 50 45 100 25 T 200 5"
+                  pathLength="1"
+                  class="why-draw"
                   stroke="#078660"
                   stroke-width="2.5"
                   stroke-linecap="round"
@@ -396,3 +402,112 @@
     </div>
   </div>
 </section>
+
+<style>
+  /* Ambient card loops on small elements, disabled under reduced motion */
+  .why-flow-y,
+  .why-flow-x {
+    background: repeating-linear-gradient(
+      var(--dir, 180deg),
+      var(--color-neutral-300) 0 4px,
+      transparent 4px 8px
+    );
+    background-size: 100% 16px;
+  }
+  .why-flow-x {
+    --dir: 90deg;
+    background-size: 16px 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .why-msg {
+      animation: why-msg 6s ease-out infinite;
+    }
+    .why-confirm {
+      animation: why-confirm 6s ease-out infinite;
+    }
+    .why-float {
+      animation: why-float 4s ease-in-out infinite;
+    }
+    .why-flow-y {
+      animation: why-flow-y 1s linear infinite;
+    }
+    .why-flow-x {
+      animation: why-flow-x 1s linear infinite;
+    }
+    .why-glow {
+      animation: why-glow 2.4s ease-in-out infinite;
+    }
+    .why-caret {
+      animation: why-caret 1s steps(1) infinite;
+    }
+    .why-draw {
+      stroke-dasharray: 1;
+      animation: why-draw 5s ease-out infinite;
+    }
+  }
+
+  @keyframes why-msg {
+    0% {
+      opacity: 0;
+      translate: 0 8px;
+    }
+    10%,
+    90% {
+      opacity: 1;
+      translate: 0 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes why-confirm {
+    0%,
+    25% {
+      opacity: 0;
+      scale: 0.96;
+    }
+    35%,
+    90% {
+      opacity: 1;
+      scale: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes why-float {
+    50% {
+      translate: 0 -6px;
+    }
+  }
+  @keyframes why-flow-y {
+    to {
+      background-position: 0 16px;
+    }
+  }
+  @keyframes why-flow-x {
+    to {
+      background-position: 16px 0;
+    }
+  }
+  @keyframes why-glow {
+    50% {
+      box-shadow: 0 0 0 6px rgb(7 134 96 / 0.15);
+    }
+  }
+  @keyframes why-caret {
+    50% {
+      opacity: 0;
+    }
+  }
+  @keyframes why-draw {
+    0% {
+      stroke-dashoffset: 1;
+    }
+    40%,
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>
